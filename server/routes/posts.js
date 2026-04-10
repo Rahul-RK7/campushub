@@ -1,0 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const { protect } = require('../middleware/authMiddleware');
+const { createPost, getFeed, deletePost, toggleLike } = require('../controllers/postController');
+router.use(protect);
+router.get('/', getFeed);
+router.post('/', createPost);
+router.delete('/:id', deletePost);
+router.patch('/:id/like', toggleLike);
+module.exports = router;

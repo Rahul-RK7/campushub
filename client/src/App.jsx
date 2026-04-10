@@ -4,6 +4,7 @@ import PrivateRoute from './components/PrivateRoute';
 import FacultyRoute from './components/FacultyRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Feed from './pages/Feed';
 
 export default function App() {
   return (
@@ -16,7 +17,7 @@ export default function App() {
 
           {/* Student protected routes — will add pages in Phase 2 */}
           <Route path="/feed" element={
-            <PrivateRoute><div style={{padding:'2rem'}}>Feed coming in Phase 2</div></PrivateRoute>
+            <PrivateRoute><Feed /></PrivateRoute>
           } />
 
           {/* Faculty protected routes — will add pages in Phase 3 */}
