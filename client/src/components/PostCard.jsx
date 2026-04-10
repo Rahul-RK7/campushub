@@ -24,7 +24,7 @@ export default function PostCard({ post, onDelete }) {
 
   const loadComments = async () => {
     if (!showComments) {
-      const { data } = await api.get(`/api/posts/${post._id}/comments`);
+      const { data } = await api.get(`/api/comments/${post._id}`);
       setComments(data.comments);
     }
     setShowComments(!showComments);
@@ -32,7 +32,7 @@ export default function PostCard({ post, onDelete }) {
 
   const addComment = async () => {
     if (!commentText.trim()) return;
-    const { data } = await api.post(`/api/posts/${post._id}/comments`, { content: commentText });
+    const { data } = await api.post(`/api/comments/${post._id}`, { content: commentText });
     setComments(prev => [...prev, data.comment]);
     setCommentText('');
   };
@@ -42,57 +42,118 @@ export default function PostCard({ post, onDelete }) {
   const isFaculty = user?.role === 'faculty';
 
   return (
-    <div style={{
-      border: `0.5px solid ${isAnnouncement ? '#BA7517' : 'var(--color-border-tertiary)'}`,
-      borderLeft: isAnnouncement ? '3px solid #BA7517' : '0.5px solid var(--color-border-tertiary)',
-      borderRadius: 12,
-      padding: '1rem',
+    <div className="animate-fadeIn" style={{
+      background: isAnnouncement ? 'var(--color-announcement-subtle)' : 'var(--gradient-card)',
+      border: `1px solid ${isAnnouncement ? 'var(--color-announcement-border)' : 'var(--color-border)'}`,
+      borderRadius: 'var(--radius-lg)',
+      padding: '1.25rem',
       marginBottom: '0.75rem',
-      background: isAnnouncement ? '#FAEEDA20' : 'var(--color-background-primary)'
+      transition: 'all var(--transition-normal)',
     }}>
+      {/* Announcement badge */}
       {isAnnouncement && (
-        <span style={{ fontSize: 11, fontWeight: 500, color: '#854F0B', background: '#FAEEDA', padding: '2px 8px', borderRadius: 4, marginBottom: 8, display: 'inline-block' }}>
-          Announcement
+        <span className="badge badge-warning" style={{ marginBottom: 10 }}>
+          📢 Announcement
         </span>
       )}
+
+      {/* Header: author + delete */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <p style={{ fontSize: 13, fontWeight: 500, margin: 0 }}>{post.author?.name}</p>
-          <p style={{ fontSize: 11, color: 'var(--color-text-tertiary)', margin: 0 }}>
-            {new Date(post.createdAt).toLocaleDateString()}
-          </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 34, height: 34, borderRadius: '50%',
+            background: isAnnouncement
+              ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+              : 'var(--gradient-accent)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 13, fontWeight: 700, color: '#fff', flexShrink: 0,
+          }}>
+            {post.author?.name?.charAt(0)?.toUpperCase() || '?'}
+          </div>
+          <div>
+            <p style={{ fontSize: 14, fontWeight: 600, margin: 0, color: 'var(--color-text)' }}>
+              {post.author?.name}
+              {post.author?.role === 'faculty' && (
+                <span className="badge badge-accent" style={{ marginLeft: 8, fontSize: 10 }}>Faculty</span>
+              )}
+            </p>
+            <p style={{ fontSize: 11, color: 'var(--color-text-tertiary)', margin: 0 }}>
+              {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </p>
+          </div>
         </div>
         {(isOwner || isFaculty) && (
-          <button onClick={handleDelete} style={{ fontSize: 12, color: 'var(--color-text-danger)', border: 'none', background: 'none', cursor: 'pointer' }}>
-            Delete
+          <button onClick={handleDelete} className="btn-ghost" style={{
+            fontSize: 12, padding: '4px 10px', color: 'var(--color-text-tertiary)',
+          }}>
+            ✕
           </button>
         )}
       </div>
 
-      <p style={{ fontSize: 14, margin: '0.75rem 0', lineHeight: 1.6 }}>{post.content}</p>
+      {/* Content */}
+      <p style={{ fontSize: 14, margin: '0.85rem 0', lineHeight: 1.7, color: 'var(--color-text)' }}>
+        {post.content}
+      </p>
 
-      <div style={{ display: 'flex', gap: 16, fontSize: 13, color: 'var(--color-text-secondary)' }}>
-        <button onClick={handleLike} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, color: liked ? '#534AB7' : 'var(--color-text-secondary)', fontWeight: liked ? 500 : 400 }}>
-          {liked ? 'Liked' : 'Like'} {likes > 0 && `(${likes})`}
+      {/* Action bar */}
+      <div style={{
+        display: 'flex', gap: 4, paddingTop: '0.5rem',
+        borderTop: '1px solid var(--color-border)',
+      }}>
+        <button onClick={handleLike} className="btn-ghost" style={{
+          fontSize: 13, padding: '6px 14px',
+          color: liked ? 'var(--color-accent)' : 'var(--color-text-tertiary)',
+          fontWeight: liked ? 600 : 400,
+        }}>
+          {liked ? '♥' : '♡'} {likes > 0 && likes}
         </button>
-        <button onClick={loadComments} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--color-text-secondary)' }}>
-          Comments
+        <button onClick={loadComments} className="btn-ghost" style={{
+          fontSize: 13, padding: '6px 14px', color: 'var(--color-text-tertiary)',
+        }}>
+          💬 Comments
         </button>
       </div>
 
+      {/* Comments section */}
       {showComments && (
-        <div style={{ marginTop: '0.75rem', borderTop: '0.5px solid var(--color-border-tertiary)', paddingTop: '0.75rem' }}>
-          {comments.length === 0 && <p style={{ fontSize: 12, color: 'var(--color-text-tertiary)' }}>No comments yet</p>}
+        <div style={{
+          marginTop: '0.75rem', paddingTop: '0.75rem',
+          borderTop: '1px solid var(--color-border)',
+          animation: 'fadeIn 0.3s ease',
+        }}>
+          {comments.length === 0 && (
+            <p style={{ fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 8 }}>No comments yet — be the first!</p>
+          )}
           {comments.map(c => (
-            <div key={c._id} style={{ marginBottom: 8 }}>
-              <span style={{ fontSize: 12, fontWeight: 500 }}>{c.author?.name}: </span>
-              <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>{c.content}</span>
+            <div key={c._id} style={{
+              display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 10,
+              padding: '8px 10px',
+              background: 'var(--color-bg-input)',
+              borderRadius: 'var(--radius-sm)',
+            }}>
+              <div style={{
+                width: 22, height: 22, borderRadius: '50%',
+                background: 'var(--color-bg-elevated)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 10, fontWeight: 700, color: 'var(--color-text-secondary)', flexShrink: 0,
+              }}>
+                {c.author?.name?.charAt(0)?.toUpperCase() || '?'}
+              </div>
+              <div>
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text)' }}>{c.author?.name}</span>
+                <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', margin: '2px 0 0' }}>{c.content}</p>
+              </div>
             </div>
           ))}
           <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
             <input value={commentText} onChange={e => setCommentText(e.target.value)}
-              placeholder="Write a comment..." style={{ flex: 1, fontSize: 12 }} />
-            <button onClick={addComment} style={{ fontSize: 12 }}>Send</button>
+              placeholder="Write a comment..."
+              onKeyDown={e => e.key === 'Enter' && addComment()}
+              style={{ flex: 1, fontSize: 13, padding: '8px 12px' }} />
+            <button onClick={addComment} className="btn-primary" style={{ fontSize: 12, padding: '8px 16px' }}>
+              Send
+            </button>
           </div>
         </div>
       )}

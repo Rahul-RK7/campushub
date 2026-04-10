@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../api/axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -11,12 +11,20 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const validate = () => {
+    if (!/\S+@\S+\.\S+/.test(email)) return 'Please enter a valid email';
+    if (password.length < 6) return 'Password must be at least 6 characters';
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationError = validate();
+    if (validationError) { setError(validationError); return; }
     setLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('/api/auth/login', { email, password });
+      const { data } = await api.post('/api/auth/login', { email, password });
       login(data.token, data.user);
       navigate('/feed');
     } catch (err) {
@@ -26,27 +34,62 @@ export default function Login() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '5rem auto', padding: '2rem', border: '0.5px solid var(--color-border-tertiary)', borderRadius: 12 }}>
-      <h2 style={{ marginBottom: '1.5rem', fontWeight: 500 }}>Login to CampusHUB</h2>
-      {error && <p style={{ color: 'var(--color-text-danger)', marginBottom: '1rem', fontSize: 13 }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>Email</label>
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-            style={{ width: '100%', marginTop: 4 }} required />
+    <div style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '2rem',
+    }}>
+      <div className="animate-fadeInUp" style={{
+        width: '100%', maxWidth: 420,
+        background: 'var(--gradient-card)',
+        border: '1px solid var(--color-border)',
+        borderRadius: 'var(--radius-xl)',
+        padding: '2.5rem',
+        boxShadow: 'var(--shadow-lg)',
+      }}>
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{
+            fontSize: 28, fontWeight: 700, marginBottom: 6,
+            background: 'var(--gradient-accent)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            letterSpacing: '-0.03em',
+          }}>CampusHUB</h1>
+          <p style={{ fontSize: 14, color: 'var(--color-text-tertiary)' }}>
+            Welcome back — sign in to continue
+          </p>
         </div>
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>Password</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-            style={{ width: '100%', marginTop: 4 }} required />
-        </div>
-        <button type="submit" style={{ width: '100%' }} disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-      <p style={{ marginTop: '1rem', fontSize: 13, textAlign: 'center', color: 'var(--color-text-secondary)' }}>
-        No account? <Link to="/register">Register</Link>
-      </p>
+
+        {error && (
+          <div style={{
+            padding: '10px 14px', marginBottom: '1.25rem',
+            background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.2)',
+            borderRadius: 'var(--radius-sm)', fontSize: 13, color: 'var(--color-text-danger)',
+          }}>{error}</div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1.25rem' }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: 'var(--color-text-secondary)', marginBottom: 6 }}>Email</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="you@university.edu"
+              style={{ width: '100%' }} required />
+          </div>
+          <div style={{ marginBottom: '1.75rem' }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: 'var(--color-text-secondary)', marginBottom: 6 }}>Password</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+              placeholder="••••••••"
+              style={{ width: '100%' }} required />
+          </div>
+          <button type="submit" className="btn-primary" style={{ width: '100%', fontSize: 15, padding: '12px' }} disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
+
+        <p style={{ marginTop: '1.5rem', fontSize: 13, textAlign: 'center', color: 'var(--color-text-tertiary)' }}>
+          Don't have an account? <Link to="/register">Create one</Link>
+        </p>
+      </div>
     </div>
   );
 }

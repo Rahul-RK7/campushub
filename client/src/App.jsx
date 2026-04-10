@@ -5,6 +5,8 @@ import FacultyRoute from './components/FacultyRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Feed from './pages/Feed';
+import Profile from './pages/Profile';
+import FacultyDashboard from './pages/FacultyDashboard';
 
 export default function App() {
   return (
@@ -15,14 +17,17 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Student protected routes — will add pages in Phase 2 */}
+          {/* Protected routes */}
           <Route path="/feed" element={
             <PrivateRoute><Feed /></PrivateRoute>
           } />
+          <Route path="/profile" element={
+            <PrivateRoute><Profile /></PrivateRoute>
+          } />
 
-          {/* Faculty protected routes — will add pages in Phase 3 */}
+          {/* Faculty protected routes */}
           <Route path="/faculty/dashboard" element={
-            <FacultyRoute><div style={{padding:'2rem'}}>Faculty dashboard coming in Phase 3</div></FacultyRoute>
+            <FacultyRoute><FacultyDashboard /></FacultyRoute>
           } />
 
           {/* Redirect root to login */}
