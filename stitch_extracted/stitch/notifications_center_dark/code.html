@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHUB - Notifications Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-secondary-fixed-variant": "#45426c",
+                    "tertiary-container": "#8a4900",
+                    "secondary-container": "#d1ccff",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "background": "#f8f9fa",
+                    "inverse-primary": "#c5c0ff",
+                    "surface-container-low": "#f3f4f5",
+                    "surface": "#f8f9fa",
+                    "surface-variant": "#e1e3e4",
+                    "tertiary-fixed": "#ffdcc3",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "on-secondary-container": "#585580",
+                    "secondary-fixed": "#e3dfff",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-container-high": "#e7e8e9",
+                    "on-primary-container": "#d1ccff",
+                    "tertiary": "#683500",
+                    "primary": "#3b309e",
+                    "primary-fixed-dim": "#c5c0ff",
+                    "surface-tint": "#584fbc",
+                    "on-tertiary-container": "#ffc69a",
+                    "on-surface": "#191c1d",
+                    "on-background": "#191c1d",
+                    "surface-dim": "#d9dadb",
+                    "primary-fixed": "#e3dfff",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#534ab7",
+                    "on-surface-variant": "#474553",
+                    "outline": "#787584",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed": "#2f1500",
+                    "on-secondary-fixed": "#19163d",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "secondary": "#5d5a85",
+                    "outline-variant": "#c8c4d5",
+                    "surface-bright": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#c6c1f3",
+                    "on-primary-fixed-variant": "#3f35a3",
+                    "surface-container": "#edeeef",
+                    "on-primary-fixed": "#140067"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-white min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-xl shadow-none">
+<div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-indigo-400">CampusHUB</span>
+<nav class="hidden md:flex items-center space-x-6 font-manrope text-sm font-medium tracking-tight">
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors" href="#">Feed</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors" href="#">Inbox</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors" href="#">Groups</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors" href="#">Events</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors" href="#">Resources</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors" href="#">Faculty</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-indigo-400 active:opacity-80 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+<button class="p-2 text-indigo-400 active:opacity-80 transition-all">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+<img alt="User avatar" class="w-8 h-8 rounded-full border-2 border-indigo-400" data-alt="Close up portrait of a college student with glasses smiling in a modern library setting with soft bokeh lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy6jo19I72xIyFgsdkDj2CCVLt_GSDYqociQsQdWlTfW6i0CMSY_qJBqqLbROHCHJrwF8taP7Yjd_1IdGM2sw5XSfb37dz8soZyg52210hy-rVdR5lQ5j1mD9JvNIK5ZPDEcP5QIAJgn2qJWj4LrC7m-GaLKNIS_Lem-ipbzZ1Yddc2UB26laO7ntJnsTtcKBKM08aLiPqNm02S1QzToQunZ95NxmBAId2DPvfZFGz8haIg9b-YSL64a5BAWly2qkvSYlikkODjU8"/>
+</div>
+</div>
+</header>
+<!-- Sidebar (Web) -->
+<aside class="hidden lg:flex h-screen w-64 fixed left-0 top-0 bg-slate-900 flex-col p-4 space-y-2 pt-20 border-r border-slate-800">
+<div class="px-4 py-6 mb-4">
+<h2 class="text-xl font-extrabold text-indigo-400">The Academic Curator</h2>
+<p class="text-xs text-slate-500 font-manrope font-semibold">Campus Hub Portal</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">dynamic_feed</span> Feed
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">mail</span> Inbox
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span> Groups
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_month</span> Events
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">menu_book</span> Resources
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-800 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span> Faculty
+            </a>
+</nav>
+<div class="pt-8 px-2">
+<button class="w-full py-3 rounded-xl bg-gradient-to-br from-indigo-700 to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-900/20 active:scale-95 transition-transform">
+                Create Post
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-64 pt-20 pb-24 px-4 md:px-8 max-w-6xl mx-auto">
+<div class="flex flex-col md:flex-row gap-8">
+<!-- Notifications Feed (Intentional Asymmetry) -->
+<div class="flex-1">
+<div class="flex items-center justify-between mb-8">
+<h1 class="text-3xl font-extrabold font-headline tracking-tight text-white">Notifications</h1>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-slate-800 text-indigo-300 text-xs font-bold rounded-lg border border-slate-700 hover:bg-slate-700 transition-all">Mark all as read</button>
+</div>
+</div>
+<!-- Tabs (Editorial Style) -->
+<div class="flex gap-6 border-b border-slate-800 mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
+<button class="pb-4 text-indigo-400 border-b-2 border-indigo-400 font-bold text-sm transition-all">All Activity</button>
+<button class="pb-4 text-slate-500 font-medium text-sm hover:text-slate-300 transition-all">Mentions</button>
+<button class="pb-4 text-slate-500 font-medium text-sm hover:text-slate-300 transition-all">Events</button>
+<button class="pb-4 text-slate-500 font-medium text-sm hover:text-slate-300 transition-all">Academic Alerts</button>
+</div>
+<!-- Notification Groups -->
+<div class="space-y-12">
+<!-- Today -->
+<section>
+<h3 class="label-md uppercase tracking-wider text-[10px] text-slate-500 font-bold mb-4">Today</h3>
+<div class="space-y-4">
+<!-- High Priority Alert -->
+<div class="bg-indigo-900/20 border-l-4 border-indigo-500 p-6 rounded-xl flex gap-4 items-start">
+<div class="bg-indigo-500/20 p-3 rounded-full shrink-0">
+<span class="material-symbols-outlined text-indigo-400">auto_awesome</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold text-white">Curator's Choice: Your Research Highlighted</h4>
+<span class="text-[10px] font-bold text-slate-500 uppercase">2m ago</span>
+</div>
+<p class="text-slate-400 text-sm leading-relaxed">Your paper on "Sustainable Architecture in Urban Settings" was featured in the Faculty Excellence board.</p>
+<div class="mt-4 flex gap-2">
+<button class="px-4 py-2 bg-indigo-500 text-white text-xs font-bold rounded-lg hover:bg-indigo-400 transition-all">View Highlight</button>
+<button class="px-4 py-2 bg-transparent text-indigo-300 text-xs font-bold rounded-lg hover:bg-slate-800 transition-all">Share</button>
+</div>
+</div>
+</div>
+<!-- Social Notification -->
+<div class="bg-slate-800/40 p-6 rounded-xl flex gap-4 items-start hover:bg-slate-800/60 transition-all group">
+<div class="relative shrink-0">
+<img alt="Profile image" class="w-12 h-12 rounded-full" data-alt="Professional portrait of a young woman with a neutral background, soft directional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6Lf5b2Kw0hMqb38ZvvyrpWAu5_Oa5d_ofrWi68paZ9etI3rZHlRZyMVOfDfkYWgFGJ77fJ3j1kkVXNu_7FffCqGvS2cBAWVbUKZOKwUPT2WiRat5B30Wh7leCXYuusQiCzXEQDu0oTFJP1G1p_VK6hsJvzB1ssM6EjcD7mo3Pv3MUc80ujHG5CRO1fBYhAMqkP0juAzTAFUDUZRefcZl5BxJEW29mPJtOUBoPqKb5BKm1-lBmDsIuj9iq3es3HafBrRaOKU9XOOc"/>
+<div class="absolute -bottom-1 -right-1 bg-indigo-600 rounded-full p-1 border-2 border-slate-900">
+<span class="material-symbols-outlined text-[12px] block text-white" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-slate-300 text-sm leading-relaxed"><span class="font-bold text-white">Elena Rodriguez</span> and 12 others liked your recent post in <span class="font-bold text-indigo-400">Architecture &amp; Design</span></p>
+<span class="text-[10px] font-bold text-slate-500 uppercase mt-2 block">1h ago</span>
+</div>
+</div>
+<!-- Group Activity -->
+<div class="bg-slate-800/40 p-6 rounded-xl flex gap-4 items-start hover:bg-slate-800/60 transition-all">
+<div class="bg-slate-700/50 p-3 rounded-full shrink-0">
+<span class="material-symbols-outlined text-slate-300">calendar_today</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-300 text-sm leading-relaxed">Reminder: <span class="font-bold text-white">Town Hall Meeting</span> for the Student Union begins in 30 minutes at the Main Auditorium.</p>
+<div class="mt-3 flex items-center gap-3">
+<span class="flex items-center gap-1 text-[10px] font-bold text-indigo-400 uppercase">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Room 402-A
+                                        </span>
+</div>
+<span class="text-[10px] font-bold text-slate-500 uppercase mt-2 block">3h ago</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Yesterday -->
+<section>
+<h3 class="label-md uppercase tracking-wider text-[10px] text-slate-500 font-bold mb-4">Yesterday</h3>
+<div class="space-y-4">
+<!-- Inbox Notification -->
+<div class="bg-slate-800/40 p-6 rounded-xl flex gap-4 items-start hover:bg-slate-800/60 transition-all">
+<div class="relative shrink-0">
+<img alt="Profile image" class="w-12 h-12 rounded-full" data-alt="Middle-aged man with a professional look, professor aesthetic, wearing a suit jacket and subtle smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8n3vJ3F1GgUQe9req4OAnymCc91vtvfxqenNfg8EqNq3V4_ooGi-G2E1UUqIrui168WZgLZYO_nJufBPhebKvd_Pdtkj0tvoPI9yYFd80Z9-goIAvU63CKCcaU_5yQ8B4TRDYc86oiek4PwE7kac57W8QlaQsjTUCnvJmXQU3R5raWX4iQki3j0mm-MH7ZVmrgsDxruxuSntMRhamYtUr1sswa1IKQaAixLr0h81jsZdF79SHe7Mo8lAekoZ1ru3olEsZjlx_FUQ"/>
+<div class="absolute -bottom-1 -right-1 bg-indigo-600 rounded-full p-1 border-2 border-slate-900">
+<span class="material-symbols-outlined text-[12px] block text-white" style="font-variation-settings: 'FILL' 1;">mail</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-slate-300 text-sm leading-relaxed"><span class="font-bold text-white">Prof. Alistair Vance</span> sent you a direct message regarding your thesis proposal.</p>
+<div class="mt-3 p-3 bg-slate-900/50 rounded-lg text-xs text-slate-400 italic">
+                                        "The methodology section looks promising, let's discuss the data sources..."
+                                    </div>
+<span class="text-[10px] font-bold text-slate-500 uppercase mt-3 block">Yesterday, 4:20 PM</span>
+</div>
+</div>
+<!-- System Update -->
+<div class="bg-slate-800/40 p-6 rounded-xl flex gap-4 items-start hover:bg-slate-800/60 transition-all">
+<div class="bg-amber-900/20 p-3 rounded-full shrink-0">
+<span class="material-symbols-outlined text-amber-500">warning</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-300 text-sm leading-relaxed">System Maintenance: The <span class="font-bold text-white">Campus Digital Library</span> will be offline for scheduled maintenance this Sunday from 2AM to 6AM EST.</p>
+<span class="text-[10px] font-bold text-slate-500 uppercase mt-2 block">Yesterday, 10:15 AM</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Right Sidebar: Stats & Filter (Asymmetric Design) -->
+<aside class="hidden xl:block w-80 space-y-6">
+<!-- Notification Stats Bento-style -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-slate-800/60 p-6 rounded-2xl border border-slate-800">
+<span class="text-3xl font-extrabold text-indigo-400 block mb-1">14</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">New Alerts</span>
+</div>
+<div class="bg-slate-800/60 p-6 rounded-2xl border border-slate-800">
+<span class="text-3xl font-extrabold text-white block mb-1">2</span>
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Direct Msgs</span>
+</div>
+</div>
+<!-- Featured Curator Action -->
+<div class="bg-indigo-600 rounded-3xl p-8 relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="text-xl font-extrabold text-white mb-2 leading-tight">Master Your Workflow</h4>
+<p class="text-indigo-100 text-sm mb-6 opacity-90">Set custom alert rules for your academic departments.</p>
+<button class="w-full py-3 bg-white text-indigo-700 font-bold text-xs rounded-xl hover:bg-indigo-50 transition-all">Configure Alerts</button>
+</div>
+<!-- Decorative background element -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-500 rounded-full opacity-20 blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+</div>
+<!-- Categories/Filters -->
+<div class="bg-slate-800/40 p-6 rounded-2xl border border-slate-800">
+<h4 class="text-xs font-bold text-white uppercase tracking-widest mb-6">Filter by Category</h4>
+<ul class="space-y-4">
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+<span class="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Academic</span>
+</div>
+<span class="text-xs font-bold text-slate-600">8</span>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Social</span>
+</div>
+<span class="text-xs font-bold text-slate-600">24</span>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Important</span>
+</div>
+<span class="text-xs font-bold text-slate-600">3</span>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span>
+<span class="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Campus Events</span>
+</div>
+<span class="text-xs font-bold text-slate-600">12</span>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-slate-900/90 backdrop-blur-xl border-t border-slate-800">
+<div class="flex justify-around items-center h-16 px-4">
+<a class="flex flex-col items-center gap-1 text-slate-500 active:opacity-80" href="#">
+<span class="material-symbols-outlined">dynamic_feed</span>
+<span class="text-[10px] font-bold">Feed</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 active:opacity-80" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="text-[10px] font-bold">Inbox</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-indigo-400 active:opacity-80" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="text-[10px] font-bold">Alerts</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 active:opacity-80" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold">Groups</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 active:opacity-80" href="#">
+<span class="material-symbols-outlined">menu</span>
+<span class="text-[10px] font-bold">More</span>
+</a>
+</div>
+</nav>
+</body></html>

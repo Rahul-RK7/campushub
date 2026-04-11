@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Events Calendar | CampusHUB</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "inverse-on-surface": "#f0f1f2",
+                "on-secondary-fixed-variant": "#45426c",
+                "tertiary-container": "#8a4900",
+                "secondary-container": "#d1ccff",
+                "on-secondary": "#ffffff",
+                "inverse-surface": "#2e3132",
+                "background": "#f8f9fa",
+                "inverse-primary": "#c5c0ff",
+                "surface-container-low": "#f3f4f5",
+                "surface": "#f8f9fa",
+                "surface-variant": "#e1e3e4",
+                "tertiary-fixed": "#ffdcc3",
+                "on-tertiary-fixed-variant": "#6e3900",
+                "on-secondary-container": "#585580",
+                "secondary-fixed": "#e3dfff",
+                "on-primary": "#ffffff",
+                "surface-container-highest": "#e1e3e4",
+                "surface-container-high": "#e7e8e9",
+                "on-primary-container": "#d1ccff",
+                "tertiary": "#683500",
+                "primary": "#3b309e",
+                "primary-fixed-dim": "#c5c0ff",
+                "surface-tint": "#584fbc",
+                "on-tertiary-container": "#ffc69a",
+                "on-surface": "#191c1d",
+                "on-background": "#191c1d",
+                "surface-dim": "#d9dadb",
+                "primary-fixed": "#e3dfff",
+                "on-tertiary": "#ffffff",
+                "primary-container": "#534ab7",
+                "on-surface-variant": "#474553",
+                "outline": "#787584",
+                "on-error-container": "#93000a",
+                "on-error": "#ffffff",
+                "error-container": "#ffdad6",
+                "surface-container-lowest": "#ffffff",
+                "on-tertiary-fixed": "#2f1500",
+                "on-secondary-fixed": "#19163d",
+                "tertiary-fixed-dim": "#ffb77d",
+                "secondary": "#5d5a85",
+                "outline-variant": "#c8c4d5",
+                "surface-bright": "#f8f9fa",
+                "error": "#ba1a1a",
+                "secondary-fixed-dim": "#c6c1f3",
+                "on-primary-fixed-variant": "#3f35a3",
+                "surface-container": "#edeeef",
+                "on-primary-fixed": "#140067"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #3b309e 0%, #534ab7 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-xl shadow-none">
+<div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-indigo-400">CampusHUB</span>
+<nav class="hidden md:flex items-center space-x-6">
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors font-manrope text-sm tracking-tight" href="#">Feed</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors font-manrope text-sm tracking-tight" href="#">Inbox</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors font-manrope text-sm tracking-tight" href="#">Groups</a>
+<a class="text-indigo-300 font-bold border-b-2 border-indigo-600 font-manrope text-sm tracking-tight" href="#">Events</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors font-manrope text-sm tracking-tight" href="#">Resources</a>
+<a class="text-slate-400 font-medium hover:text-indigo-300 transition-colors font-manrope text-sm tracking-tight" href="#">Faculty</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-slate-400 hover:text-indigo-400 transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-indigo-400 transition-colors">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<img alt="User avatar" class="w-8 h-8 rounded-full border border-slate-700" data-alt="Close up portrait of a young professional student with glasses in a modern library setting, soft bokeh lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3cVxtZXtXUsqDmgc1s8ItGW9nPDfhJ1Hmu6asUL18BqT7Tyodv29RHUapHIah-q2wJ4HhkNHEtQSFPsgDRuSo4rvyExJ4VaS9uzUoRsbaw_rqYAsd-0DZJsd2LCY2zwmKTYCuhJjysM4Q-Cv1PBFvGmKb0_Lkvf6y5fm1CVaD9aosnMFEKwBrMTxyY64b_5t_zq0zkosI-CTVfL31_CNj_2FTBm1_jikG7zWa_l68FqBYjTqgw0Yo1jtkm_K0vOIcjw5Q9miAdqc"/>
+</div>
+</div>
+</header>
+<div class="pt-24 pb-12 px-6 max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+<!-- Left Sidebar: Controls -->
+<aside class="w-full lg:w-64 space-y-8">
+<div class="bg-slate-900 rounded-xl p-4 space-y-4">
+<h2 class="text-indigo-400 font-headline text-lg font-bold">Filter Content</h2>
+<div class="space-y-2">
+<label class="flex items-center space-x-3 p-2 rounded-lg bg-indigo-900/20 text-indigo-300 cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-semibold">All Events</span>
+</label>
+<label class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-800 text-slate-400 cursor-pointer transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="school">school</span>
+<span class="text-sm font-semibold">Academic</span>
+</label>
+<label class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-800 text-slate-400 cursor-pointer transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="sports_basketball">sports_basketball</span>
+<span class="text-sm font-semibold">Athletics</span>
+</label>
+<label class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-800 text-slate-400 cursor-pointer transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="celebration">celebration</span>
+<span class="text-sm font-semibold">Socials</span>
+</label>
+<label class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-800 text-slate-400 cursor-pointer transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="work">work</span>
+<span class="text-sm font-semibold">Career</span>
+</label>
+</div>
+</div>
+<div class="bg-slate-900 rounded-xl p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-headline font-bold uppercase tracking-widest text-slate-500">October 2023</h3>
+<div class="flex space-x-2">
+<span class="material-symbols-outlined text-xs cursor-pointer hover:text-indigo-400" data-icon="chevron_left">chevron_left</span>
+<span class="material-symbols-outlined text-xs cursor-pointer hover:text-indigo-400" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center text-[10px]">
+<span class="text-slate-600">S</span><span class="text-slate-600">M</span><span class="text-slate-600">T</span><span class="text-slate-600">W</span><span class="text-slate-600">T</span><span class="text-slate-600">F</span><span class="text-slate-600">S</span>
+<span class="p-1">1</span><span class="p-1">2</span><span class="p-1">3</span><span class="p-1">4</span><span class="p-1">5</span><span class="p-1">6</span><span class="p-1">7</span>
+<span class="p-1">8</span><span class="p-1">9</span><span class="p-1">10</span><span class="p-1">11</span><span class="p-1">12</span><span class="p-1">13</span><span class="p-1">14</span>
+<span class="p-1">15</span><span class="p-1">16</span><span class="p-1">17</span><span class="p-1">18</span><span class="p-1">19</span><span class="p-1 bg-indigo-600 rounded-full text-white font-bold">20</span><span class="p-1">21</span>
+<span class="p-1">22</span><span class="p-1">23</span><span class="p-1">24</span><span class="p-1">25</span><span class="p-1">26</span><span class="p-1">27</span><span class="p-1">28</span>
+<span class="p-1">29</span><span class="p-1">30</span><span class="p-1">31</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area: Bento Grid Layout -->
+<main class="flex-1 space-y-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-4xl font-headline font-extrabold text-slate-50 tracking-tight">Campus Events</h1>
+<p class="text-slate-400 mt-2 font-body">Curated academic and social gatherings for your community.</p>
+</div>
+<button class="bg-gradient-primary text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 active:scale-95 transition-all shadow-lg shadow-indigo-900/20">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                    Create Event
+                </button>
+</div>
+<!-- Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Large Featured Event Card -->
+<div class="md:col-span-2 row-span-2 relative group overflow-hidden rounded-2xl bg-slate-900">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent z-10"></div>
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Wide angle view of a packed modern university auditorium with a speaker on stage and blue ambient stage lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkOgG29szmgNoq1XwOzfdGnFUjAbCLJTVQT69BURmyKOjHRxx8djF6sfPhGyxpMO9JdZDiHFHwuP5281FXbLBmZ2WbH68gLztUha_JXzF8WSYJqNuAQNWmY92vnD1AhAJ1wg98qVvlp7382oC9hEsuihXI1v77Hm_kvknmakrkqF2OlVHyYNLu9GyB_lqNVcTJ-inqh-ZvZm_0ax_7Z5F4Zs_PF_6L3MQdNpd7l2t9HRaSruq7flo1BsbTuzn6cQx9JupPVk2cqkI"/>
+<div class="relative z-20 h-full flex flex-col justify-end p-8">
+<span class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest w-max mb-4">Academic • Featured</span>
+<h2 class="text-3xl font-headline font-bold text-white mb-2">The Future of AI in Modern Research</h2>
+<p class="text-slate-300 max-w-lg mb-6">Join Dr. Sarah Chen for a keynote discussion on ethics and automation in higher education.</p>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-slate-300">
+<span class="material-symbols-outlined text-indigo-400" data-icon="calendar_today">calendar_today</span>
+<span class="text-sm">Oct 24, 2023</span>
+</div>
+<div class="flex items-center gap-2 text-slate-300">
+<span class="material-symbols-outlined text-indigo-400" data-icon="location_on">location_on</span>
+<span class="text-sm">Main Hall A1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Cards -->
+<div class="bg-slate-900 rounded-2xl p-6 flex flex-col justify-between border-b-4 border-indigo-600">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-indigo-900/30 rounded-xl text-indigo-400">
+<span class="material-symbols-outlined" data-icon="sports_soccer">sports_soccer</span>
+</div>
+<span class="text-slate-500 text-sm font-semibold">Today, 5:00 PM</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-slate-100">Intramural Finals</h3>
+<p class="text-slate-400 text-sm mt-2">Men's Soccer Championship: Lions vs. Rockets.</p>
+</div>
+<div class="mt-6 flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-slate-900" data-alt="Portrait of a young male student smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMjx_0WlVvZwc2RdSGSRl7mKdf0o-yzK4Huwz2zUUP2djQ9BaFDueiKtPp_z92xsGIIYypKxD4WHA9XfK5fdwiMh-BYhgnZdgaCyrsFUY5DjagPNA_vCdY3TDQFBguTJudaA85MZ4IZIbqC10A1Bc7kBXcKFO3wQV7qv9DtIX5uzfZkDh7fBw828Z7vDOnnFsAhNmdu2q8YO8Xlr9XN3Bp-1gTLnnPwDsR7EE-RI5y1mZuCNnGynvfgldTGaxYLcVel_2rTfWb45Y"/>
+<img class="w-8 h-8 rounded-full border-2 border-slate-900" data-alt="Portrait of a young female student smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzI3lNC0Nk1Ykokn5k6spPheOZc_5__PvWh-nL-tSMJyAzkoJn-vrZXl6q_Bkmtu88oVS8IkWf2e7W_ZrrT7fPw0cqvCws7dYl_LlY-L7lsmre6pj_MzFWgIIoFyt2t60IthMFUx9ovmhs91HrUdErRcRXaD2U8s3zOzNb6JzdzpvKGcd-ilsy2wsS1esYnfIE2drrKRL6kcFMf5yMX3J-J1NuHU3g_IAYixPjK6raYzrfTJ1UO8ZrBLktzW5BfHPZ6IdnhwG4ooU"/>
+<img class="w-8 h-8 rounded-full border-2 border-slate-900" data-alt="Portrait of a young male student with glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqql_kGApBgh2zTcemep9NOLmvG2TS5Pt8G82EfWliGObQMOnap0CdtsbGo4ovAfFJEq_wa9ONKcYzpq0eOE5bv58kHHdjq-6HSN4j8Cly5xtBbs9Do05yJPtL6QpHTsyvI-7EDwuMju6cWvLXLgpS6snAh7Fbeky9JZmQPr2dfjJJYA5p6PFzD50N3RkYKN5jfN0AfOnlHNpOB2bmcn9F1LzbvBdaVCNSLD0cNbZ_5LLNtWBM5LjOhV6c5sZMjOLt35fSB6ImTvU"/>
+<div class="w-8 h-8 rounded-full bg-slate-800 border-2 border-slate-900 flex items-center justify-center text-[10px] text-slate-400 font-bold">+42</div>
+</div>
+</div>
+<div class="bg-slate-900 rounded-2xl p-6 flex flex-col justify-between border-b-4 border-amber-600">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-amber-900/30 rounded-xl text-amber-500">
+<span class="material-symbols-outlined" data-icon="brush">brush</span>
+</div>
+<span class="text-slate-500 text-sm font-semibold">Oct 21, 2:00 PM</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-slate-100">Digital Art Expo</h3>
+<p class="text-slate-400 text-sm mt-2">Showcasing the best student works from the Fine Arts faculty.</p>
+</div>
+<button class="mt-6 text-amber-500 font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all">
+                        Register Now
+                        <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Horizontal List Card -->
+<div class="md:col-span-3 bg-slate-900 rounded-2xl p-6">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-lg font-headline font-bold text-slate-100">Upcoming This Week</h3>
+<a class="text-indigo-400 text-sm font-semibold hover:underline" href="#">View Schedule</a>
+</div>
+<div class="space-y-6">
+<div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 group">
+<div class="flex-shrink-0 w-16 text-center">
+<p class="text-xs font-bold text-slate-500 uppercase">Mon</p>
+<p class="text-2xl font-headline font-extrabold text-indigo-400">23</p>
+</div>
+<div class="flex-1 pb-6 border-b border-slate-800">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline font-bold text-slate-100 group-hover:text-indigo-400 transition-colors">Resume Workshop: Tech Careers</h4>
+<p class="text-slate-400 text-sm">Career Center • 10:00 AM - 12:00 PM</p>
+</div>
+<button class="text-slate-500 hover:text-indigo-400">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 group">
+<div class="flex-shrink-0 w-16 text-center">
+<p class="text-xs font-bold text-slate-500 uppercase">Tue</p>
+<p class="text-2xl font-headline font-extrabold text-indigo-400">24</p>
+</div>
+<div class="flex-1 pb-6 border-b border-slate-800">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline font-bold text-slate-100 group-hover:text-indigo-400 transition-colors">Jazz in the Plaza</h4>
+<p class="text-slate-400 text-sm">East Campus Commons • 6:30 PM</p>
+</div>
+<button class="text-slate-500 hover:text-indigo-400">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 group">
+<div class="flex-shrink-0 w-16 text-center">
+<p class="text-xs font-bold text-slate-500 uppercase">Wed</p>
+<p class="text-2xl font-headline font-extrabold text-indigo-400">25</p>
+</div>
+<div class="flex-1 pb-6 border-b border-slate-800">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline font-bold text-slate-100 group-hover:text-indigo-400 transition-colors">Study Group: Organic Chem II</h4>
+<p class="text-slate-400 text-sm">Library Room 402 • 4:00 PM</p>
+</div>
+<button class="text-indigo-400">
+<span class="material-symbols-outlined" data-icon="bookmark" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- SideNavBar for Mobile (Simplified representation) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="dynamic_feed">dynamic_feed</span>
+<span class="text-[10px]">Feed</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-[10px]">Groups</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-indigo-400">
+<span class="material-symbols-outlined" data-icon="calendar_month" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="text-[10px] font-bold">Events</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="text-[10px]">Inbox</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-500">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px]">Faculty</span>
+</button>
+</nav>
+</body></html>

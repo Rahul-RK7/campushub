@@ -49,13 +49,15 @@ exports.toggleLike = async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ error: 'Not found' });
     const userId = req.user._id;
-    if (post.likes.includes(userId)) {
+    const alreadyLiked = post.likes.some(id => id.equals(userId));
+    if (alreadyLiked) {
       post.likes.pull(userId);
     } else {
       post.likes.push(userId);
     }
     await post.save();
-    res.json({ likes: post.likes.length, liked: post.likes.includes(userId) });
+    const nowLiked = post.likes.some(id => id.equals(userId));
+    res.json({ likes: post.likes.length, liked: nowLiked });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }

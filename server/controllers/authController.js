@@ -6,6 +6,14 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password, department } = req.body;
 
+    // Basic input validation
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Name, email, and password are required' });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    }
+
     // Check if email already used
     const existing = await User.findOne({ email });
     if (existing) return res.status(400).json({ error: 'Email already registered' });
@@ -13,9 +21,9 @@ exports.register = async (req, res) => {
     // Hash password (never store plain text)
     const hashed = await bcrypt.hash(password, 10);
 
-    // Create user with status: pending
+    // Create user with status: pending — explicitly set role to prevent escalation
     const user = await User.create({
-      name, email, password: hashed, department
+      name, email, password: hashed, department, role: 'student'
     });
 
     res.status(201).json({ message: 'Registration submitted. Awaiting faculty approval.' });
@@ -27,6 +35,11 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Basic input validation
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
 
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ error: 'Invalid credentials' });

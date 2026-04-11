@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notifications Center | CampusHUB</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-secondary-fixed-variant": "#45426c",
+                        "tertiary-container": "#8a4900",
+                        "secondary-container": "#d1ccff",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "background": "#f8f9fa",
+                        "inverse-primary": "#c5c0ff",
+                        "surface-container-low": "#f3f4f5",
+                        "surface": "#f8f9fa",
+                        "surface-variant": "#e1e3e4",
+                        "tertiary-fixed": "#ffdcc3",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-secondary-container": "#585580",
+                        "secondary-fixed": "#e3dfff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-container": "#d1ccff",
+                        "tertiary": "#683500",
+                        "primary": "#3b309e",
+                        "primary-fixed-dim": "#c5c0ff",
+                        "surface-tint": "#584fbc",
+                        "on-tertiary-container": "#ffc69a",
+                        "on-surface": "#191c1d",
+                        "on-background": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "primary-fixed": "#e3dfff",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#534ab7",
+                        "on-surface-variant": "#474553",
+                        "outline": "#787584",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#2f1500",
+                        "on-secondary-fixed": "#19163d",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "secondary": "#5d5a85",
+                        "outline-variant": "#c8c4d5",
+                        "surface-bright": "#f8f9fa",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c6c1f3",
+                        "on-primary-fixed-variant": "#3f35a3",
+                        "surface-container": "#edeeef",
+                        "on-primary-fixed": "#140067"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-indigo-700 dark:text-indigo-400">CampusHUB</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors" href="#">Feed</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors" href="#">Inbox</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors" href="#">Groups</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors" href="#">Events</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors" href="#">Resources</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors" href="#">Faculty</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-indigo-700 dark:text-indigo-300 font-bold border-b-2 border-indigo-600 active:opacity-80 transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:text-indigo-500 transition-colors">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<img alt="User avatar" class="w-8 h-8 rounded-full border border-outline-variant/20" data-alt="Close-up portrait of a professional smiling man in a clean office environment with natural soft light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9Hv328gtGxgZq-Jbk33hfwvZEcLLMJfl6uArgFDxa7fj2fJtKmvQjeECSa3w5Gq2yT9CHcUKSfIx2tP6eT-aTXoy9MQNvlqdrgwQ7FkRpm5qjkGjJ-jK7T94Yy_eTiRKwojeW6rQo-CS5Mk-f9n6b-M99LurM2q8kt4k4BRJZbRIiEuDpFTJ5D_GUZj92nhOUhnm477aXq6i1c4XOGoH37fSwSSkJ8m5iF3tWgJ2diIP5JoBHyaRZtXbFvsVmVoyrSXiWM70G4AY"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-12 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- SideNavBar (Filter Area) -->
+<aside class="hidden lg:block lg:col-span-3">
+<div class="sticky top-24 space-y-6">
+<div>
+<h2 class="text-headline-sm font-bold text-on-surface mb-1">The Academic Curator</h2>
+<p class="text-sm text-on-surface-variant">Campus Hub Portal</p>
+</div>
+<div class="flex flex-col space-y-1">
+<button class="flex items-center gap-3 px-4 py-3 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg font-semibold transition-all scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span>All Alerts</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="unread_badge">mark_as_unread</span>
+<span>Unread</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="alternate_email">alternate_email</span>
+<span>Mentions</span>
+</button>
+</div>
+<div class="pt-6 border-t border-outline-variant/20">
+<p class="text-[10px] font-bold tracking-widest text-on-surface-variant uppercase mb-4">Quick Actions</p>
+<button class="w-full py-3 px-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-semibold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                        Create Post
+                    </button>
+</div>
+</div>
+</aside>
+<!-- Main Content (Notifications List) -->
+<section class="lg:col-span-9 space-y-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="asymmetric-header">
+<span class="text-xs font-bold tracking-[0.1em] text-primary uppercase">Activity Center</span>
+<h1 class="text-4xl font-extrabold text-on-surface tracking-tight mt-1">Notifications</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 bg-surface-container-high text-primary rounded-lg text-sm font-semibold hover:bg-surface-container-highest transition-colors">Mark all as read</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+<!-- Filter Chips (Mobile/Tablet and Auxiliary UI) -->
+<div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+<span class="px-4 py-1.5 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold">ALL</span>
+<span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">UNREAD</span>
+<span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">MENTIONS</span>
+<span class="px-4 py-1.5 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">SYSTEM</span>
+</div>
+<!-- Notification Items -->
+<div class="space-y-4">
+<!-- New Event Notification -->
+<div class="group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-bright relative flex gap-5 border-l-4 border-primary">
+<div class="flex-shrink-0">
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-on-surface text-lg">New event in Computer Science Group</h3>
+<p class="text-on-surface-variant leading-relaxed mt-1">The "AI &amp; Ethics Symposium" has been scheduled for next Friday in Hall B. Don't forget to RSVP.</p>
+</div>
+<span class="text-xs font-medium text-outline">2m ago</span>
+</div>
+<div class="mt-4 flex gap-3">
+<button class="px-5 py-2 bg-gradient-to-br from-primary to-primary-container text-on-primary text-sm font-bold rounded-xl">View Details</button>
+<button class="px-5 py-2 bg-surface-container-high text-primary text-sm font-bold rounded-xl">Dismiss</button>
+</div>
+</div>
+</div>
+<!-- Faculty Approval Notification -->
+<div class="group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-bright flex gap-5">
+<div class="flex-shrink-0">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-tertiary shadow-sm">
+<span class="material-symbols-outlined" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-on-surface text-lg">Faculty approved your request</h3>
+<p class="text-on-surface-variant leading-relaxed mt-1">Your application for the "Advanced Research Lab" access has been formally approved by Prof. Henderson.</p>
+</div>
+<span class="text-xs font-medium text-outline">1h ago</span>
+</div>
+<div class="mt-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-tertiary" data-icon="description">description</span>
+<span class="text-xs font-semibold text-tertiary uppercase tracking-wider">LAB_PERMIT_2024.PDF</span>
+</div>
+</div>
+</div>
+<!-- Interaction Notification -->
+<div class="group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-bright flex gap-5">
+<div class="flex-shrink-0 relative">
+<img alt="Student profile" class="w-12 h-12 rounded-full object-cover" data-alt="Candid portrait of a young college student laughing in a sunlit campus park with trees in background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0U1YbXwmsVeT1LmDMXJxqKsuVjNdH466da9tygPHn-MyZoSA6nGLqOb-MmWvnIXyTRd44ryFroZfHJA-sLH6DJMagadEyHPCB62yq2QaK-umcbLHwpdfYgF6Qap7_uwTqJM7PvJOa1MptNz3H7-jnK_IjTL5HApONGyb0qEHPz1Kx8HYr67cxvyHDVUEDjFA2NB8fQcy4ZCVHLiXnzEFvTY4WZw31B7-jYR8Z51xWJ4snZmI-tEaFIRccqXGFdPxJL7fWi4Rrz_Q"/>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-error flex items-center justify-center text-white border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-[14px]" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<p class="text-on-surface leading-relaxed">
+<span class="font-bold">Sarah Jenkins</span> liked your post 
+                                <span class="text-on-surface-variant italic">"Found the best study spot in the North Library... "</span>
+</p>
+<span class="text-xs font-medium text-outline">4h ago</span>
+</div>
+</div>
+</div>
+<!-- Mention Notification -->
+<div class="group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-bright flex gap-5 border-l-4 border-primary">
+<div class="flex-shrink-0">
+<img alt="Student profile" class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of a male student wearing glasses in a library setting with warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPQBEY26vQEx2Qsbv1SUhfYQBswEAT5xhfWK5nu8-XqZylLbGjcLAILuKypK0UbbUZur6bvcd36fWsOEsyKJiw8KN_Z8U2BaQvWoO3VVUYfq7PA9Vp-uz24jjY6C0_RKN9-JE_TjPUZiBqQz8BXBW1lhK-JJWy4WXQu_6aM_Jh-56OC9Vd5hvjZrKRceQYmxpNcfWcNeEtge4eGB9JcQlqYz-XqH6Fg_kqsWb3Zid8NBumptb_S3-VmVMK6g_MTRUkT8He3Pc5JZ8"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-on-surface leading-relaxed">
+<span class="font-bold">David Chen</span> mentioned you in a comment:
+                                </p>
+<div class="mt-2 pl-4 border-l-2 border-surface-variant">
+<p class="text-on-surface-variant text-sm italic">"@Alex You were looking for the syllabus for CS402? I just uploaded it to the group resources section!"</p>
+</div>
+</div>
+<span class="text-xs font-medium text-outline">6h ago</span>
+</div>
+<div class="mt-4">
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
+                                Reply to comment
+                                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Generic Info Notification -->
+<div class="group bg-surface-container-lowest p-6 rounded-xl transition-all duration-300 hover:bg-surface-bright flex gap-5">
+<div class="flex-shrink-0">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-on-surface">Weekly Campus Digest is ready</h3>
+<p class="text-on-surface-variant text-sm mt-1">See what you missed this week in the Architecture and Design departments.</p>
+</div>
+<span class="text-xs font-medium text-outline">1d ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State / Load More (Editorial Style) -->
+<div class="py-12 flex flex-col items-center text-center">
+<div class="w-1 bg-surface-variant h-12 mb-6"></div>
+<p class="text-on-surface-variant font-medium">You've reached the end of your recent notifications.</p>
+<button class="mt-6 text-primary font-bold hover:tracking-widest transition-all">LOAD OLDER ACTIVITY</button>
+</div>
+</section>
+</main>
+<!-- Contextual FAB (Only for main ecosystem tasks) -->
+<!-- Suppressed on this page as it's a specific "Task-Focused" notification center -->
+</body></html>

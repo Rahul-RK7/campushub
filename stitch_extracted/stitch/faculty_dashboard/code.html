@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Faculty Dashboard | CampusHUB</title>
+<!-- Google Fonts: Manrope & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#2f1500",
+                    "tertiary": "#683500",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "primary-fixed-dim": "#c5c0ff",
+                    "inverse-surface": "#2e3132",
+                    "on-primary": "#ffffff",
+                    "outline": "#787584",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "surface-container-low": "#f3f4f5",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#c6c1f3",
+                    "primary-container": "#534ab7",
+                    "tertiary-fixed": "#ffdcc3",
+                    "primary": "#3b309e",
+                    "primary-fixed": "#e3dfff",
+                    "secondary-container": "#d1ccff",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#3f35a3",
+                    "surface-container-high": "#e7e8e9",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#ffc69a",
+                    "secondary": "#5d5a85",
+                    "inverse-primary": "#c5c0ff",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#edeeef",
+                    "on-secondary-fixed-variant": "#45426c",
+                    "background": "#f8f9fa",
+                    "on-secondary-fixed": "#19163d",
+                    "surface-bright": "#f8f9fa",
+                    "secondary-fixed": "#e3dfff",
+                    "on-primary-container": "#d1ccff",
+                    "on-surface-variant": "#474553",
+                    "on-background": "#191c1d",
+                    "surface-variant": "#e1e3e4",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "on-primary-fixed": "#140067",
+                    "outline-variant": "#c8c4d5",
+                    "surface-tint": "#584fbc",
+                    "surface": "#f8f9fa",
+                    "tertiary-container": "#8a4900",
+                    "on-secondary-container": "#585580",
+                    "surface-dim": "#d9dadb",
+                    "on-surface": "#191c1d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-3 max-w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-indigo-700 dark:text-indigo-300">CampusHUB</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-wider text-xs font-semibold" href="#">Feed</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-wider text-xs font-semibold" href="#">Inbox</a>
+<a class="text-indigo-700 dark:text-indigo-300 border-b-2 border-indigo-600 font-semibold pb-1 uppercase tracking-wider text-xs" href="#">Faculty Dashboard</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg transition-all scale-95 active:duration-150 relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20">
+<img alt="User profile avatar" class="w-8 h-8 rounded-full object-cover" data-alt="Close-up portrait of a professional academic male professor in a library setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy5RdwsJyfiTrSaU4JIgVI1TmExwxXu-SQzcT9cs75mDaTWZXIHQ4-u_MW5qJYsomLOClmPYtZ1bRCi426DeuWwmvzR-nJ2p-N0F5i29urWBvF1Y0_U2_gG6fxJ6CMS-MGKLUTgX9E-rJ9F9oj4ezhVPucfU_c4UoRYAszKhwK1-G2-SeMl3Gz4f3ThWRMMMnZuNQbMI7cu87CS005JJQGIWw1hukF66l7K8pSjmRwXYGohpyr--CXGWYOcudifleMVIxcaLWWgVk"/>
+<span class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-wider text-xs font-semibold cursor-pointer">Logout</span>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-12 px-6 max-w-7xl mx-auto">
+<!-- Dashboard Header & Stats -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+<div>
+<span class="text-primary font-semibold tracking-widest text-xs uppercase mb-2 block">Administration</span>
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface">Faculty Dashboard</h1>
+<p class="text-on-surface-variant mt-2 max-w-md">Review and manage pending student registrations for the upcoming academic semester.</p>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center gap-4 min-w-[160px]">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">group</span>
+</div>
+<div>
+<p class="text-xs uppercase tracking-tighter font-bold text-on-surface-variant">Pending</p>
+<p class="text-2xl font-bold text-primary">12</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center gap-4 min-w-[160px]">
+<div class="bg-tertiary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">verified</span>
+</div>
+<div>
+<p class="text-xs uppercase tracking-tighter font-bold text-on-surface-variant">Approved</p>
+<p class="text-2xl font-bold text-tertiary">148</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Content Grid (Asymmetric) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Main Column: Pending List -->
+<div class="lg:col-span-8 space-y-4">
+<div class="flex items-center justify-between mb-2">
+<h2 class="headline text-xl font-bold text-on-surface flex items-center gap-2">
+                        Registration Queue
+                        <span class="bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded text-xs font-bold">12 TOTAL</span>
+</h2>
+<div class="flex gap-2">
+<button class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span> Filter
+                        </button>
+</div>
+</div>
+<!-- Registration Cards -->
+<div class="space-y-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_20px_40px_rgba(25,28,29,0.03)] flex flex-col md:flex-row md:items-center justify-between gap-6 hover:translate-y-[-2px] transition-transform">
+<div class="flex items-center gap-5">
+<img alt="Student" class="w-14 h-14 rounded-full object-cover ring-2 ring-surface-container" data-alt="Professional headshot of a young female student with a bright smile in a campus environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBE3C4UuGrsxkvk2SZ_4hxy1xEydxw1_Ngvpx4DwvnWqh5hBpArm_H4s1Lk6tfjh4OGCChGlLvNKCDgTGlk6_qsGbqraWCZyotB0qeV4i4LEClmbsVD0E2QGF6wr2xfSdfb6eO1IKSrtGU2sU9LRpO3KixQIlY8r7UU2DF2H5jSEk44YCjp342h-OEeSrv3IWDORVtSPCLgeHhWNi6XpxcVgOOA5d1i0ORVnuv1sDyl-pjhCmK4OX6XvOt3lmu_NDubszoPjmfbeE"/>
+<div>
+<h3 class="font-bold text-lg text-on-surface">Sarah Mitchell</h3>
+<p class="text-sm text-on-surface-variant">s.mitchell@university.edu</p>
+<div class="flex items-center gap-3 mt-2">
+<span class="bg-surface-container-high text-on-secondary-fixed-variant text-[10px] uppercase font-bold px-2 py-0.5 rounded-sm tracking-wider">Computer Science</span>
+<span class="text-[10px] text-outline font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">calendar_today</span> Oct 24, 2023
+                                    </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-surface-container-high text-primary hover:bg-surface-bright transition-colors">
+                                Reject
+                            </button>
+<button class="px-6 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                                Approve
+                            </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_20px_40px_rgba(25,28,29,0.03)] flex flex-col md:flex-row md:items-center justify-between gap-6 hover:translate-y-[-2px] transition-transform">
+<div class="flex items-center gap-5">
+<img alt="Student" class="w-14 h-14 rounded-full object-cover ring-2 ring-surface-container" data-alt="Young male student in a casual blazer sitting in a modern study hall looking focused" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY4JeY98oZe5xZDjihP-oZumuyYp7EaSpbsDCiXMPntZA3fq_T0ZEYFRDWjNo14Aj5UK0shoH-7GjWeQt-DIkDccL8uN9fpbGV4whbZZkIzRsxLH6JUmzFs-6eZCMftWPsX2LZx346LpbTiSkOQiSUmrAqf5ZEbhRSTw94PjXiSqw9LQjhrdZXRq4tfihz6lQn2fEmXsTmA35nWvZRamfGkS-JoNBWu8EVe6CYny3cCnfLQIzH3s6-FNmGjnPbAmFLzNdsCmwvEAM"/>
+<div>
+<h3 class="font-bold text-lg text-on-surface">Jameson Chen</h3>
+<p class="text-sm text-on-surface-variant">j.chen88@university.edu</p>
+<div class="flex items-center gap-3 mt-2">
+<span class="bg-surface-container-high text-on-secondary-fixed-variant text-[10px] uppercase font-bold px-2 py-0.5 rounded-sm tracking-wider">Bioengineering</span>
+<span class="text-[10px] text-outline font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">calendar_today</span> Oct 25, 2023
+                                    </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-surface-container-high text-primary hover:bg-surface-bright transition-colors">
+                                Reject
+                            </button>
+<button class="px-6 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                                Approve
+                            </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_20px_40px_rgba(25,28,29,0.03)] flex flex-col md:flex-row md:items-center justify-between gap-6 hover:translate-y-[-2px] transition-transform">
+<div class="flex items-center gap-5">
+<div class="w-14 h-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold text-xl ring-2 ring-surface-container">
+                                AB
+                            </div>
+<div>
+<h3 class="font-bold text-lg text-on-surface">Amara Belen</h3>
+<p class="text-sm text-on-surface-variant">a.belen@university.edu</p>
+<div class="flex items-center gap-3 mt-2">
+<span class="bg-surface-container-high text-on-secondary-fixed-variant text-[10px] uppercase font-bold px-2 py-0.5 rounded-sm tracking-wider">Digital Arts</span>
+<span class="text-[10px] text-outline font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">calendar_today</span> Oct 25, 2023
+                                    </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-surface-container-high text-primary hover:bg-surface-bright transition-colors">
+                                Reject
+                            </button>
+<button class="px-6 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                                Approve
+                            </button>
+</div>
+</div>
+</div>
+<!-- Pagination/Load More -->
+<div class="flex justify-center pt-6">
+<button class="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
+                        View All Registrations <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Sidebar: Context & Tasks -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Task Checklist -->
+<section class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10">
+<h3 class="headline font-bold text-on-surface mb-4">Quick Actions</h3>
+<div class="space-y-3">
+<button class="w-full flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest hover:bg-surface-bright transition-all group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">history_edu</span>
+<span class="text-sm font-medium text-on-surface">Transcript Requests</span>
+</div>
+<span class="bg-error/10 text-error text-[10px] font-bold px-1.5 py-0.5 rounded">4</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest hover:bg-surface-bright transition-all group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">school</span>
+<span class="text-sm font-medium text-on-surface">Degree Audits</span>
+</div>
+<span class="material-symbols-outlined text-sm text-outline">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest hover:bg-surface-bright transition-all group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">description</span>
+<span class="text-sm font-medium text-on-surface">Course Evaluations</span>
+</div>
+<span class="material-symbols-outlined text-sm text-outline">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Announcement / Empty State Inspiration -->
+<section class="relative overflow-hidden bg-primary p-6 rounded-2xl text-on-primary">
+<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<span class="material-symbols-outlined mb-3 opacity-80" data-weight="fill">lightbulb</span>
+<h3 class="headline font-bold text-lg mb-2">Automated Rules</h3>
+<p class="text-sm text-on-primary/80 leading-relaxed mb-4">You can now set up automated approval for students with a GPA above 3.8 in your department.</p>
+<button class="text-xs font-bold uppercase tracking-widest bg-white text-primary px-4 py-2 rounded-lg hover:bg-on-primary-container transition-colors">Configure</button>
+</div>
+</section>
+</div>
+</div>
+<!-- Optional Empty State Section (Hidden by default but ready) -->
+<!-- 
+        <div class="flex flex-col items-center justify-center py-32 text-center">
+            <div class="w-24 h-24 bg-surface-container-high rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-5xl text-outline-variant">inbox</span>
+            </div>
+            <h2 class="text-2xl font-bold text-on-surface mb-2">All Caught Up!</h2>
+            <p class="text-on-surface-variant max-w-sm mx-auto">There are currently no pending student registrations in your queue. Check back later or review your history.</p>
+            <button class="mt-8 px-6 py-3 bg-surface-container-high text-primary font-bold rounded-xl hover:bg-surface-container-highest transition-all">
+                Review Past Decisions
+            </button>
+        </div>
+        -->
+</main>
+<!-- Contextual FAB (Only on Dashboard for quick adding a guest student) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">person_add</span>
+</button>
+</body></html>

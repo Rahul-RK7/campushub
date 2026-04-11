@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resource Library - CampusHUB</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-secondary-fixed-variant": "#45426c",
+                    "tertiary-container": "#8a4900",
+                    "secondary-container": "#d1ccff",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "background": "#f8f9fa",
+                    "inverse-primary": "#c5c0ff",
+                    "surface-container-low": "#f3f4f5",
+                    "surface": "#f8f9fa",
+                    "surface-variant": "#e1e3e4",
+                    "tertiary-fixed": "#ffdcc3",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "on-secondary-container": "#585580",
+                    "secondary-fixed": "#e3dfff",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-container-high": "#e7e8e9",
+                    "on-primary-container": "#d1ccff",
+                    "tertiary": "#683500",
+                    "primary": "#3b309e",
+                    "primary-fixed-dim": "#c5c0ff",
+                    "surface-tint": "#584fbc",
+                    "on-tertiary-container": "#ffc69a",
+                    "on-surface": "#191c1d",
+                    "on-background": "#191c1d",
+                    "surface-dim": "#d9dadb",
+                    "primary-fixed": "#e3dfff",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#534ab7",
+                    "on-surface-variant": "#474553",
+                    "outline": "#787584",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed": "#2f1500",
+                    "on-secondary-fixed": "#19163d",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "secondary": "#5d5a85",
+                    "outline-variant": "#c8c4d5",
+                    "surface-bright": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#c6c1f3",
+                    "on-primary-fixed-variant": "#3f35a3",
+                    "surface-container": "#edeeef",
+                    "on-primary-fixed": "#140067"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #0f172a; color: #f1f5f9; }
+        .dark .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .academic-gradient { background: linear-gradient(135deg, #3b309e 0%, #534ab7 100%); }
+        .glass-panel { backdrop-filter: blur(24px); background: rgba(15, 23, 42, 0.8); }
+    </style>
+</head>
+<body class="font-body text-on-surface dark:bg-slate-950 dark:text-slate-100">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-indigo-700 dark:text-indigo-400 font-headline">CampusHUB</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 font-medium font-manrope text-sm tracking-tight hover:text-indigo-500 transition-colors" href="#">Feed</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium font-manrope text-sm tracking-tight hover:text-indigo-500 transition-colors" href="#">Inbox</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium font-manrope text-sm tracking-tight hover:text-indigo-500 transition-colors" href="#">Groups</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium font-manrope text-sm tracking-tight hover:text-indigo-500 transition-colors" href="#">Events</a>
+<a class="text-indigo-700 dark:text-indigo-300 font-bold border-b-2 border-indigo-600 font-manrope text-sm tracking-tight" href="#">Resources</a>
+<a class="text-slate-600 dark:text-slate-400 font-medium font-manrope text-sm tracking-tight hover:text-indigo-500 transition-colors" href="#">Faculty</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:text-indigo-500 transition-all active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-indigo-500 transition-all active:opacity-80">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
+<img alt="User avatar" data-alt="close-up portrait of a friendly university student with glasses and a soft smile in front of a blurred library background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfh4I50K8AHUlQCN0YD8ASP0xt-0y5L2YGuwsmwgEqAyfI4PBoqESyuUNW6DWvBSbpeasq2TNA6mE2qEk023uQS7R3Zob5_XzUenJiuu8GfjbXkOgoNKX6jwUuB1sc_lyfPwR8Y-aX5dnt8wVECApsIKd66xxmYcPHVdxt3c8B4tM4rKEceOMCs4eHYxnsdJ2Hr3KCwNaIoLpjaV9I7ud9R1zrn_TJ_IXiTrexAxpZivVS-6Jhn-c8GtC1no_gnhegKc3AkR_UsK8"/>
+</div>
+</div>
+</div>
+</nav>
+<div class="flex pt-16 min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex h-[calc(100vh-64px)] w-64 fixed left-0 top-16 bg-slate-50 dark:bg-slate-900 flex-col p-4 space-y-2 border-r border-slate-200 dark:border-slate-800">
+<div class="px-4 py-6 mb-4">
+<h2 class="text-xl font-extrabold text-indigo-700 dark:text-indigo-400 font-headline">The Academic Curator</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-widest mt-1">Campus Hub Portal</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl">dynamic_feed</span>
+                    Feed
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl">mail</span>
+                    Inbox
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+                    Groups
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl">calendar_month</span>
+                    Events
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 font-manrope text-sm font-semibold rounded-lg" href="#">
+<span class="material-symbols-outlined text-xl">menu_book</span>
+                    Resources
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl">dashboard</span>
+                    Faculty
+                </a>
+</nav>
+<div class="pt-8">
+<button class="w-full academic-gradient text-white font-semibold py-3 rounded-xl shadow-lg shadow-indigo-500/20 active:scale-95 transition-all">
+                    Create Post
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 lg:ml-64 bg-slate-50 dark:bg-slate-950 px-6 py-8">
+<div class="max-w-6xl mx-auto">
+<!-- Hero Editorial Header -->
+<header class="relative mb-12 flex flex-col md:flex-row items-end gap-8">
+<div class="flex-1">
+<span class="text-xs font-bold tracking-[0.2em] text-indigo-600 dark:text-indigo-400 uppercase font-label mb-2 block">Curation Hub</span>
+<h1 class="text-5xl md:text-7xl font-extrabold font-headline text-slate-900 dark:text-white tracking-tighter leading-none mb-6">Resource<br/><span class="text-indigo-600 dark:text-indigo-500">Library.</span></h1>
+<p class="max-w-md text-slate-600 dark:text-slate-400 text-lg leading-relaxed">A meticulously curated collection of academic materials, research papers, and student-led guides designed for the modern scholar.</p>
+</div>
+<div class="w-full md:w-1/3 bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-indigo-500">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium" placeholder="Search archive..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-[10px] font-bold text-slate-500 uppercase tracking-wider">Physics</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-[10px] font-bold text-slate-500 uppercase tracking-wider">AI Ethics</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-[10px] font-bold text-slate-500 uppercase tracking-wider">Architecture</span>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Featured Resource: Asymmetric Large Card -->
+<article class="md:col-span-8 group relative overflow-hidden rounded-xl aspect-[16/9] md:aspect-auto md:h-[480px]">
+<img alt="Feature Library" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Minimalist modern library interior with sleek wooden tables, warm glowing lamps, and floor to ceiling bookshelves in soft focus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcoVhlGnLze5dqjBuH1Yebr2ePzMu_HyijZmAfqYiwS1vfFWmAtZBeJn4BHOIFo2gk5fxIPYayod41Tv8FndyLAufRHf13DD7zz9SuAHAp5uEzmspZxm_7E_acdatdz41dKrasLaSpS1PA4MJ7of75HCoyThY7E7wEdN5Yt5TERJgHbcbQ6cQ5h0P1eUyXUbZyT0pTQuEbCHbsQK8GfgdXjcfHVT2Cj3r1G8sNDwExDrkiJ9xP7o80D7siCOTQ7aYw3y0CaKjzBCM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full md:w-2/3">
+<div class="inline-block px-3 py-1 academic-gradient rounded text-[10px] font-extrabold text-white uppercase tracking-widest mb-4">Masterclass Series</div>
+<h3 class="text-3xl md:text-4xl font-bold text-white font-headline leading-tight mb-4">The Architectural Evolution of Campus Spaces</h3>
+<p class="text-slate-300 text-sm md:text-base mb-6">Dr. Aris Thorne explores how modern physical environments influence cognitive performance and student well-being.</p>
+<button class="flex items-center gap-2 text-white font-semibold text-sm group/btn">
+                                View Collection 
+                                <span class="material-symbols-outlined text-lg transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Secondary Items: Side Stack -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<div class="flex-1 bg-white dark:bg-slate-900 p-6 rounded-xl flex flex-col justify-between border-b-2 border-indigo-600">
+<div>
+<span class="material-symbols-outlined text-indigo-500 mb-4" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+<h4 class="text-xl font-bold text-slate-900 dark:text-white font-headline mb-2">My Saved Repository</h4>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Access your 14 bookmarked research papers and private notes.</p>
+</div>
+<div class="mt-8 flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-300"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-400 flex items-center justify-center text-[10px] font-bold">+11</div>
+</div>
+</div>
+<div class="flex-1 bg-indigo-600 p-6 rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="text-xl font-bold text-white font-headline mb-2">Faculty Guidelines 2024</h4>
+<p class="text-indigo-100 text-xs opacity-80">Download the updated thesis submission standards and peer-review protocols.</p>
+</div>
+<span class="material-symbols-outlined absolute -bottom-4 -right-4 text-8xl text-white opacity-10 group-hover:scale-110 transition-transform">description</span>
+</div>
+</div>
+<!-- Filter Categories Horizontal -->
+<div class="md:col-span-12 py-4 flex gap-3 overflow-x-auto no-scrollbar">
+<button class="flex-none px-6 py-2 bg-indigo-600 text-white rounded-full text-xs font-bold uppercase tracking-wider">All Subjects</button>
+<button class="flex-none px-6 py-2 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Computer Science</button>
+<button class="flex-none px-6 py-2 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Philosophy</button>
+<button class="flex-none px-6 py-2 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Data Ethics</button>
+<button class="flex-none px-6 py-2 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Life Sciences</button>
+<button class="flex-none px-6 py-2 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Economics</button>
+</div>
+<!-- Resource Cards List -->
+<div class="md:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+<!-- Card 1 -->
+<div class="bg-white dark:bg-slate-900 p-1 rounded-2xl group cursor-pointer hover:shadow-xl transition-all">
+<div class="aspect-video w-full rounded-xl overflow-hidden mb-4 relative">
+<img alt="Resource 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A stack of vintage hardcover books on a dark wooden table with a single shaft of natural light illuminating the textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy1eRu_b0DZbjW7Dq0R1a_cHu169H6lbfADcu4I9cHn4hnkFxHl-L5l43z9FioFm_k1EeE2WWg_cBam1h_WZqnxGoYUa-OW6_DFlXoIEuph4uqYMqThHZSTE2KlqkrN5pp8sAdAo0nSzSYR4s7rPIMB4j9G6E8ztJEcJzBmMQUacIC9XNl4_xWpdrPM-DSfLbI4RRr3fEG3HfgAn2evW6XrhKm13-t9SyjkDjDGtv9_jdHBfYzqWJv4U5juBcXAx3n7dsEHorXt-s"/>
+<div class="absolute top-3 right-3 bg-slate-900/60 backdrop-blur text-white px-2 py-1 rounded text-[10px] font-bold">PDF • 4.2 MB</div>
+</div>
+<div class="px-4 pb-6">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-indigo-500 uppercase">Computer Science</span>
+<span class="text-[10px] text-slate-400">OCT 12, 2023</span>
+</div>
+<h5 class="text-lg font-bold text-slate-900 dark:text-white font-headline leading-tight mb-2">Neural Network Fundamentals</h5>
+<p class="text-slate-500 dark:text-slate-400 text-xs mb-4 line-clamp-2">An introductory guide to backpropagation and activation functions for undergraduate researchers.</p>
+<div class="flex items-center gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+<img alt="Author" class="w-5 h-5 rounded-full" data-alt="abstract colorful avatar for JD" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOH-xoEt4HyiWJ_h64Bj9Mt5WxJ2uW6SVPSsrRIaE9QXecxcj0_I6rD6TFlEwZ8bGpBJuEVO4mVVa3XMwrN_umSVh6kwwUhsV7xTUuBWswwo6CDJTTi2OfEkP1ngeRARUgGtTL72OAN8ecURftPJmRWVFBuoAvrlHXiC6Ip64RuMPPV67Yd3n_8KBVSH6fpg8oIEkMWfxdfIrvbRuWMYD9ndt-UXJnqcuVgOxf-USQ5Mw5_J-16fUfy79lgZ5CZpqrfBudxX4n-bw"/>
+<span class="text-[10px] font-semibold text-slate-600 dark:text-slate-400">By Prof. Julianna Dewitt</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-slate-900 p-1 rounded-2xl group cursor-pointer hover:shadow-xl transition-all">
+<div class="aspect-video w-full rounded-xl overflow-hidden mb-4 relative">
+<img alt="Resource 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="abstract digital visualization of data streams and neural networks in shades of neon blue and purple on a black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGuTbLHC4Go61Vlw6ngqrDAV-zqvkgzG9pAvJVUtBolW7q8BDzpZurCu4QnddCOYR4HMwbjk48QvNEGXH2L_jrjVR0_YnHAFP-dOF7ZE5Mz4nPMbL_KGU7KtlKXi6hHZjxe4kl1e2s8ckPW3A-45sLiNBn1JAYZGGfna32ZhpNsdc_EvBgW4EXlf5g_04thNYEoFPxclsugvcmikw8PUqKgS2T5s8UODiZcYFWv6DL0qeScg0M4DYzRqcM9qo6JsExU6rfwPkcC-A"/>
+<div class="absolute top-3 right-3 bg-slate-900/60 backdrop-blur text-white px-2 py-1 rounded text-[10px] font-bold">VIDEO • 24:05</div>
+</div>
+<div class="px-4 pb-6">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-indigo-500 uppercase">Data Science</span>
+<span class="text-[10px] text-slate-400">SEP 28, 2023</span>
+</div>
+<h5 class="text-lg font-bold text-slate-900 dark:text-white font-headline leading-tight mb-2">Visualizing Big Data in D3.js</h5>
+<p class="text-slate-500 dark:text-slate-400 text-xs mb-4 line-clamp-2">Advanced techniques for creating interactive web-based data visualizations for complex datasets.</p>
+<div class="flex items-center gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+<img alt="Author" class="w-5 h-5 rounded-full" data-alt="abstract colorful avatar for MC" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD5Wjh9R46UUdCEpKQHQdYXXascT9VShFPCrYUT3qEKC1TAv5lOt6O0C4JV1jWECXf4qMDJOdf8N3W_Lq-k1fO0NaINT8i2VRg1AS4lrwmMWb4o-mSdzATh2zNz562mUo0WC_gtyIT19Sk59E21mZ7ViAhWYEq_nvEQCxBHpVn85zEgagpa0LdPkfDCqnbvA_-hqDbrffy-hEJbDeeKx0g-f4Bw2b9TpOdX9mI8iCln7pzYUivXeEPBQmKp4ww7BEJrAxLjgwSFoY"/>
+<span class="text-[10px] font-semibold text-slate-600 dark:text-slate-400">By Marcus Chen, Lead Dev</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-slate-900 p-1 rounded-2xl group cursor-pointer hover:shadow-xl transition-all">
+<div class="aspect-video w-full rounded-xl overflow-hidden mb-4 relative">
+<img alt="Resource 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="top down view of a clean desk with a pen and an open notebook featuring elegant cursive handwriting and sketches" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC06AroY-UdUs49s4csElZar7c28ToDv63RY0eiHYNcM6L6v-knsEY73aDwDZdgD98MLsC4nKXCul8hxX8HCpmtIS_dHUBs0HhMG49JQSUjCk36dFzk0eCKgzIoYCJSIh7kB3TH9UGxLf6Ziim1bJxmzAMCmWXTj33e0nLu_QS6ETe7HjYA03jAhEHHcIJT8W22LJCesbnrBO66JR4cTHdqKM_LG51KSJJSaqpc2dCVo4GE-mKRFqfg2TrvAhPmakLQdooW2l9TC3o"/>
+<div class="absolute top-3 right-3 bg-slate-900/60 backdrop-blur text-white px-2 py-1 rounded text-[10px] font-bold">SLIDES • 42 PGS</div>
+</div>
+<div class="px-4 pb-6">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-indigo-500 uppercase">Philosophy</span>
+<span class="text-[10px] text-slate-400">AUG 15, 2023</span>
+</div>
+<h5 class="text-lg font-bold text-slate-900 dark:text-white font-headline leading-tight mb-2">Ethics of the Algorithmic Era</h5>
+<p class="text-slate-500 dark:text-slate-400 text-xs mb-4 line-clamp-2">A deep dive into the moral implications of automated decision-making in public policy.</p>
+<div class="flex items-center gap-2 pt-4 border-t border-slate-100 dark:border-slate-800">
+<img alt="Author" class="w-5 h-5 rounded-full" data-alt="abstract colorful avatar for ES" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChmKHEjF5e2zpXdc2wmW_xM1iEvNueMiyQXjx8OyCTX3Cf_UQS6ZDtTJIW4Ww4dUkLxMSzs5eS4YFM1bbhK0QzoiOwJCr-TQKRpRRS-kPQOcxj5LabN5K8Nbwqr0HECR_aoUHwk7oK6B93s1a7m1wf_sga1Qpamec_YgnsYqF5WD3JikfFnAGVLebWRKfKSNnaCOJ7-FbAyG1Gu3bnXXfHkoP5hNWMiTGvuheZJBLhkFs37JkrAxC3qIw8xiPubVE4KVDP8z_SWX4"/>
+<span class="text-[10px] font-semibold text-slate-600 dark:text-slate-400">By Elena Sorensen</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Load More / Footer Section -->
+<div class="mt-16 text-center border-t border-slate-200 dark:border-slate-800 pt-12 pb-24">
+<button class="px-8 py-3 bg-slate-200 dark:bg-slate-900 text-slate-900 dark:text-white font-bold rounded-xl hover:bg-slate-300 dark:hover:bg-slate-800 transition-all active:scale-95">
+                        Discover More Resources
+                    </button>
+<p class="mt-6 text-slate-500 dark:text-slate-400 text-sm italic">Showing 9 of 1,248 available materials in the public hub.</p>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Navigation Bottom Bar -->
+<div class="md:hidden fixed bottom-0 w-full glass-panel h-16 flex items-center justify-around px-4 border-t border-slate-200 dark:border-slate-800 z-50">
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">dynamic_feed</span>
+<span class="text-[10px] font-bold">FEED</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">mail</span>
+<span class="text-[10px] font-bold">MAIL</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-indigo-500">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="text-[10px] font-bold">RESOURCES</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold">GROUPS</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">PROFILE</span>
+</button>
+</div>
+</body></html>

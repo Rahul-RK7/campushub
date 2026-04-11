@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CampusHUB | Groups</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-secondary-fixed-variant": "#45426c",
+                        "tertiary-container": "#8a4900",
+                        "secondary-container": "#d1ccff",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "background": "#f8f9fa",
+                        "inverse-primary": "#c5c0ff",
+                        "surface-container-low": "#f3f4f5",
+                        "surface": "#f8f9fa",
+                        "surface-variant": "#e1e3e4",
+                        "tertiary-fixed": "#ffdcc3",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "on-secondary-container": "#585580",
+                        "secondary-fixed": "#e3dfff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-high": "#e7e8e9",
+                        "on-primary-container": "#d1ccff",
+                        "tertiary": "#683500",
+                        "primary": "#3b309e",
+                        "primary-fixed-dim": "#c5c0ff",
+                        "surface-tint": "#584fbc",
+                        "on-tertiary-container": "#ffc69a",
+                        "on-surface": "#191c1d",
+                        "on-background": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "primary-fixed": "#e3dfff",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#534ab7",
+                        "on-surface-variant": "#474553",
+                        "outline": "#787584",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#2f1500",
+                        "on-secondary-fixed": "#19163d",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "secondary": "#5d5a85",
+                        "outline-variant": "#c8c4d5",
+                        "surface-bright": "#f8f9fa",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c6c1f3",
+                        "on-primary-fixed-variant": "#3f35a3",
+                        "surface-container": "#edeeef",
+                        "on-primary-fixed": "#140067"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background selection:bg-secondary-container selection:text-on-secondary-container">
+    <!-- TopNavBar (Shared Component) -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <span class="text-2xl font-bold tracking-tighter text-indigo-700 dark:text-indigo-400">CampusHUB</span>
+                <div class="hidden md:flex items-center space-x-6 font-manrope text-sm font-medium tracking-tight">
+                    <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 transition-colors"
+                        href="#">Feed</a>
+                    <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 transition-colors"
+                        href="#">Inbox</a>
+                    <a class="text-indigo-700 dark:text-indigo-300 font-bold border-b-2 border-indigo-600 transition-colors"
+                        href="#">Groups</a>
+                    <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 transition-colors"
+                        href="#">Events</a>
+                    <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 transition-colors"
+                        href="#">Resources</a>
+                    <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-indigo-500 transition-colors"
+                        href="#">Faculty</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="p-2 text-slate-500 hover:text-indigo-600 active:opacity-80 transition-all">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <button class="p-2 text-slate-500 hover:text-indigo-600 active:opacity-80 transition-all">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+                <img alt="User avatar" class="w-8 h-8 rounded-full border-2 border-indigo-100"
+                    data-alt="close-up portrait of a diverse university student smiling warmly in a bright indoor campus setting"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY6eqJJobTltE3SQhrxWM_zSI4a-1Q_KJX1J5txVHHwwdTd1Yqyz4S7S1jCUAsN4vhMPwBe_Va09lgtJXRQnaVHIaGwbQtNGrfu0yDRsUyx4zUs5c6EkK624LMJc-Uq6aOQc2wEcgSpnud78FM9C0T6p2ytps7tzPylZady70dfNTJiiNFikccSC2Ftgpecq0AOKQbUrCnkRNlRhW2wa2tc9HgjQW4xB3gCu8d4u73lMZdr3-Y2epKh2lzFik1f0V_UwLuwIRv0ZA" />
+            </div>
+        </div>
+    </nav>
+    <!-- SideNavBar (Shared Component) -->
+    <aside
+        class="hidden lg:flex flex-col h-screen w-64 fixed left-0 top-0 bg-slate-50 dark:bg-slate-900 p-4 space-y-2 border-r border-slate-200 dark:border-slate-800 pt-20">
+        <div class="mb-8 px-2">
+            <h2 class="text-xl font-extrabold text-indigo-700 dark:text-indigo-400">The Academic Curator</h2>
+            <p class="text-xs text-slate-500 font-manrope">Campus Hub Portal</p>
+        </div>
+        <nav class="flex flex-col space-y-1">
+            <a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 transition-all rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">dynamic_feed</span> Feed
+            </a>
+            <a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 transition-all rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">mail</span> Inbox
+            </a>
+            <a class="flex items-center gap-3 p-3 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg font-manrope text-sm font-semibold scale-95 duration-150"
+                href="#">
+                <span class="material-symbols-outlined">group</span> Groups
+            </a>
+            <a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 transition-all rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">calendar_month</span> Events
+            </a>
+            <a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 transition-all rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">menu_book</span> Resources
+            </a>
+            <a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 transition-all rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">dashboard</span> Faculty
+            </a>
+        </nav>
+        <div class="mt-auto p-2">
+            <button
+                class="w-full py-3 px-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-all">
+                Create Post
+            </button>
+        </div>
+    </aside>
+    <!-- Main Content Canvas -->
+    <main class="lg:pl-64 pt-20 min-h-screen">
+        <div class="max-w-6xl mx-auto px-6 py-8">
+            <!-- Editorial Header Section -->
+            <header class="mb-12 relative">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="max-w-2xl">
+                        <span
+                            class="text-xs font-bold tracking-[0.1em] text-primary mb-2 block uppercase font-label">COMMUNITY
+                            HUB</span>
+                        <h1 class="text-5xl font-extrabold tracking-tight text-on-surface mb-4 leading-tight">
+                            Connect with <br /><span class="text-primary-container">Campus Communities</span>
+                        </h1>
+                        <p class="text-on-surface-variant text-lg max-w-lg leading-relaxed">
+                            Discover academic excellence and social vibrant spaces curated for your growth. Find your
+                            tribe in the heart of campus.
+                        </p>
+                    </div>
+                    <div class="flex flex-col items-start gap-4">
+                        <div class="flex -space-x-3">
+                            <img alt="Member 1" class="w-10 h-10 rounded-full border-2 border-white"
+                                data-alt="portrait of a young man with glasses smiling"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAD7w5a7XuI69ScyQ_XM7P9R3Fx49p6fwa6evCnv5pE1O6NaZ14goFOra4ToavMZ9Vr3YyzYvNewc_Gap4wUY-njRMLQmE6h2rM_hMJm-DzwE-AT0osn3usDjRQHb8JKf0zcCJwdAgBcJEpzF33DdorMX9C_aRUcY2JWr57nO9szp8uieMuBnfj9kyKdiNnwgtcFbDzW7DoyzxAicH-_Bu9-xM6NYaABzaNm5hpgiqZ-FQvo7xG1ZQF6oNC7JGYMVKsAJ53U4weYw" />
+                            <img alt="Member 2" class="w-10 h-10 rounded-full border-2 border-white"
+                                data-alt="portrait of a woman with curly hair looking confident"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm558Aa04JUaooD3QnsTebgEi4ha08A_uLGj3F0U9kWyUpMUw3HuTLErM0INf27QL6mJCfufVDfkLnO9qKN7GYollCuSwKSFNPE5WcPmVRJuG0BkngOq26l0RyLvC9l-rzb9MMWQGIV7JAm8gQRBRL2r8GbfSN89Ol62l446ZDefExZ83Rz77zFL4kfMdyOIStwj8j1ut5dlcBd8CrKwEVB0RL0YbwuizIUwIjyfzx6Y2rW0IxI23PZ781pEpo_51buLKX5Blr9sU" />
+                            <img alt="Member 3" class="w-10 h-10 rounded-full border-2 border-white"
+                                data-alt="portrait of a smiling student in a library"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRKWrJrdZSs4nnrtDhjpzu9xC8hyfKV_4T0_KLsgrEjzk4ARhdCLfilzvspwuWYRellpbt-QxfssB1s_1FX1wo4e2v9piW7-wU9tYEAQ_qz6BC8LNtxVZKxAbS8nhv4tLkiUxHF5G1tPRYEq5qqkl-nGsBz9KBTHe0YX0s03V8L3XKl4kq5x8jP4GI-5-tbXT3ptUsvyavFvAGIwKuNB-del_3Dytpf7aeD6a2rJyvaeJPc_V020TlTMPxShZhQZbGV-W8W6JumlY" />
+                            <div
+                                class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xs font-bold border-2 border-white">
+                                +12k
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium text-on-surface-variant">Active students online now</p>
+                    </div>
+                </div>
+            </header>
+            <!-- Search & Filters -->
+            <section class="mb-12 sticky top-20 z-40 bg-background/95 backdrop-blur-sm py-4">
+                <div class="flex flex-col md:flex-row gap-4 items-center">
+                    <div class="relative w-full md:flex-1">
+                        <span
+                            class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+                        <input
+                            class="w-full pl-12 pr-4 py-4 bg-surface-container-low rounded-xl border-none focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all text-on-surface"
+                            placeholder="Search clubs, academic societies, or hobbies..." type="text" />
+                    </div>
+                    <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+                        <button
+                            class="px-6 py-3 bg-primary text-on-primary rounded-xl font-medium whitespace-nowrap">All
+                            Groups</button>
+                        <button
+                            class="px-6 py-3 bg-surface-container-high text-on-surface hover:bg-surface-variant transition-all rounded-xl font-medium whitespace-nowrap">Academic</button>
+                        <button
+                            class="px-6 py-3 bg-surface-container-high text-on-surface hover:bg-surface-variant transition-all rounded-xl font-medium whitespace-nowrap">Social</button>
+                        <button
+                            class="px-6 py-3 bg-surface-container-high text-on-surface hover:bg-surface-variant transition-all rounded-xl font-medium whitespace-nowrap">Career</button>
+                        <button
+                            class="px-6 py-3 bg-surface-container-high text-on-surface hover:bg-surface-variant transition-all rounded-xl font-medium whitespace-nowrap">Sports</button>
+                    </div>
+                </div>
+            </section>
+            <!-- Asymmetric Bento Grid of Groups -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Group Card 1: CS Society (Featured/Large) -->
+                <div
+                    class="lg:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col md:flex-row group border border-transparent hover:border-outline-variant/30 transition-all duration-300">
+                    <div class="md:w-2/5 relative h-64 md:h-auto overflow-hidden">
+                        <img alt="Computer Science Society"
+                            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            data-alt="group of students working together on laptops in a modern tech lab with neon accents and coding on screens"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx7ryxc5KBlbELhIAKdQ-aOkKC8pGrzJPCVwud_up5P6LhCpc3Tf0oeibMOacyR8B9uztxL5nhgalOfFfrwpdnlANfAu8SwKXMtfIhbXtxqAHsibjj9HlOgh58VE_jj2p-GyDQwOytKUjc95lYDCBuVPRolDGq26_1xh7_c-LUT2DAoBLQ8xLYSDuKlIyuXZPI7iQd1_uBr2hz7gpO5awGNuWxlhscm5ZoWHM0JRZQVHKr5bocnZQX2FixMk-y0leX69H1ySSQMsU" />
+                        <div class="absolute top-4 left-4">
+                            <span
+                                class="px-3 py-1 bg-primary/90 text-on-primary text-[10px] font-bold tracking-widest uppercase rounded-full">MOST
+                                ACTIVE</span>
+                        </div>
+                    </div>
+                    <div class="md:w-3/5 p-8 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-2xl font-bold text-on-surface">Computer Science Society</h3>
+                                <span class="flex items-center gap-1 text-primary text-sm font-bold">
+                                    <span class="material-symbols-outlined text-sm">groups</span> 1,240
+                                </span>
+                            </div>
+                            <p class="text-on-surface-variant leading-relaxed mb-6">
+                                The hub for future engineers. Weekly hackathons, industry networking events, and
+                                collaborative peer-coding sessions. Open to all skill levels.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-8">
+                                <span
+                                    class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-xs font-semibold rounded-md uppercase">ACADEMIC</span>
+                                <span
+                                    class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-xs font-semibold rounded-md uppercase">TECH</span>
+                            </div>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
+                            Join Society
+                        </button>
+                    </div>
+                </div>
+                <!-- Group Card 2: Chess Club -->
+                <div
+                    class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between group hover:shadow-xl hover:shadow-on-surface/5 transition-all">
+                    <div>
+                        <div
+                            class="w-16 h-16 bg-tertiary-fixed rounded-2xl flex items-center justify-center mb-6 text-on-tertiary-fixed">
+                            <span class="material-symbols-outlined text-3xl">strategy</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-on-surface">Grandmaster Chess Club</h3>
+                            <span class="text-xs font-medium text-on-surface-variant">420 members</span>
+                        </div>
+                        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+                            Master the 64 squares. From casual blitz games to competitive campus tournaments. All levels
+                            from beginner to advanced are welcome.
+                        </p>
+                    </div>
+                    <button
+                        class="w-full py-3 bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-all rounded-xl font-bold">
+                        Join Club
+                    </button>
+                </div>
+                <!-- Group Card 3: Drama Club -->
+                <div
+                    class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between group hover:shadow-xl hover:shadow-on-surface/5 transition-all">
+                    <div>
+                        <div
+                            class="w-16 h-16 bg-secondary-fixed rounded-2xl flex items-center justify-center mb-6 text-on-secondary-fixed">
+                            <span class="material-symbols-outlined text-3xl">theater_comedy</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-on-surface">Thespian Collective</h3>
+                            <span class="text-xs font-medium text-on-surface-variant">215 members</span>
+                        </div>
+                        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+                            Express yourself through performance. Annual mainstage productions, improv workshops, and
+                            script-writing labs.
+                        </p>
+                    </div>
+                    <button
+                        class="w-full py-3 bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-all rounded-xl font-bold">
+                        Join Collective
+                    </button>
+                </div>
+                <!-- Group Card 4: Environmental Society -->
+                <div
+                    class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between group hover:shadow-xl hover:shadow-on-surface/5 transition-all">
+                    <div>
+                        <div
+                            class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6 text-green-800">
+                            <span class="material-symbols-outlined text-3xl">eco</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-on-surface">Green Campus Initiative</h3>
+                            <span class="text-xs font-medium text-on-surface-variant">890 members</span>
+                        </div>
+                        <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+                            Leading the way in campus sustainability. Organic gardening, recycling drives, and
+                            environmental policy advocacy.
+                        </p>
+                    </div>
+                    <button
+                        class="w-full py-3 bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-all rounded-xl font-bold">
+                        Join Initiative
+                    </button>
+                </div>
+                <!-- Group Card 5: Music & Arts (Large/Featured) -->
+                <div
+                    class="lg:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col md:flex-row group border border-transparent hover:border-outline-variant/30 transition-all duration-300">
+                    <div class="md:w-3/5 p-8 flex flex-col justify-between order-2 md:order-1">
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-2xl font-bold text-on-surface">Creative Arts Collective</h3>
+                                <span class="flex items-center gap-1 text-primary text-sm font-bold">
+                                    <span class="material-symbols-outlined text-sm">groups</span> 560
+                                </span>
+                            </div>
+                            <p class="text-on-surface-variant leading-relaxed mb-6">
+                                A cross-disciplinary space for painters, musicians, and digital artists. Monthly gallery
+                                showcases and collaborative street-art projects.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-8">
+                                <span
+                                    class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-xs font-semibold rounded-md uppercase">ARTS</span>
+                                <span
+                                    class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-xs font-semibold rounded-md uppercase">SOCIAL</span>
+                            </div>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95">
+                            Join Collective
+                        </button>
+                    </div>
+                    <div class="md:w-2/5 relative h-64 md:h-auto overflow-hidden order-1 md:order-2">
+                        <img alt="Creative Arts Collective"
+                            class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            data-alt="bright open art studio with students painting on canvases and colorful splatter patterns on the floor with natural sunlight"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBLNhZqiL5nXjKEtt2YPN_sE-PdwWTr21C4p-DWslunCX_GsG_lcaGPqkaRFvS8aUvgqGYKKrOn-dzTaACU_UuyUzBrQiMsTKQbuOLcpjY65aW2FdfP3nQuHmxsxLTnX8S75g3Ed3LT8-atlFFfiEqp3rDvcv_He356T5sQFHU3uJk52EbliVGalSlYm5FeKjf87ECgDNULqnUXNKNyv1jjspBpbnKg8fCg87_4xPOgt92k10WgasjArTsY8WkRJi3Xbcros9-lvU" />
+                    </div>
+                </div>
+            </div>
+            <!-- Suggestion Footer -->
+            <footer
+                class="mt-20 p-12 bg-surface-container-low rounded-[2rem] text-center border-2 border-dashed border-outline-variant/30">
+                <div class="max-w-xl mx-auto">
+                    <span class="material-symbols-outlined text-5xl text-primary/40 mb-4">rocket_launch</span>
+                    <h3 class="text-2xl font-bold text-on-surface mb-2">Can't find your tribe?</h3>
+                    <p class="text-on-surface-variant mb-8">Start your own student organization and lead the next wave
+                        of campus culture. We provide the tools and funding to get you started.</p>
+                    <button
+                        class="px-8 py-4 bg-white text-primary border border-primary/20 rounded-xl font-bold hover:bg-primary hover:text-white transition-all">
+                        Apply to Found a Club
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </main>
+    <!-- FAB (Suppressed on this specific detail/navigation intensive page based on instructions, but keeping template logic) -->
+    <!-- Mobile Bottom Nav -->
+    <nav
+        class="md:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-xl border-t-0 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-50 px-6 py-3 flex justify-between items-center">
+        <button class="flex flex-col items-center gap-1 text-slate-400">
+            <span class="material-symbols-outlined">dynamic_feed</span>
+            <span class="text-[10px] font-bold">Feed</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400">
+            <span class="material-symbols-outlined">mail</span>
+            <span class="text-[10px] font-bold">Inbox</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-indigo-700">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+            <span class="text-[10px] font-bold">Groups</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400">
+            <span class="material-symbols-outlined">calendar_month</span>
+            <span class="text-[10px] font-bold">Events</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400">
+            <span class="material-symbols-outlined">person</span>
+            <span class="text-[10px] font-bold">Profile</span>
+        </button>
+    </nav>
+</body>
+
+</html>

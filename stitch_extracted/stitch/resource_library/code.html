@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resource Library | CampusHUB</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-secondary-fixed-variant": "#45426c",
+                    "tertiary-container": "#8a4900",
+                    "secondary-container": "#d1ccff",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "background": "#f8f9fa",
+                    "inverse-primary": "#c5c0ff",
+                    "surface-container-low": "#f3f4f5",
+                    "surface": "#f8f9fa",
+                    "surface-variant": "#e1e3e4",
+                    "tertiary-fixed": "#ffdcc3",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "on-secondary-container": "#585580",
+                    "secondary-fixed": "#e3dfff",
+                    "on-primary": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-container-high": "#e7e8e9",
+                    "on-primary-container": "#d1ccff",
+                    "tertiary": "#683500",
+                    "primary": "#3b309e",
+                    "primary-fixed-dim": "#c5c0ff",
+                    "surface-tint": "#584fbc",
+                    "on-tertiary-container": "#ffc69a",
+                    "on-surface": "#191c1d",
+                    "on-background": "#191c1d",
+                    "surface-dim": "#d9dadb",
+                    "primary-fixed": "#e3dfff",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#534ab7",
+                    "on-surface-variant": "#474553",
+                    "outline": "#787584",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed": "#2f1500",
+                    "on-secondary-fixed": "#19163d",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "secondary": "#5d5a85",
+                    "outline-variant": "#c8c4d5",
+                    "surface-bright": "#f8f9fa",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#c6c1f3",
+                    "on-primary-fixed-variant": "#3f35a3",
+                    "surface-container": "#edeeef",
+                    "on-primary-fixed": "#140067"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-editorial-gradient {
+            background: linear-gradient(135deg, #3b309e 0%, #534ab7 100%);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-sm h-16">
+<div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+<div class="flex items-center gap-12">
+<span class="text-2xl font-bold tracking-tighter text-indigo-700">CampusHUB</span>
+<div class="hidden md:flex items-center gap-8 font-manrope text-sm font-medium tracking-tight">
+<a class="text-slate-600 hover:text-indigo-500 transition-colors" href="#">Feed</a>
+<a class="text-slate-600 hover:text-indigo-500 transition-colors" href="#">Inbox</a>
+<a class="text-slate-600 hover:text-indigo-500 transition-colors" href="#">Groups</a>
+<a class="text-slate-600 hover:text-indigo-500 transition-colors" href="#">Events</a>
+<a class="text-indigo-700 font-bold border-b-2 border-indigo-600 pb-1" href="#">Resources</a>
+<a class="text-slate-600 hover:text-indigo-500 transition-colors" href="#">Faculty</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 active:opacity-80 transition-all"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 text-slate-600 active:opacity-80 transition-all"><span class="material-symbols-outlined">dark_mode</span></button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="User avatar" data-alt="professional headshot of a smiling young academic student in a neutral indoor setting with natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjyyQi1aqxWHN6e_CGJb7BFiAJSGj7SUlCynabkSgKACA7F4cMq_xKBAVF2GPVr_wyjEig7ceUiyk3BdNZqEDTix5ZoF6OOvvXxM6duw6vDXZNT_E2zLUw723Zc4W9FVtnYCMqbrdcnrJ0ZlQ3pMG-WxEefF7rEGmfaEJVxARcxOpiXtXxRUGOn26uf2q5Yr_8GcIgBd0lbs6CuPxk2FF-jqLLwmkvHw6OD__NLu5wkmkf1xSqN13Ln3igrLDBHKBKbuZ-9sWjmd4"/>
+</div>
+</div>
+</div>
+</nav>
+<div class="flex pt-16 min-h-screen">
+<!-- SideNavBar (Hidden on small mobile) -->
+<aside class="hidden lg:flex flex-col w-64 bg-slate-50 p-4 space-y-2 border-r border-transparent h-[calc(100vh-64px)] fixed sticky top-16">
+<div class="px-4 py-6 mb-4">
+<h2 class="text-xl font-extrabold text-indigo-700 font-headline">The Academic Curator</h2>
+<p class="text-xs text-slate-500 uppercase tracking-widest mt-1">Campus Hub Portal</p>
+</div>
+<nav class="flex flex-col space-y-1 font-manrope text-sm font-semibold">
+<a class="flex items-center gap-3 p-3 text-slate-500 hover:bg-slate-100 rounded-lg transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">dynamic_feed</span> Feed
+                </a>
+<a class="flex items-center gap-3 p-3 text-slate-500 hover:bg-slate-100 rounded-lg transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">mail</span> Inbox
+                </a>
+<a class="flex items-center gap-3 p-3 text-slate-500 hover:bg-slate-100 rounded-lg transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">group</span> Groups
+                </a>
+<a class="flex items-center gap-3 p-3 text-slate-500 hover:bg-slate-100 rounded-lg transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">calendar_month</span> Events
+                </a>
+<a class="flex items-center gap-3 p-3 bg-indigo-50 text-indigo-700 rounded-lg transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">menu_book</span> Resources
+                </a>
+<a class="flex items-center gap-3 p-3 text-slate-500 hover:bg-slate-100 rounded-lg transition-all active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span> Faculty
+                </a>
+</nav>
+<div class="mt-auto p-4">
+<button class="w-full py-3 bg-editorial-gradient text-on-primary rounded-xl font-semibold shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span> Create Post
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 px-6 lg:px-12 py-8 max-w-7xl">
+<!-- Header Section (Asymmetric Editorial Style) -->
+<header class="mb-12">
+<span class="label-md uppercase tracking-[0.05em] text-primary font-bold text-xs mb-2 block">REPOSITORIES</span>
+<h1 class="text-5xl font-extrabold font-headline tracking-tighter text-on-surface max-w-2xl leading-tight">
+                    Academic Knowledge Base
+                </h1>
+<div class="mt-4 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<p class="text-on-surface-variant max-w-md">
+                        A curated collection of research papers, lecture notes, and media assets spanning across all departments.
+                    </p>
+<div class="flex items-center gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low rounded-lg outline-none focus:bg-surface-container-lowest border-none ring-0 focus:ring-b-2 ring-primary transition-all w-64 text-sm" placeholder="Search resources..." type="text"/>
+</div>
+<button class="p-2 bg-surface-container-high rounded-lg text-on-surface hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Department Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+<!-- Science Department -->
+<div class="group relative overflow-hidden bg-surface-container-lowest p-8 rounded-xl transition-all duration-300 hover:translate-y-[-4px]">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[80px] -z-0"></div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6">science</span>
+<h3 class="text-xl font-bold font-headline mb-2">Science</h3>
+<p class="text-sm text-on-surface-variant mb-6">Physics, Biology, Chemistry &amp; Laboratory reports.</p>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-400">1,240 FILES</span>
+<button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
+                            Open Folder <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Arts Department -->
+<div class="group relative overflow-hidden bg-surface-container-lowest p-8 rounded-xl transition-all duration-300 hover:translate-y-[-4px]">
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary/5 rounded-bl-[80px] -z-0"></div>
+<span class="material-symbols-outlined text-4xl text-tertiary mb-6">palette</span>
+<h3 class="text-xl font-bold font-headline mb-2">Arts</h3>
+<p class="text-sm text-on-surface-variant mb-6">Visual Arts, Literature, Music &amp; History archives.</p>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-400">856 FILES</span>
+<button class="text-tertiary font-bold text-sm flex items-center gap-1 hover:underline">
+                            Open Folder <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Business Department -->
+<div class="group relative overflow-hidden bg-surface-container-lowest p-8 rounded-xl transition-all duration-300 hover:translate-y-[-4px]">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-bl-[80px] -z-0"></div>
+<span class="material-symbols-outlined text-4xl text-secondary mb-6">payments</span>
+<h3 class="text-xl font-bold font-headline mb-2">Business</h3>
+<p class="text-sm text-on-surface-variant mb-6">Economics, Finance, Marketing &amp; Case Studies.</p>
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-400">2,105 FILES</span>
+<button class="text-secondary font-bold text-sm flex items-center gap-1 hover:underline">
+                            Open Folder <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Featured Resources (Glassmorphism List) -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-bold font-headline">Recent Uploads</h2>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold">ALL</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">PDFS</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full text-xs font-bold">SLIDES</span>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Resource Item 1 -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-error-container rounded-lg flex items-center justify-center text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Neuroscience Foundations_Chapter_4.pdf</h4>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> Oct 12, 2023</span>
+<span>•</span>
+<span>Science Dept</span>
+<span>•</span>
+<span>4.2 MB</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="px-4 py-2 bg-surface-container-high text-primary font-bold text-xs rounded-lg flex items-center gap-2 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-sm">download</span> DOWNLOAD
+                            </button>
+</div>
+</div>
+<!-- Resource Item 2 -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">present_to_all</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Modernist Architecture_Slides_V2.pptx</h4>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> Oct 10, 2023</span>
+<span>•</span>
+<span>Arts Dept</span>
+<span>•</span>
+<span>18.5 MB</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="px-4 py-2 bg-surface-container-high text-primary font-bold text-xs rounded-lg flex items-center gap-2 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-sm">download</span> DOWNLOAD
+                            </button>
+</div>
+</div>
+<!-- Resource Item 3 -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-error-container rounded-lg flex items-center justify-center text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Global Economics_Forecast_Q4.pdf</h4>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> Oct 08, 2023</span>
+<span>•</span>
+<span>Business Dept</span>
+<span>•</span>
+<span>2.1 MB</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="px-4 py-2 bg-surface-container-high text-primary font-bold text-xs rounded-lg flex items-center gap-2 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-sm">download</span> DOWNLOAD
+                            </button>
+</div>
+</div>
+<!-- Resource Item 4 -->
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-variant rounded-lg flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">table_chart</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Lab Results_Genetic Sequence_A.csv</h4>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> Oct 05, 2023</span>
+<span>•</span>
+<span>Science Dept</span>
+<span>•</span>
+<span>840 KB</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="px-4 py-2 bg-surface-container-high text-primary font-bold text-xs rounded-lg flex items-center gap-2 hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-sm">download</span> DOWNLOAD
+                            </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Right Side Panel (Campus Events) -->
+<aside class="hidden xl:block w-80 p-8 border-l border-transparent">
+<div class="bg-surface-container-low rounded-2xl p-6">
+<h3 class="text-lg font-bold font-headline mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">event</span> Campus Events
+                </h3>
+<div class="space-y-6">
+<div class="relative pl-4">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-primary/20"></div>
+<span class="text-xs font-bold text-primary uppercase">TODAY</span>
+<h5 class="text-sm font-bold mt-1">AI in Research Workshop</h5>
+<p class="text-xs text-on-surface-variant mt-1">Main Hall, 14:00 PM</p>
+</div>
+<div class="relative pl-4">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-tertiary/20"></div>
+<span class="text-xs font-bold text-tertiary uppercase">TOMORROW</span>
+<h5 class="text-sm font-bold mt-1">Open Mic Art Night</h5>
+<p class="text-xs text-on-surface-variant mt-1">Student Lounge, 19:00 PM</p>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-primary font-bold text-sm hover:bg-primary/5 rounded-lg transition-colors">
+                    View Full Calendar
+                </button>
+</div>
+<div class="mt-8">
+<div class="rounded-2xl overflow-hidden relative group">
+<img alt="Campus library" class="w-full h-48 object-cover brightness-75 group-hover:scale-105 transition-transform duration-500" data-alt="vibrant campus courtyard with modern brick buildings and students walking on a sunny spring day" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR--tMGiaaA8rpLlIxldCcFDGpeXZKCmFtu14gFYD_VGb67rI4T9qU8nk9vxYYF4jmuT_vkdchjSRjH0QjRecjIY5AwBNyVRTMFIKUdB7ERYqd67NVNgNOdc9xKIF5sbjtvtZ7aIVwLN1w0iUgfpbC-8ulTIk7wk9wXFmIQZfWMkCepPwVgtHQnidugpdAyWwGOysyUAE66pQIBDbI2E6JpJH9rntfJCIa4GVmf38I7p_naSmU_drQyP5xU_110po1Rgie7YER5rQ"/>
+<div class="absolute inset-0 p-4 flex flex-col justify-end bg-gradient-to-t from-on-surface/80 to-transparent">
+<h4 class="text-white font-bold">New Silent Study Wing</h4>
+<p class="text-white/80 text-xs mt-1">Now open in the West Library.</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-0 shadow-[0_-4px_10px_rgba(0,0,0,0.03)] h-16 flex items-center justify-around z-50">
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">dynamic_feed</span>
+<span class="text-[10px] font-bold">Feed</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="text-[10px] font-bold">Inbox</span>
+</a>
+<div class="w-12 h-12 bg-editorial-gradient rounded-full -mt-10 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+<span class="material-symbols-outlined">add</span>
+</div>
+<a class="flex flex-col items-center gap-1 text-indigo-700" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="text-[10px] font-bold">Resources</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</a>
+</nav>
+</body></html>

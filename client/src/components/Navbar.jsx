@@ -13,77 +13,117 @@ export default function Navbar() {
 
     const isActive = (path) => location.pathname === path;
 
-    const navLinkStyle = (path) => ({
-        fontSize: 13,
-        fontWeight: isActive(path) ? 600 : 400,
-        color: isActive(path) ? 'var(--color-accent)' : 'var(--color-text-secondary)',
-        textDecoration: 'none',
-        padding: '6px 12px',
-        borderRadius: 'var(--radius-sm)',
-        background: isActive(path) ? 'var(--color-accent-subtle)' : 'transparent',
-        transition: 'all var(--transition-fast)',
-    });
-
     return (
-        <nav style={{
+        <header style={{
+            position: 'fixed', top: 0, width: '100%', zIndex: 50,
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '0 2rem', height: 56,
-            borderBottom: '1px solid var(--color-border)',
-            background: 'rgba(15, 15, 19, 0.85)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            position: 'sticky', top: 0, zIndex: 100,
+            padding: '0 1.5rem', height: 64,
+            background: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
         }}>
-            <Link to="/feed" style={{
-                fontWeight: 700, fontSize: 18,
-                background: 'var(--gradient-accent)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textDecoration: 'none',
-                letterSpacing: '-0.02em',
-            }}>
-                CampusHUB
-            </Link>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Link to="/feed" style={navLinkStyle('/feed')}>Feed</Link>
-                {user?.role === 'faculty' && (
-                    <Link to="/faculty/dashboard" style={navLinkStyle('/faculty/dashboard')}>
-                        Faculty Panel
-                    </Link>
-                )}
-                <Link to="/profile" style={navLinkStyle('/profile')}>Profile</Link>
-
-                <div style={{ width: 1, height: 20, background: 'var(--color-border)', margin: '0 8px' }} />
-
-                <div style={{
-                    display: 'flex', alignItems: 'center', gap: 10,
-                    padding: '4px 6px 4px 12px',
-                    borderRadius: 'var(--radius-sm)',
-                    background: 'var(--color-bg-elevated)',
+            {/* Left: Logo + Nav Links */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                <Link to="/feed" style={{
+                    fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em',
+                    color: 'var(--primary-container)',
+                    textDecoration: 'none',
+                    fontFamily: "'Manrope', sans-serif",
                 }}>
+                    CampusHUB
+                </Link>
+                <nav style={{ display: 'flex', gap: '1.5rem' }}>
+                    {[
+                        { path: '/feed', label: 'Feed' },
+                        ...(user?.role === 'faculty' ? [{ path: '/faculty/dashboard', label: 'Faculty Dashboard' }] : []),
+                        { path: '/profile', label: 'Profile' },
+                    ].map(link => (
+                        <Link key={link.path} to={link.path} style={{
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.08em',
+                            fontSize: '0.6875rem',
+                            fontWeight: 600,
+                            color: isActive(link.path) ? 'var(--primary-container)' : 'var(--outline)',
+                            textDecoration: 'none',
+                            paddingBottom: 4,
+                            borderBottom: isActive(link.path) ? '2px solid var(--primary)' : '2px solid transparent',
+                            transition: 'all 150ms ease',
+                        }}>
+                            {link.label}
+                        </Link>
+                    ))}
+                </nav>
+            </div>
+
+            {/* Right: Search + Notifications + Profile + Logout */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                {/* Search */}
+                <div style={{
+                    display: 'flex', alignItems: 'center',
+                    background: 'var(--surface-container-low)',
+                    padding: '0.375rem 0.75rem',
+                    borderRadius: 'var(--radius-md)',
+                }}>
+                    <span className="material-symbols-outlined" style={{
+                        fontSize: 16, color: 'var(--outline)', marginRight: 6,
+                    }}>search</span>
+                    <input
+                        type="text"
+                        placeholder="Search campus..."
+                        style={{
+                            background: 'transparent', border: 'none', outline: 'none',
+                            fontSize: '0.8125rem', width: 160, padding: '0.25rem 0',
+                            color: 'var(--on-surface)',
+                        }}
+                    />
+                </div>
+
+                {/* Notifications */}
+                <button onClick={() => {}} style={{
+                    background: 'transparent', border: 'none', padding: 8,
+                    borderRadius: 'var(--radius-md)', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background 150ms ease',
+                }}
+                onMouseOver={e => e.currentTarget.style.background = 'var(--surface-container-high)'}
+                onMouseOut={e => e.currentTarget.style.background = 'transparent'}
+                >
+                    <span className="material-symbols-outlined" style={{
+                        color: 'var(--on-surface-variant)', fontSize: 22,
+                    }}>notifications</span>
+                </button>
+
+                {/* Divider + User */}
+                <div style={{
+                    display: 'flex', alignItems: 'center', gap: '0.75rem',
+                    paddingLeft: '0.5rem', borderLeft: '1px solid rgba(200,196,213,0.2)',
+                }}>
+                    {/* Avatar */}
                     <div style={{
-                        width: 28, height: 28, borderRadius: '50%',
-                        background: 'var(--gradient-accent)',
+                        width: 32, height: 32, borderRadius: '50%',
+                        background: 'var(--gradient-primary)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: 12, fontWeight: 700, color: '#fff',
+                        fontSize: 13, fontWeight: 700, color: '#fff',
+                        overflow: 'hidden',
                     }}>
                         {user?.name?.charAt(0)?.toUpperCase() || '?'}
                     </div>
-                    <span style={{ fontSize: 13, color: 'var(--color-text-secondary)', fontWeight: 500 }}>
-                        {user?.name}
-                    </span>
                     <button onClick={handleLogout} style={{
-                        fontSize: 11, padding: '5px 12px',
-                        border: '1px solid var(--color-border)',
-                        borderRadius: 6, background: 'transparent', cursor: 'pointer',
-                        color: 'var(--color-text-tertiary)', fontWeight: 500,
-                        transition: 'all var(--transition-fast)',
-                    }}>
+                        background: 'transparent', border: 'none',
+                        fontSize: '0.6875rem', fontWeight: 600,
+                        textTransform: 'uppercase', letterSpacing: '0.06em',
+                        color: 'var(--outline)', cursor: 'pointer',
+                        padding: '4px 8px',
+                        transition: 'color 150ms ease',
+                    }}
+                    onMouseOver={e => e.currentTarget.style.color = 'var(--primary)'}
+                    onMouseOut={e => e.currentTarget.style.color = 'var(--outline)'}
+                    >
                         Logout
                     </button>
                 </div>
             </div>
-        </nav>
+        </header>
     );
 }

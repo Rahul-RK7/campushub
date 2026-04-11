@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CampusHUB - Inbox</title>
+<!-- Fonts: Manrope for headlines, Inter for body/labels -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#2f1500",
+                    "tertiary": "#683500",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e1e3e4",
+                    "primary-fixed-dim": "#c5c0ff",
+                    "inverse-surface": "#2e3132",
+                    "on-primary": "#ffffff",
+                    "outline": "#787584",
+                    "on-tertiary-fixed-variant": "#6e3900",
+                    "surface-container-low": "#f3f4f5",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#c6c1f3",
+                    "primary-container": "#534ab7",
+                    "tertiary-fixed": "#ffdcc3",
+                    "primary": "#3b309e",
+                    "primary-fixed": "#e3dfff",
+                    "secondary-container": "#d1ccff",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#3f35a3",
+                    "surface-container-high": "#e7e8e9",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#ffc69a",
+                    "secondary": "#5d5a85",
+                    "inverse-primary": "#c5c0ff",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#edeeef",
+                    "on-secondary-fixed-variant": "#45426c",
+                    "background": "#f8f9fa",
+                    "on-secondary-fixed": "#19163d",
+                    "surface-bright": "#f8f9fa",
+                    "secondary-fixed": "#e3dfff",
+                    "on-primary-container": "#d1ccff",
+                    "on-surface-variant": "#474553",
+                    "on-background": "#191c1d",
+                    "surface-variant": "#e1e3e4",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb77d",
+                    "on-primary-fixed": "#140067",
+                    "outline-variant": "#c8c4d5",
+                    "surface-tint": "#584fbc",
+                    "surface": "#f8f9fa",
+                    "tertiary-container": "#8a4900",
+                    "on-secondary-container": "#585580",
+                    "surface-dim": "#d9dadb",
+                    "on-surface": "#191c1d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .message-bubble-left {
+            border-radius: 0.25rem 1.25rem 1.25rem 1.25rem;
+        }
+        .message-bubble-right {
+            border-radius: 1.25rem 1.25rem 0.25rem 1.25rem;
+        }
+        /* Custom scrollbar for conversational feel */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e1e3e4;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-3 max-w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-indigo-700 dark:text-indigo-300">CampusHUB</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-wider text-xs font-semibold" href="#">Feed</a>
+<a class="text-indigo-700 dark:text-indigo-300 border-b-2 border-indigo-600 font-semibold pb-1 uppercase tracking-wider text-xs font-semibold" href="#">Inbox</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-wider text-xs font-semibold" href="#">Faculty Dashboard</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-sm pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 w-64 transition-all" placeholder="Search messages..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-2 ml-2 border-l border-slate-100 dark:border-slate-800">
+<img alt="User profile avatar" class="w-8 h-8 rounded-full border border-primary/10" data-alt="portrait of a young student with glasses and a friendly smile in a modern campus setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiv03jEnSkUCD7xoYE-nrrX71E4iG7FnjE2qX6tYFI7j-QiELtwwj6BGYqyIlnK8bOnECUg6JgIIg3M6FQI9Ss6XTz3tAYXIGsCM0pQUs9Thf6GU3o2hESghI7BYb-EReaSb2WrdpIFf2Z7m06rg0RJoP1LtcZvatrB9Fi68wlbvuL3oRWyL5uZiT9EJpRAeNhSVLLmvtDn-l-l7YlCS_UUOK_BZ3XqRgSe24bSzZzKjAFt8IsOQfu2QMyklYkcMZYTtwzGVM1G6w"/>
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-500 hover:text-indigo-600 cursor-pointer transition-colors">Logout</span>
+</div>
+</div>
+</header>
+<!-- Main Content Container -->
+<main class="flex-1 pt-[64px] h-screen flex overflow-hidden">
+<!-- Left Sidebar: Conversations List -->
+<aside class="w-full md:w-80 lg:w-96 bg-surface-container-low border-r-0 flex flex-col h-full">
+<div class="p-6 pb-2">
+<h1 class="headline text-2xl font-extrabold tracking-tight text-on-background mb-4">Messages</h1>
+<div class="flex gap-2 mb-4 overflow-x-auto pb-2 custom-scrollbar">
+<span class="bg-primary text-on-primary px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap cursor-pointer">All</span>
+<span class="bg-surface-container-high text-on-surface-variant px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap cursor-pointer hover:bg-surface-container-highest transition-colors">Unread</span>
+<span class="bg-surface-container-high text-on-surface-variant px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap cursor-pointer hover:bg-surface-container-highest transition-colors">Groups</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<!-- Conversation Item: Active -->
+<div class="px-4 mb-2">
+<div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest shadow-sm border-l-4 border-primary transition-all cursor-pointer">
+<div class="relative">
+<img alt="Jordan profile" class="w-12 h-12 rounded-full bg-slate-100" data-alt="creative professional male portrait with stylish hair and modern artistic background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5_43W3292R5mRDJ3NJkj61XETQO_jKzoXinGmLkXeL175opgiGu8t_dFMCJ1osU0DouSEDZuIlS37Fwb6YH1kxFakrW5yYezSAbrCIJmaUldytJXm9beAOnYqRKb53kuV2Gmry2eBmXxS26-UndfS5lboM1ZP0kdN5Fcr4ywGUtgwOTBASVmDo33KTWrg67Embb_Wug3dWXO9BdeqzHIsxUAyqkk-DnRJWyuT5LELdpNeM7NqL06wtUUVVGQIzuUal0DCNcU_-Jc"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-0.5">
+<h3 class="font-bold text-on-surface truncate">Jordan Miller</h3>
+<span class="text-[10px] font-semibold uppercase text-primary tracking-tighter">Active Now</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate font-medium">Did you see the final grades for CS302?</p>
+</div>
+</div>
+</div>
+<!-- Conversation Item -->
+<div class="px-4 mb-2">
+<div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-bright transition-all cursor-pointer group">
+<div class="relative">
+<img alt="Sarah profile" class="w-12 h-12 rounded-full bg-slate-100" data-alt="female academic professional with a warm expression and professional office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArqJs6gFC7BRCbV9SZXdELLyQOYl9sO_eCyDQ59k3vhHkWzaFj9yPrx7CUhvCC6k6oWHPVoELidwGAA49AEVMA7nStxH652RXLZSJrWOwL80dTzFEtt1WB3bMTYaK5mX3ENHHFa-_-Tgs6Tf6CAyMe6yUJkA7j56cQXtfCPtp4jqTw3pmmMPKWv9oVoE18aDW243fBy5jBa8Ks3FXHPkWcQmFWjaVJ0gboZAofcfwXWlfswm4MrmULn5lcaw4Hp0v_5SYOfeVl4FQ"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-slate-300 border-2 border-white rounded-full"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-0.5">
+<h3 class="font-bold text-on-surface truncate group-hover:text-primary transition-colors">Dr. Sarah Chen</h3>
+<span class="text-[10px] font-medium text-slate-400 uppercase">2h ago</span>
+</div>
+<p class="text-sm text-slate-500 truncate">The research paper deadline has been extended...</p>
+</div>
+</div>
+</div>
+<!-- Conversation Item -->
+<div class="px-4 mb-2">
+<div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-bright transition-all cursor-pointer group">
+<div class="relative">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold">DS</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-0.5">
+<h3 class="font-bold text-on-surface truncate group-hover:text-primary transition-colors">Design Society</h3>
+<span class="text-[10px] font-medium text-slate-400 uppercase">Yesterday</span>
+</div>
+<p class="text-sm text-slate-500 truncate font-semibold text-on-background">New event: Portfolio Review Night!</p>
+</div>
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+</div>
+</div>
+<!-- Conversation Item -->
+<div class="px-4 mb-2">
+<div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-bright transition-all cursor-pointer group">
+<div class="relative">
+<img alt="Marcus profile" class="w-12 h-12 rounded-full bg-slate-100" data-alt="confident young man smiling outdoors on a bright day" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1Z3WWu3ODxz9i-m2EtpyHWOHgLsDQUhnUYWQ4O6WRVzooc_mv90aJ1HCc6ykQ3xbkaNR2CUhwICPPaY9q0KkGUEktDp8gkajbk6mFB_q4DEX28keK7xu6mSsgRbCxkijc6vU_4w8RnY-aZhXMMEZ8ngSuGiJVBOq_YI4O-J9Ng-cblHLRUblszzdX2rp3L8o31H4UkdpODcwyF0hJk7nsWX4ZlEXZkimtWeYmRzcq2OEVlc2kdYvdTsXvP_qoqnT9XgWJa55mZ50"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-0.5">
+<h3 class="font-bold text-on-surface truncate group-hover:text-primary transition-colors">Marcus Wright</h3>
+<span class="text-[10px] font-medium text-slate-400 uppercase">3 days</span>
+</div>
+<p class="text-sm text-slate-500 truncate">I'll meet you at the library at 5.</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Right Panel: Conversation View -->
+<section class="hidden md:flex flex-1 flex-col bg-surface-container-lowest relative">
+<!-- Chat Header -->
+<header class="flex items-center justify-between px-8 py-4 border-b border-surface-container-low">
+<div class="flex items-center gap-4">
+<div class="relative">
+<img alt="Jordan Miller" class="w-10 h-10 rounded-full" data-alt="close up profile photo of a young male university student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXWJsoVdSZRTNiXKSw3H-S3pT8KN08dEHgMFYLZwykuPqK745rTVwCT4B9qcyQJeRqm5icEQMK5HO7SpAmbeSBmh6M0nA-tYr16aD4FUaosaBSV7u8ocK09pbub_D4uYM16sW3euJ_CBhFhye4tTStL2-RVA0J-RBUjBV1VKrHGhAwaUTMjCaQmflH8k30dutacRJAEaDx9yTsC7QzWVxw4zfGjVByhDgtGMOBCRVwBJZFwt9QE-0M-x1YVBcfk5sj1Hu4465QSR4"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></span>
+</div>
+<div>
+<h2 class="headline text-lg font-bold text-on-surface">Jordan Miller</h2>
+<p class="text-xs text-slate-400 font-medium uppercase tracking-tight">Active for Architecture 101 Group</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-surface-container-low rounded-lg transition-all">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-surface-container-low rounded-lg transition-all">
+<span class="material-symbols-outlined">videocam</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary hover:bg-surface-container-low rounded-lg transition-all">
+<span class="material-symbols-outlined">info</span>
+</button>
+</div>
+</header>
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-8 flex flex-col gap-6 custom-scrollbar">
+<!-- Timestamp Divider -->
+<div class="flex items-center gap-4 my-4">
+<div class="h-px flex-1 bg-surface-container"></div>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Today, 10:45 AM</span>
+<div class="h-px flex-1 bg-surface-container"></div>
+</div>
+<!-- Message Left -->
+<div class="flex items-end gap-3 max-w-[80%]">
+<img alt="Jordan" class="w-6 h-6 rounded-full mb-1" data-alt="avatar of student with brown hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC04_e7WvLDEoIC0DiEQMeKubCErLI2MrjJdFqln71XdAwKM7XyGHCTquEZ_9r1X701CpR1vRY8MH49TQbkR8PoqJiVRf9tOXhEmPio7jinCVmJYerqkKwGMbefAZRMQn9D_HGLYowG1b-mwoGrE_4l_lp4fNwL4HbWh7mB08FCywt2wqY8lH4cmCem2HHTCuJ7w4BZpf6E1RabyuXlGOFUk5pSimMhR2_DxTXLUnbLU5G_XK2bsrYFlDWFkR-iQ_zRQ0ROrI3G_VU"/>
+<div class="message-bubble-left bg-surface-container-low p-4 text-on-surface text-sm leading-relaxed">
+                        Hey! Have you started on the Architecture history project yet? I'm struggling with the Romanesque section.
+                    </div>
+</div>
+<!-- Message Right (Current User) -->
+<div class="flex items-end justify-end gap-3 self-end max-w-[80%]">
+<div class="flex flex-col items-end">
+<div class="message-bubble-right bg-gradient-to-br from-primary to-primary-container p-4 text-white text-sm shadow-lg shadow-primary/10 leading-relaxed">
+                            Yeah, I've got a few notes. I can share them with you if you want? I found some great diagrams in the library archive.
+                        </div>
+<span class="text-[9px] text-slate-400 mt-1 uppercase font-bold tracking-tighter">Read 11:02 AM</span>
+</div>
+</div>
+<!-- Message Left -->
+<div class="flex items-end gap-3 max-w-[80%]">
+<img alt="Jordan" class="w-6 h-6 rounded-full mb-1" data-alt="avatar of student with brown hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4au8J2WXghxysKeVgtplgf4o0cb4Qwt-IIP7nE9ftLLn9hj5vGKsjzJsVKK-p03fU-pxnTzCPqTJmtzboyTSFGxNQiW2WZwoHFwZqGAbLF9ng_cGVCqPXigzwNmJdnd2hqVD35JuIdD5SiZCDMEP04P67HLfV7LkOT6GroE6qMzeuiFMqxxAr2kGDlKGdvPsVUSscTnJP1Oq2dFW_4r7Voljh4gYg39juQUPtWsGYOYWymwF9Oi0COrSbPkaDkg208lTgSCxZHq8"/>
+<div class="message-bubble-left bg-surface-container-low p-4 text-on-surface text-sm leading-relaxed">
+                        That would be amazing! 🙏 
+                        <br/><br/>
+                        Also, did you see the final grades for CS302? They just posted them on the portal about ten minutes ago.
+                    </div>
+</div>
+<!-- Message Right (Current User) -->
+<div class="flex items-end justify-end gap-3 self-end max-w-[80%]">
+<div class="message-bubble-right bg-gradient-to-br from-primary to-primary-container p-4 text-white text-sm shadow-lg shadow-primary/10 leading-relaxed">
+                        Not yet! Checking right now... hang on.
+                    </div>
+</div>
+</div>
+<!-- Input Area -->
+<footer class="p-6 bg-surface-container-lowest border-t border-surface-container-low">
+<div class="flex items-center gap-4 bg-surface-container-low rounded-xl p-2 pr-3 focus-within:bg-white transition-all ring-1 ring-transparent focus-within:ring-primary/20">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="image">image</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-2 px-1" placeholder="Type a message..." type="text"/>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="mood">mood</span>
+</button>
+<button class="bg-primary text-on-primary w-10 h-10 rounded-lg flex items-center justify-center shadow-md shadow-primary/20 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="send" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+<div class="mt-3 flex justify-center">
+<p class="text-[10px] text-slate-400 uppercase tracking-widest font-medium">Press <span class="font-bold text-slate-500">Enter</span> to send</p>
+</div>
+</footer>
+</section>
+<!-- Mobile View Placeholder (When conversation is not selected, but sidebar is) -->
+<div class="md:hidden flex-1 flex flex-col items-center justify-center p-8 text-center">
+<div class="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-primary/40">forum</span>
+</div>
+<h2 class="headline text-xl font-bold text-on-surface mb-2">Select a conversation</h2>
+<p class="text-sm text-slate-500">Choose from your existing messages or start a new discussion with faculty and peers.</p>
+</div>
+</main>
+<!-- FAB for New Message (Only visible on home/dashboard as per suppression rules, but provided here as it's the primary Inbox action) -->
+<button class="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-xl shadow-primary/30 flex items-center justify-center active:scale-90 transition-transform md:hidden">
+<span class="material-symbols-outlined text-2xl" data-icon="edit_square" style="font-variation-settings: 'FILL' 1;">edit_square</span>
+</button>
+</body></html>
