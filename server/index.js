@@ -9,7 +9,7 @@ require('dotenv').config();
 const app = express();
 app.use(helmet());
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 // Sanitize req.body to prevent NoSQL injection (req.query is read-only in Express 5)
 app.use((req, res, next) => {
   const sanitize = (obj) => {

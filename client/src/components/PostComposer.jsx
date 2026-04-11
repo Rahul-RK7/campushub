@@ -1,28 +1,83 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
+
+const IMAGE_MAX = 5 * 1024 * 1024;   // 5 MB
+const VIDEO_MAX = 25 * 1024 * 1024;  // 25 MB
+const ALLOWED_IMAGE = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const ALLOWED_VIDEO = ['video/mp4', 'video/webm', 'video/quicktime'];
 
 export default function PostComposer({ onPost }) {
   const { user } = useAuth();
   const [content, setContent] = useState('');
   const [type, setType] = useState('post');
   const [loading, setLoading] = useState(false);
+  const [mediaFile, setMediaFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
+  const [mediaError, setMediaError] = useState('');
+  const fileRef = useRef(null);
 
   const isFaculty = user?.role === 'faculty';
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setMediaError('');
+
+    const isImage = ALLOWED_IMAGE.includes(file.type);
+    const isVideo = ALLOWED_VIDEO.includes(file.type);
+
+    if (!isImage && !isVideo) {
+      setMediaError('Unsupported format. Use JPEG, PNG, GIF, WebP, MP4, WebM, or MOV.');
+      return;
+    }
+    if (isImage && file.size > IMAGE_MAX) {
+      setMediaError(`Image too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max 5 MB.`);
+      return;
+    }
+    if (isVideo && file.size > VIDEO_MAX) {
+      setMediaError(`Video too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max 25 MB.`);
+      return;
+    }
+
+    setMediaFile(file);
+    setMediaPreview(URL.createObjectURL(file));
+  };
+
+  const removeMedia = () => {
+    setMediaFile(null);
+    setMediaPreview(null);
+    setMediaError('');
+    if (fileRef.current) fileRef.current.value = '';
+  };
+
   const handleSubmit = async () => {
-    if (!content.trim()) return;
+    if (!content.trim() && !mediaFile) return;
     setLoading(true);
     try {
-      const { data } = await api.post('/api/posts', { content, type });
-      onPost(data.post);
+      let res;
+      if (mediaFile) {
+        const formData = new FormData();
+        formData.append('content', content);
+        formData.append('type', type);
+        formData.append('media', mediaFile);
+        res = await api.post('/api/posts', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      } else {
+        res = await api.post('/api/posts', { content, type });
+      }
+      onPost(res.data.post);
       setContent('');
       setType('post');
+      removeMedia();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to post');
     }
     setLoading(false);
   };
+
+  const isVideoFile = mediaFile?.type?.startsWith('video/');
 
   return (
     <div style={{
@@ -43,7 +98,7 @@ export default function PostComposer({ onPost }) {
         }}>
           {user?.name?.charAt(0)?.toUpperCase() || '?'}
         </div>
-        {/* Textarea */}
+        {/* Content area */}
         <div style={{ flex: 1 }}>
           <textarea
             value={content}
@@ -64,17 +119,126 @@ export default function PostComposer({ onPost }) {
               lineHeight: 1.6,
             }}
           />
+
+          {/* Media Preview */}
+          {mediaPreview && (
+            <div style={{
+              position: 'relative', marginTop: '0.75rem',
+              borderRadius: 'var(--radius-xl)', overflow: 'hidden',
+              background: 'var(--surface-container-low)',
+              border: '1px solid rgba(200,196,213,0.15)',
+            }}>
+              {isVideoFile ? (
+                <video
+                  src={mediaPreview}
+                  controls
+                  style={{ width: '100%', maxHeight: 300, display: 'block', objectFit: 'contain', background: '#000' }}
+                />
+              ) : (
+                <img
+                  src={mediaPreview}
+                  alt="Preview"
+                  style={{ width: '100%', maxHeight: 300, display: 'block', objectFit: 'contain' }}
+                />
+              )}
+              <button
+                onClick={removeMedia}
+                style={{
+                  position: 'absolute', top: 8, right: 8,
+                  width: 28, height: 28, borderRadius: '50%',
+                  background: 'rgba(0,0,0,0.65)', border: 'none',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: '#fff', fontSize: 16,
+                  transition: 'background 150ms ease',
+                }}
+                onMouseOver={e => e.currentTarget.style.background = 'rgba(220,50,50,0.85)'}
+                onMouseOut={e => e.currentTarget.style.background = 'rgba(0,0,0,0.65)'}
+                title="Remove media"
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>close</span>
+              </button>
+              {/* File size badge */}
+              <span style={{
+                position: 'absolute', bottom: 8, left: 8,
+                background: 'rgba(0,0,0,0.6)', color: '#fff',
+                fontSize: '0.625rem', fontWeight: 700,
+                padding: '2px 8px', borderRadius: 'var(--radius-sm)',
+                letterSpacing: '0.04em',
+              }}>
+                {(mediaFile.size / 1024 / 1024).toFixed(1)} MB
+              </span>
+            </div>
+          )}
+
+          {/* Error message */}
+          {mediaError && (
+            <p style={{
+              color: 'var(--error, #dc3545)', fontSize: '0.75rem', fontWeight: 600,
+              margin: '0.5rem 0 0', display: 'flex', alignItems: 'center', gap: 4,
+            }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 16 }}>error</span>
+              {mediaError}
+            </p>
+          )}
+
+          {/* Actions bar */}
           <div style={{
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             marginTop: '0.75rem',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              {/* Hidden file input */}
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm,video/quicktime"
+                onChange={handleFileSelect}
+                style={{ display: 'none' }}
+              />
+              {/* Photo button */}
+              <button
+                onClick={() => { fileRef.current.accept = 'image/jpeg,image/png,image/gif,image/webp'; fileRef.current.click(); }}
+                title="Add photo (max 5 MB)"
+                style={{
+                  background: 'transparent', border: 'none', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  padding: '4px 8px', borderRadius: 'var(--radius-sm)',
+                  color: 'var(--primary)', fontSize: '0.625rem', fontWeight: 700,
+                  textTransform: 'uppercase', letterSpacing: '0.08em',
+                  transition: 'all 150ms ease',
+                }}
+                onMouseOver={e => e.currentTarget.style.background = 'var(--surface-container-low)'}
+                onMouseOut={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>image</span>
+                Photo
+              </button>
+              {/* Video button */}
+              <button
+                onClick={() => { fileRef.current.accept = 'video/mp4,video/webm,video/quicktime'; fileRef.current.click(); }}
+                title="Add video (max 25 MB)"
+                style={{
+                  background: 'transparent', border: 'none', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  padding: '4px 8px', borderRadius: 'var(--radius-sm)',
+                  color: 'var(--tertiary, var(--primary))', fontSize: '0.625rem', fontWeight: 700,
+                  textTransform: 'uppercase', letterSpacing: '0.08em',
+                  transition: 'all 150ms ease',
+                }}
+                onMouseOver={e => e.currentTarget.style.background = 'var(--surface-container-low)'}
+                onMouseOut={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>videocam</span>
+                Video
+              </button>
+
               <span style={{
                 fontSize: '0.625rem', fontWeight: 700, color: 'var(--outline)',
                 textTransform: 'uppercase', letterSpacing: '0.08em',
               }}>
-                {content.length} / 500 characters
+                {content.length} / 500
               </span>
+
               {isFaculty && (
                 <label style={{
                   display: 'flex', alignItems: 'center', gap: 6,
@@ -101,7 +265,7 @@ export default function PostComposer({ onPost }) {
             </div>
             <button
               onClick={handleSubmit}
-              disabled={loading || !content.trim()}
+              disabled={loading || (!content.trim() && !mediaFile)}
               style={{
                 background: 'var(--gradient-primary)',
                 color: 'var(--on-primary)',
@@ -110,8 +274,8 @@ export default function PostComposer({ onPost }) {
                 fontSize: '0.875rem',
                 fontWeight: 700,
                 border: 'none',
-                cursor: loading || !content.trim() ? 'not-allowed' : 'pointer',
-                opacity: loading || !content.trim() ? 0.5 : 1,
+                cursor: loading || (!content.trim() && !mediaFile) ? 'not-allowed' : 'pointer',
+                opacity: loading || (!content.trim() && !mediaFile) ? 0.5 : 1,
                 boxShadow: '0 2px 8px rgba(59, 48, 158, 0.15)',
                 transition: 'all 150ms ease',
               }}

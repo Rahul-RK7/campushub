@@ -1,17 +1,33 @@
 const Post = require('../models/Post');
+const { cloudinary, uploadToCloudinary } = require('../config/cloudinaryConfig');
 
 exports.createPost = async (req, res) => {
   try {
     const { content, type } = req.body;
-    const postData = { author: req.user._id, content };
+    const postData = { author: req.user._id, content: content || '' };
+
     if (req.user.role === 'faculty' && type === 'announcement') {
       postData.type = 'announcement';
     }
+
+    // Handle uploaded media — upload buffer to Cloudinary
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+      postData.mediaUrl = result.secure_url;
+      postData.mediaType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
+    }
+
+    // Validate at least content or media
+    if (!postData.content && !req.file) {
+      return res.status(400).json({ error: 'Post must have text or media' });
+    }
+
     const post = await Post.create(postData);
     await post.populate('author', 'name profilePic role');
     res.status(201).json({ post });
   } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+    console.error('Create post error:', err);
+    res.status(500).json({ error: err.message || 'Server error' });
   }
 };
 
@@ -37,6 +53,20 @@ exports.deletePost = async (req, res) => {
     const isOwner = post.author.toString() === req.user._id.toString();
     const isFaculty = req.user.role === 'faculty';
     if (!isOwner && !isFaculty) return res.status(403).json({ error: 'Not allowed' });
+
+    // Delete media from Cloudinary if present
+    if (post.mediaUrl) {
+      try {
+        const urlParts = post.mediaUrl.split('/');
+        const folderAndFile = urlParts.slice(urlParts.indexOf('campushub_posts')).join('/');
+        const publicId = folderAndFile.replace(/\.[^.]+$/, '');
+        const resourceType = post.mediaType === 'video' ? 'video' : 'image';
+        await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+      } catch (cloudErr) {
+        console.error('Cloudinary delete error (non-fatal):', cloudErr);
+      }
+    }
+
     await post.deleteOne();
     res.json({ message: 'Deleted' });
   } catch (err) {
