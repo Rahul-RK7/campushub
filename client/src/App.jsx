@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Feed from './pages/Feed';
 import Profile from './pages/Profile';
 import FacultyDashboard from './pages/FacultyDashboard';
+import ForgotPassword from './pages/ForgotPassword';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* Protected routes */}
           <Route path="/feed" element={

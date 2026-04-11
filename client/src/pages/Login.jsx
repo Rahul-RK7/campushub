@@ -160,11 +160,11 @@ export default function Login() {
                   textTransform: 'uppercase', letterSpacing: '0.08em',
                   color: 'var(--on-surface-variant)',
                 }}>Password</label>
-                <a href="#" style={{
+                <Link to="/forgot-password" style={{
                   fontSize: '0.75rem', fontWeight: 500,
                   color: 'var(--primary)', textDecoration: 'none',
                   transition: 'color 150ms ease',
-                }}>Forgot?</a>
+                }}>Forgot?</Link>
               </div>
               <div style={{ position: 'relative' }}>
                 <div style={{

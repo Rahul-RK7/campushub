@@ -34,7 +34,9 @@ const userSchema = new mongoose.Schema({
     trim: true
   },
   bio: { type: String, default: '' },
-  profilePic: { type: String, default: '' }
+  profilePic: { type: String, default: '' },
+  otp: { type: String, default: null },
+  otpExpiry: { type: Date, default: null }
 }, { timestamps: true });   // adds createdAt and updatedAt automatically
 
 module.exports = mongoose.model('User', userSchema);
