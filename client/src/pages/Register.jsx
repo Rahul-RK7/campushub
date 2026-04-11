@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
 
 export default function Register() {
-  const [form, setForm] = useState({ name: '', email: '', password: '', department: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', registrationId: '', department: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,6 +15,7 @@ export default function Register() {
     if (!form.name.trim()) return 'Name is required';
     if (!/\S+@\S+\.\S+/.test(form.email)) return 'Please enter a valid email';
     if (form.password.length < 6) return 'Password must be at least 6 characters';
+    if (!form.registrationId.trim()) return 'Registration ID is required';
     if (!form.department.trim()) return 'Department is required';
     return null;
   };
@@ -75,19 +76,12 @@ export default function Register() {
     </div>
   );
 
-  const departments = [
-    { value: '', label: 'Select Department' },
-    { value: 'cs', label: 'Computer Science' },
-    { value: 'eng', label: 'Engineering' },
-    { value: 'bus', label: 'Business School' },
-    { value: 'art', label: 'Arts & Humanities' },
-    { value: 'sci', label: 'Natural Sciences' },
-  ];
-
   const fields = [
     { name: 'name', label: 'Full Name', type: 'text', placeholder: 'John Doe', icon: 'person' },
     { name: 'email', label: 'University Email', type: 'email', placeholder: 'j.doe@university.edu', icon: 'mail' },
     { name: 'password', label: 'Password', type: 'password', placeholder: '••••••••', icon: 'lock' },
+    { name: 'registrationId', label: 'Student Registration ID', type: 'text', placeholder: 'e.g. STU2024001', icon: 'badge' },
+    { name: 'department', label: 'Department', type: 'text', placeholder: 'e.g. Computer Science', icon: 'account_balance' },
   ];
 
   return (
@@ -233,37 +227,7 @@ export default function Register() {
               </div>
             ))}
 
-            {/* Department Select */}
-            <div>
-              <label style={{
-                display: 'block', fontSize: '0.6875rem', fontWeight: 600,
-                textTransform: 'uppercase', letterSpacing: '0.08em',
-                color: 'var(--on-surface-variant)', marginBottom: 6, marginLeft: 4,
-              }}>Department</label>
-              <div style={{ position: 'relative' }}>
-                <span className="material-symbols-outlined" style={{
-                  position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
-                  fontSize: 20, color: 'var(--outline)',
-                }}>account_balance</span>
-                <select
-                  name="department" value={form.department}
-                  onChange={handleChange} required
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem 0.75rem 2.5rem',
-                    background: 'var(--surface-container-low)',
-                    border: 'none', borderRadius: 'var(--radius-md)',
-                    fontSize: '0.875rem', color: 'var(--on-surface)',
-                    outline: 'none', appearance: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {departments.map(d => (
-                    <option key={d.value} value={d.value} disabled={!d.value}>{d.label}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+
 
             {/* Submit */}
             <div style={{ paddingTop: '0.5rem' }}>

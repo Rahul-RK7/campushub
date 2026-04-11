@@ -27,6 +27,12 @@ const userSchema = new mongoose.Schema({
     default: 'pending'      // ← Every new student starts here
   },
   department: String,
+  registrationId: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
   bio: { type: String, default: '' },
   profilePic: { type: String, default: '' }
 }, { timestamps: true });   // adds createdAt and updatedAt automatically

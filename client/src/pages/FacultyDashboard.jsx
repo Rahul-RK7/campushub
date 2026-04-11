@@ -186,6 +186,17 @@ export default function FacultyDashboard() {
                                                 display: 'flex', alignItems: 'center', gap: '0.75rem',
                                                 marginTop: 8,
                                             }}>
+                                                {student.registrationId && (
+                                                    <span style={{
+                                                        background: 'var(--primary-fixed)',
+                                                        color: 'var(--on-primary-fixed-variant)',
+                                                        fontSize: '0.625rem', fontWeight: 700,
+                                                        textTransform: 'uppercase',
+                                                        padding: '0.125rem 0.5rem',
+                                                        borderRadius: 'var(--radius-sm)',
+                                                        letterSpacing: '0.06em',
+                                                    }}>ID: {student.registrationId}</span>
+                                                )}
                                                 {student.department && (
                                                     <span style={{
                                                         background: 'var(--surface-container-high)',

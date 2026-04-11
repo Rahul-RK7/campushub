@@ -4,11 +4,11 @@ const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, department } = req.body;
+    const { name, email, password, department, registrationId } = req.body;
 
     // Basic input validation
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Name, email, and password are required' });
+    if (!name || !email || !password || !registrationId) {
+      return res.status(400).json({ error: 'Name, email, password, and registration ID are required' });
     }
     if (password.length < 6) {
       return res.status(400).json({ error: 'Password must be at least 6 characters' });
@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
 
     // Create user with status: pending — explicitly set role to prevent escalation
     const user = await User.create({
-      name, email, password: hashed, department, role: 'student'
+      name, email, password: hashed, department, registrationId, role: 'student'
     });
 
     res.status(201).json({ message: 'Registration submitted. Awaiting faculty approval.' });
@@ -59,8 +59,12 @@ exports.login = async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    res.json({ token, user: { _id: user._id, name: user.name,
-      email: user.email, role: user.role, status: user.status } });
+    res.json({
+      token, user: {
+        _id: user._id, name: user.name,
+        email: user.email, role: user.role, status: user.status
+      }
+    });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }
