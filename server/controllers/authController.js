@@ -30,6 +30,8 @@ exports.register = async (req, res) => {
     // Check if email already used
     const existing = await User.findOne({ email });
     if (existing) return res.status(400).json({ error: 'Email already registered' });
+    const existingRegId = await User.findOne({ registrationId });
+    if (existingRegId) return res.status(400).json({ error: 'Registration ID already in use' });
 
     // Hash password (never store plain text)
     const hashed = await bcrypt.hash(password, 10);
@@ -75,7 +77,8 @@ exports.login = async (req, res) => {
     res.json({
       token, user: {
         _id: user._id, name: user.name,
-        email: user.email, role: user.role, status: user.status
+        email: user.email, role: user.role, status: user.status,
+        profilePic: user.profilePic || '', department: user.department || ''
       }
     });
   } catch (err) {
@@ -145,6 +148,11 @@ exports.verifyOtp = async (req, res) => {
     // Compare OTP
     const match = await bcrypt.compare(otp, user.otp);
     if (!match) return res.status(400).json({ error: 'Invalid OTP' });
+
+    // Clear OTP after successful verification to prevent reuse
+    user.otp = null;
+    user.otpExpiry = null;
+    await user.save();
 
     // Generate a short-lived reset token (5 minutes)
     const resetToken = jwt.sign(

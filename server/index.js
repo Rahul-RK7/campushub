@@ -48,4 +48,12 @@ app.use('/api/faculty', require('./routes/faculty'));
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/comments', require('./routes/comments'));
+app.use('/api/events', require('./routes/events'));
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(err.status || 500).json({ error: 'Internal server error' });
+});
+
 app.listen(PORT, () => console.log('Server running on port ' + PORT));

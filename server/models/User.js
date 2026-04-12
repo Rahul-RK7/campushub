@@ -35,6 +35,9 @@ const userSchema = new mongoose.Schema({
   },
   bio: { type: String, default: '' },
   profilePic: { type: String, default: '' },
+  profilePicPublicId: { type: String, default: '' },
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   otp: { type: String, default: null },
   otpExpiry: { type: Date, default: null }
 }, { timestamps: true });   // adds createdAt and updatedAt automatically

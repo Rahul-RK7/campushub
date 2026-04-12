@@ -2,7 +2,7 @@ import { useState } from 'react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
-export default function PostCard({ post, onDelete }) {
+export default function PostCard({ post, onDelete, followingList = [] }) {
   const { user } = useAuth();
   const [likes, setLikes] = useState(post.likes?.length || 0);
   const [liked, setLiked] = useState(post.likes?.map(String).includes(String(user?._id)));
@@ -10,6 +10,10 @@ export default function PostCard({ post, onDelete }) {
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [lightbox, setLightbox] = useState(false);
+  const [following, setFollowing] = useState(
+    followingList.map(String).includes(String(post.author?._id))
+  );
+  const [followLoading, setFollowLoading] = useState(false);
 
   const handleLike = async () => {
     try {
@@ -33,17 +37,37 @@ export default function PostCard({ post, onDelete }) {
 
   const loadComments = async () => {
     if (!showComments) {
-      const { data } = await api.get(`/api/comments/${post._id}`);
-      setComments(data.comments);
+      try {
+        const { data } = await api.get(`/api/comments/${post._id}`);
+        setComments(data.comments);
+      } catch (err) {
+        console.error('Failed to load comments:', err);
+      }
     }
     setShowComments(!showComments);
   };
 
   const addComment = async () => {
     if (!commentText.trim()) return;
-    const { data } = await api.post(`/api/comments/${post._id}`, { content: commentText });
-    setComments(prev => [...prev, data.comment]);
-    setCommentText('');
+    try {
+      const { data } = await api.post(`/api/comments/${post._id}`, { content: commentText });
+      setComments(prev => [...prev, data.comment]);
+      setCommentText('');
+    } catch (err) {
+      console.error('Failed to add comment:', err);
+    }
+  };
+
+  const handleFollow = async () => {
+    if (followLoading) return;
+    setFollowLoading(true);
+    try {
+      const { data } = await api.post(`/api/users/${post.author?._id}/follow`);
+      setFollowing(data.isFollowing);
+    } catch (err) {
+      console.error('Follow failed:', err);
+    }
+    setFollowLoading(false);
   };
 
   const isAnnouncement = post.type === 'announcement';
@@ -87,6 +111,8 @@ export default function PostCard({ post, onDelete }) {
               }}>
                 {isAnnouncement ? (
                   <span className="material-symbols-outlined" style={{ color: 'var(--tertiary)', fontSize: 22 }}>school</span>
+                ) : post.author?.profilePic ? (
+                  <img src={post.author.profilePic} alt={post.author.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>
                     {post.author?.name?.charAt(0)?.toUpperCase() || '?'}
@@ -94,13 +120,32 @@ export default function PostCard({ post, onDelete }) {
                 )}
               </div>
               <div>
-                <h3 style={{
-                  fontFamily: "'Manrope', sans-serif",
-                  fontWeight: 700, fontSize: '1rem', lineHeight: 1.3,
-                  color: 'var(--on-surface)', margin: 0,
-                }}>
-                  {post.author?.name}
-                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <h3 style={{
+                    fontFamily: "'Manrope', sans-serif",
+                    fontWeight: 700, fontSize: '1rem', lineHeight: 1.3,
+                    color: 'var(--on-surface)', margin: 0,
+                  }}>
+                    {post.author?.name}
+                  </h3>
+                  {!isOwner && (
+                    <button onClick={handleFollow} disabled={followLoading} style={{
+                      background: following ? 'var(--surface-container-high)' : 'var(--primary)',
+                      color: following ? 'var(--on-surface-variant)' : '#fff',
+                      border: 'none',
+                      borderRadius: 'var(--radius-xl)',
+                      padding: '0.2rem 0.625rem',
+                      fontSize: '0.6875rem',
+                      fontWeight: 700,
+                      cursor: followLoading ? 'not-allowed' : 'pointer',
+                      opacity: followLoading ? 0.6 : 1,
+                      transition: 'all 150ms ease',
+                      letterSpacing: '0.02em',
+                    }}>
+                      {followLoading ? '...' : following ? 'Unfollow' : 'Follow'}
+                    </button>
+                  )}
+                </div>
                 <p style={{
                   fontSize: '0.75rem', color: 'var(--outline)', margin: 0,
                 }}>
@@ -257,9 +302,13 @@ export default function PostCard({ post, onDelete }) {
                     background: 'var(--surface-container-high)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: 11, fontWeight: 700, color: 'var(--on-surface-variant)',
-                    flexShrink: 0,
+                    flexShrink: 0, overflow: 'hidden',
                   }}>
-                    {c.author?.name?.charAt(0)?.toUpperCase() || '?'}
+                    {c.author?.profilePic ? (
+                      <img src={c.author.profilePic} alt={c.author.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      c.author?.name?.charAt(0)?.toUpperCase() || '?'
+                    )}
                   </div>
                   <div style={{
                     background: 'var(--surface-container-low)',
@@ -286,8 +335,13 @@ export default function PostCard({ post, onDelete }) {
                   background: 'var(--gradient-primary)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 11, fontWeight: 700, color: '#fff', flexShrink: 0,
+                  overflow: 'hidden',
                 }}>
-                  {user?.name?.charAt(0)?.toUpperCase() || '?'}
+                  {user?.profilePic ? (
+                    <img src={user.profilePic} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    user?.name?.charAt(0)?.toUpperCase() || '?'
+                  )}
                 </div>
                 <input
                   value={commentText}

@@ -80,14 +80,14 @@ export default function Navbar() {
                 </div>
 
                 {/* Notifications */}
-                <button onClick={() => {}} style={{
+                <button onClick={() => { }} style={{
                     background: 'transparent', border: 'none', padding: 8,
                     borderRadius: 'var(--radius-md)', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'background 150ms ease',
                 }}
-                onMouseOver={e => e.currentTarget.style.background = 'var(--surface-container-high)'}
-                onMouseOut={e => e.currentTarget.style.background = 'transparent'}
+                    onMouseOver={e => e.currentTarget.style.background = 'var(--surface-container-high)'}
+                    onMouseOut={e => e.currentTarget.style.background = 'transparent'}
                 >
                     <span className="material-symbols-outlined" style={{
                         color: 'var(--on-surface-variant)', fontSize: 22,
@@ -107,7 +107,11 @@ export default function Navbar() {
                         fontSize: 13, fontWeight: 700, color: '#fff',
                         overflow: 'hidden',
                     }}>
-                        {user?.name?.charAt(0)?.toUpperCase() || '?'}
+                        {user?.profilePic ? (
+                            <img src={user.profilePic} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                            user?.name?.charAt(0)?.toUpperCase() || '?'
+                        )}
                     </div>
                     <button onClick={handleLogout} style={{
                         background: 'transparent', border: 'none',
@@ -117,8 +121,8 @@ export default function Navbar() {
                         padding: '4px 8px',
                         transition: 'color 150ms ease',
                     }}
-                    onMouseOver={e => e.currentTarget.style.color = 'var(--primary)'}
-                    onMouseOut={e => e.currentTarget.style.color = 'var(--outline)'}
+                        onMouseOver={e => e.currentTarget.style.color = 'var(--primary)'}
+                        onMouseOut={e => e.currentTarget.style.color = 'var(--outline)'}
                     >
                         Logout
                     </button>

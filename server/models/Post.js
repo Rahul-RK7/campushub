@@ -17,6 +17,7 @@ const postSchema = new mongoose.Schema({
     default: 'post'
   },
   mediaUrl: { type: String, default: '' },
+  mediaPublicId: { type: String, default: '' },
   mediaType: {
     type: String,
     enum: ['none', 'image', 'video'],

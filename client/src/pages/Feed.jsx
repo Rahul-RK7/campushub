@@ -11,6 +11,14 @@ export default function Feed() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [postCount, setPostCount] = useState(0);
+  const [followingList, setFollowingList] = useState([]);
+
+  /* ── Event Calendar state ── */
+  const [events, setEvents] = useState([]);
+  const [showEventForm, setShowEventForm] = useState(false);
+  const [eventForm, setEventForm] = useState({ title: '', description: '', date: '', time: '', location: '' });
+  const [eventSubmitting, setEventSubmitting] = useState(false);
 
   const fetchPosts = async (p = 1) => {
     try {
@@ -24,9 +32,61 @@ export default function Feed() {
     }
   };
 
-  useEffect(() => { fetchPosts(1); }, []);
+  const fetchEvents = async () => {
+    try {
+      const { data } = await api.get('/api/events');
+      setEvents(data);
+    } catch (err) {
+      console.error('Failed to load events:', err);
+    }
+  };
 
-  const onNewPost = (post) => setPosts(prev => [post, ...prev]);
+  useEffect(() => {
+    fetchPosts(1);
+    fetchEvents();
+    api.get('/api/users/me/post-count')
+      .then(({ data }) => setPostCount(data.postCount))
+      .catch(() => { });
+    api.get('/api/users/me')
+      .then(({ data }) => setFollowingList((data.following || []).map(f => f._id || f)))
+      .catch(() => { });
+  }, []);
+
+  const onNewPost = (post) => {
+    setPosts(prev => [post, ...prev]);
+    setPostCount(prev => prev + 1);
+  };
+
+  const handleEventSubmit = async (e) => {
+    e.preventDefault();
+    if (!eventForm.title || !eventForm.date || !eventForm.time || !eventForm.location) return;
+    setEventSubmitting(true);
+    try {
+      const { data } = await api.post('/api/events', eventForm);
+      setEvents(prev => [...prev, data].sort((a, b) => new Date(a.date) - new Date(b.date)));
+      setEventForm({ title: '', description: '', date: '', time: '', location: '' });
+      setShowEventForm(false);
+    } catch (err) {
+      console.error('Failed to create event:', err);
+    } finally {
+      setEventSubmitting(false);
+    }
+  };
+
+  const handleDeleteEvent = async (id) => {
+    try {
+      await api.delete('/api/events/' + id);
+      setEvents(prev => prev.filter(ev => ev._id !== id));
+    } catch (err) {
+      console.error('Failed to delete event:', err);
+    }
+  };
+
+  const formatEventDate = (dateStr) => {
+    const d = new Date(dateStr);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return { month: months[d.getMonth()], day: d.getDate() };
+  };
 
   if (loading) return (
     <Layout>
@@ -73,7 +133,11 @@ export default function Feed() {
               fontSize: 28, fontWeight: 700, color: '#fff',
               overflow: 'hidden',
             }}>
-              {user?.name?.charAt(0)?.toUpperCase() || '?'}
+              {user?.profilePic ? (
+                <img src={user.profilePic} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                user?.name?.charAt(0)?.toUpperCase() || '?'
+              )}
             </div>
             <h2 style={{
               fontFamily: "'Manrope', sans-serif",
@@ -91,7 +155,7 @@ export default function Feed() {
               color: 'var(--outline-variant)', textTransform: 'uppercase',
               letterSpacing: '0.1em',
             }}>
-              <div>Posts<br /><span style={{ color: 'var(--on-background)', fontSize: '1rem' }}>{posts.length}</span></div>
+              <div>Posts<br /><span style={{ color: 'var(--on-background)', fontSize: '1rem' }}>{postCount}</span></div>
               <div>Role<br /><span style={{ color: 'var(--on-background)', fontSize: '1rem', textTransform: 'capitalize' }}>{user?.role || '—'}</span></div>
             </div>
           </div>
@@ -142,7 +206,7 @@ export default function Feed() {
             </div>
           )}
           {posts.map(p => (
-            <PostCard key={p._id} post={p} onDelete={id => setPosts(prev => prev.filter(x => x._id !== id))} />
+            <PostCard key={p._id} post={p} onDelete={id => setPosts(prev => prev.filter(x => x._id !== id))} followingList={followingList} />
           ))}
           {posts.length > 0 && hasMore && (
             <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '1rem' }}>
@@ -167,9 +231,9 @@ export default function Feed() {
           )}
         </section>
 
-        {/* ── Right Sidebar: Events & Spotlights ── */}
+        {/* ── Right Sidebar: Event Calendar ── */}
         <aside style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {/* Upcoming Events */}
+          {/* Event Calendar */}
           <div style={{
             background: 'var(--surface-container-lowest)',
             borderRadius: 'var(--radius-xl)',
@@ -183,79 +247,183 @@ export default function Feed() {
               marginBottom: '1rem',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             }}>
-              Upcoming Events
-              <span style={{ fontSize: '0.625rem', color: 'var(--primary)', fontWeight: 500, textTransform: 'none', letterSpacing: 0, cursor: 'pointer' }}>See All</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 18, color: 'var(--primary)' }}>calendar_month</span>
+                Event Calendar
+              </span>
+              {user?.role === 'faculty' && (
+                <button
+                  id="add-event-btn"
+                  onClick={() => setShowEventForm(v => !v)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 4,
+                    padding: '4px 10px',
+                    background: 'var(--primary)',
+                    color: 'var(--on-primary)',
+                    borderRadius: 'var(--radius-full)',
+                    border: 'none', cursor: 'pointer',
+                    fontSize: '0.625rem', fontWeight: 700,
+                    textTransform: 'uppercase', letterSpacing: '0.05em',
+                    transition: 'opacity 200ms ease',
+                  }}
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
+                    {showEventForm ? 'close' : 'add'}
+                  </span>
+                  {showEventForm ? 'Cancel' : 'Add'}
+                </button>
+              )}
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {[
-                { month: 'Nov', day: '12', title: 'Winter Arts Gala', time: '7:00 PM • Main Hall', featured: true },
-                { month: 'Nov', day: '15', title: 'Intro to AI Seminar', time: '2:00 PM • Tech Hub', featured: false },
-              ].map((ev, i) => (
-                <div key={i} style={{ display: 'flex', gap: '0.75rem', cursor: 'pointer' }}>
-                  <div style={{
-                    width: 48, height: 48, borderRadius: 'var(--radius-md)',
-                    background: ev.featured ? 'var(--primary-fixed)' : 'var(--surface-container-high)',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
-                  }}>
-                    <span style={{
-                      fontSize: '0.625rem', fontWeight: 700, textTransform: 'uppercase',
-                      color: ev.featured ? 'var(--on-primary-fixed-variant)' : 'var(--outline)',
-                    }}>{ev.month}</span>
-                    <span style={{
-                      fontSize: '1.125rem', fontWeight: 700,
-                      color: ev.featured ? 'var(--primary)' : 'var(--on-surface-variant)',
-                      lineHeight: 1,
-                    }}>{ev.day}</span>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: '0.75rem', fontWeight: 700, lineHeight: 1.3, margin: 0 }}>{ev.title}</p>
-                    <p style={{ fontSize: '0.625rem', color: 'var(--outline)', margin: 0, marginTop: 2 }}>{ev.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Faculty Spotlights */}
-          <div style={{
-            background: 'var(--surface-container-lowest)',
-            borderRadius: 'var(--radius-xl)',
-            padding: '1.5rem',
-            boxShadow: 'var(--shadow-card)',
-          }}>
-            <h3 style={{
-              fontFamily: "'Manrope', sans-serif",
-              fontWeight: 700, fontSize: '0.875rem',
-              textTransform: 'uppercase', letterSpacing: '0.06em',
-              marginBottom: '1rem',
-            }}>Faculty Spotlights</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              {[
-                { name: 'Prof. Alan Smith', dept: 'Department of Physics', initials: 'AS' },
-                { name: 'Dr. Elena Rodriguez', dept: 'Modern Languages', initials: 'ER' },
-              ].map((f, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <div style={{
-                    width: 40, height: 40, borderRadius: '50%',
-                    background: 'var(--secondary-container)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 12, fontWeight: 700, color: 'var(--on-secondary-container)',
-                  }}>{f.initials}</div>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: '0.75rem', fontWeight: 700, margin: 0 }}>{f.name}</p>
-                    <p style={{ fontSize: '0.625rem', color: 'var(--outline)', margin: 0, marginTop: 2 }}>{f.dept}</p>
-                  </div>
-                  <button style={{
-                    padding: 6, background: 'var(--surface-container-low)',
-                    borderRadius: 'var(--radius-md)', border: 'none', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'var(--primary)',
-                  }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 14 }}>add</span>
-                  </button>
+            {/* ── Add Event Form (faculty only) ── */}
+            {showEventForm && user?.role === 'faculty' && (
+              <form
+                onSubmit={handleEventSubmit}
+                style={{
+                  display: 'flex', flexDirection: 'column', gap: '0.625rem',
+                  marginBottom: '1rem',
+                  padding: '1rem',
+                  background: 'var(--surface-container-low)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--outline-variant)',
+                }}
+              >
+                <input
+                  id="event-title"
+                  type="text"
+                  placeholder="Event title *"
+                  value={eventForm.title}
+                  onChange={e => setEventForm(f => ({ ...f, title: e.target.value }))}
+                  style={inputStyle}
+                  required
+                />
+                <textarea
+                  id="event-description"
+                  placeholder="Description (optional)"
+                  value={eventForm.description}
+                  onChange={e => setEventForm(f => ({ ...f, description: e.target.value }))}
+                  rows={2}
+                  style={{ ...inputStyle, resize: 'vertical', fontFamily: 'inherit' }}
+                />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                  <input
+                    id="event-date"
+                    type="date"
+                    value={eventForm.date}
+                    onChange={e => setEventForm(f => ({ ...f, date: e.target.value }))}
+                    style={inputStyle}
+                    required
+                  />
+                  <input
+                    id="event-time"
+                    type="time"
+                    value={eventForm.time}
+                    onChange={e => setEventForm(f => ({ ...f, time: e.target.value }))}
+                    style={inputStyle}
+                    required
+                  />
                 </div>
-              ))}
+                <input
+                  id="event-location"
+                  type="text"
+                  placeholder="Location *"
+                  value={eventForm.location}
+                  onChange={e => setEventForm(f => ({ ...f, location: e.target.value }))}
+                  style={inputStyle}
+                  required
+                />
+                <button
+                  id="event-submit-btn"
+                  type="submit"
+                  disabled={eventSubmitting}
+                  style={{
+                    padding: '0.5rem',
+                    background: 'var(--primary)',
+                    color: 'var(--on-primary)',
+                    borderRadius: 'var(--radius-md)',
+                    border: 'none', cursor: 'pointer',
+                    fontWeight: 700, fontSize: '0.75rem',
+                    textTransform: 'uppercase', letterSpacing: '0.06em',
+                    opacity: eventSubmitting ? 0.6 : 1,
+                    transition: 'opacity 200ms ease',
+                  }}
+                >
+                  {eventSubmitting ? 'Adding…' : 'Add Event'}
+                </button>
+              </form>
+            )}
+
+            {/* ── Event List ── */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {events.length === 0 && (
+                <p style={{
+                  fontSize: '0.75rem', color: 'var(--outline)',
+                  textAlign: 'center', padding: '1rem 0', margin: 0,
+                }}>No upcoming events</p>
+              )}
+              {events.map((ev, i) => {
+                const { month, day } = formatEventDate(ev.date);
+                const isFeatured = i === 0;
+                return (
+                  <div key={ev._id} style={{
+                    display: 'flex', gap: '0.75rem', cursor: 'pointer',
+                    padding: '0.5rem',
+                    borderRadius: 'var(--radius-md)',
+                    transition: 'background 150ms ease',
+                    position: 'relative',
+                  }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'var(--surface-container-high)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <div style={{
+                      width: 48, height: 48, borderRadius: 'var(--radius-md)',
+                      background: isFeatured ? 'var(--primary-fixed)' : 'var(--surface-container-high)',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
+                    }}>
+                      <span style={{
+                        fontSize: '0.5rem', fontWeight: 700, textTransform: 'uppercase',
+                        color: isFeatured ? 'var(--on-primary-fixed-variant)' : 'var(--outline)',
+                        lineHeight: 1.2,
+                      }}>{month}</span>
+                      <span style={{
+                        fontSize: '1.125rem', fontWeight: 700,
+                        color: isFeatured ? 'var(--primary)' : 'var(--on-surface-variant)',
+                        lineHeight: 1,
+                      }}>{day}</span>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: '0.75rem', fontWeight: 700, lineHeight: 1.3, margin: 0 }}>{ev.title}</p>
+                      <p style={{ fontSize: '0.625rem', color: 'var(--outline)', margin: 0, marginTop: 2 }}>
+                        {ev.time} • {ev.location}
+                      </p>
+                      {ev.createdBy && (
+                        <p style={{ fontSize: '0.5625rem', color: 'var(--outline-variant)', margin: 0, marginTop: 2, fontStyle: 'italic' }}>
+                          by {ev.createdBy.name}
+                        </p>
+                      )}
+                    </div>
+                    {user?.role === 'faculty' && ev.createdBy && (ev.createdBy._id === user._id || ev.createdBy === user._id) && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleDeleteEvent(ev._id); }}
+                        style={{
+                          position: 'absolute', top: 4, right: 4,
+                          background: 'none', border: 'none', cursor: 'pointer',
+                          color: 'var(--error, #d32f2f)',
+                          padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          borderRadius: 'var(--radius-full)',
+                          opacity: 0.6, transition: 'opacity 150ms ease',
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+                        onMouseLeave={e => e.currentTarget.style.opacity = '0.6'}
+                        title="Delete event"
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: 14 }}>delete</span>
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -273,3 +441,16 @@ export default function Feed() {
     </Layout>
   );
 }
+
+/* ── Shared input style ── */
+const inputStyle = {
+  padding: '0.5rem 0.625rem',
+  fontSize: '0.75rem',
+  borderRadius: 'var(--radius-md)',
+  border: '1px solid var(--outline-variant)',
+  background: 'var(--surface-container-lowest)',
+  color: 'var(--on-surface)',
+  outline: 'none',
+  width: '100%',
+  boxSizing: 'border-box',
+};

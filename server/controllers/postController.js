@@ -14,6 +14,7 @@ exports.createPost = async (req, res) => {
     if (req.file) {
       const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
       postData.mediaUrl = result.secure_url;
+      postData.mediaPublicId = result.public_id;
       postData.mediaType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
     }
 
@@ -55,7 +56,15 @@ exports.deletePost = async (req, res) => {
     if (!isOwner && !isFaculty) return res.status(403).json({ error: 'Not allowed' });
 
     // Delete media from Cloudinary if present
-    if (post.mediaUrl) {
+    if (post.mediaPublicId) {
+      try {
+        const resourceType = post.mediaType === 'video' ? 'video' : 'image';
+        await cloudinary.uploader.destroy(post.mediaPublicId, { resource_type: resourceType });
+      } catch (cloudErr) {
+        console.error('Cloudinary delete error (non-fatal):', cloudErr);
+      }
+    } else if (post.mediaUrl) {
+      // Fallback for legacy posts without public_id
       try {
         const urlParts = post.mediaUrl.split('/');
         const folderAndFile = urlParts.slice(urlParts.indexOf('campushub_posts')).join('/');
@@ -63,10 +72,12 @@ exports.deletePost = async (req, res) => {
         const resourceType = post.mediaType === 'video' ? 'video' : 'image';
         await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
       } catch (cloudErr) {
-        console.error('Cloudinary delete error (non-fatal):', cloudErr);
+        console.error('Cloudinary legacy delete error (non-fatal):', cloudErr);
       }
     }
 
+    const Comment = require('../models/Comment');
+    await Comment.deleteMany({ postId: post._id });
     await post.deleteOne();
     res.json({ message: 'Deleted' });
   } catch (err) {

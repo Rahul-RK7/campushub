@@ -17,7 +17,7 @@ exports.approve = async (req, res) => {
     if (user.status !== 'pending') return res.status(400).json({ error: 'User is not pending approval' });
     user.status = 'active';
     await user.save();
-    res.json({ message: 'Approved', user });
+    res.json({ message: 'Approved', user: { _id: user._id, name: user.name, email: user.email, status: user.status } });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }

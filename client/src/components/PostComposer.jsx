@@ -41,10 +41,12 @@ export default function PostComposer({ onPost }) {
     }
 
     setMediaFile(file);
+    if (mediaPreview) URL.revokeObjectURL(mediaPreview);
     setMediaPreview(URL.createObjectURL(file));
   };
 
   const removeMedia = () => {
+    if (mediaPreview) URL.revokeObjectURL(mediaPreview);
     setMediaFile(null);
     setMediaPreview(null);
     setMediaError('');
@@ -96,7 +98,11 @@ export default function PostComposer({ onPost }) {
           fontSize: 14, fontWeight: 700, color: '#fff',
           overflow: 'hidden',
         }}>
-          {user?.name?.charAt(0)?.toUpperCase() || '?'}
+          {user?.profilePic ? (
+            <img src={user.profilePic} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          ) : (
+            user?.name?.charAt(0)?.toUpperCase() || '?'
+          )}
         </div>
         {/* Content area */}
         <div style={{ flex: 1 }}>
