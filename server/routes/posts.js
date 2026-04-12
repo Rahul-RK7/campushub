@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
-const { createPost, getFeed, deletePost, toggleLike } = require('../controllers/postController');
+const { createPost, getFeed, deletePost, toggleLike, getUserPosts } = require('../controllers/postController');
 const { upload } = require('../config/cloudinaryConfig');
 
 router.use(protect);
@@ -32,6 +32,7 @@ const enforceMediaLimits = (req, res, next) => {
 };
 
 router.post('/', handleUpload, enforceMediaLimits, createPost);
+router.get('/user/:userId', getUserPosts);
 router.delete('/:id', deletePost);
 router.patch('/:id/like', toggleLike);
 module.exports = router;

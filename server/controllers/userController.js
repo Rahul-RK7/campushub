@@ -134,3 +134,22 @@ exports.getUserProfile = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.searchUsers = async (req, res) => {
+    try {
+        const q = req.query.q?.trim();
+        if (!q) return res.json([]);
+
+        const users = await User.find({
+            name: { $regex: q, $options: 'i' },
+            _id: { $ne: req.user._id },
+            status: 'active',
+        })
+            .select('name profilePic department role')
+            .limit(20);
+
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};

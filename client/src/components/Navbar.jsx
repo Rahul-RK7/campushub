@@ -1,10 +1,34 @@
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useSocket } from '../context/SocketContext';
+import api from '../api/axios';
 
 export default function Navbar() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const { socket } = useSocket();
+    const [unreadCount, setUnreadCount] = useState(0);
+
+    const fetchUnreadCount = useCallback(async () => {
+        try {
+            const { data } = await api.get('/api/messages/unread-count');
+            setUnreadCount(data.count);
+        } catch { /* silent */ }
+    }, []);
+
+    useEffect(() => {
+        if (user) fetchUnreadCount();
+    }, [user, fetchUnreadCount, location.pathname]);
+
+    // Listen for new messages to update badge
+    useEffect(() => {
+        if (!socket) return;
+        const handler = () => fetchUnreadCount();
+        socket.on('newMessage', handler);
+        return () => socket.off('newMessage', handler);
+    }, [socket, fetchUnreadCount]);
 
     const handleLogout = () => {
         logout();
@@ -36,6 +60,7 @@ export default function Navbar() {
                 <nav style={{ display: 'flex', gap: '1.5rem' }}>
                     {[
                         { path: '/feed', label: 'Feed' },
+                        { path: '/messages', label: 'Messages', badge: unreadCount },
                         ...(user?.role === 'faculty' ? [{ path: '/faculty/dashboard', label: 'Faculty Dashboard' }] : []),
                         { path: '/profile', label: 'Profile' },
                     ].map(link => (
@@ -49,8 +74,28 @@ export default function Navbar() {
                             paddingBottom: 4,
                             borderBottom: isActive(link.path) ? '2px solid var(--primary)' : '2px solid transparent',
                             transition: 'all 150ms ease',
+                            position: 'relative',
+                            display: 'flex', alignItems: 'center', gap: 6,
                         }}>
                             {link.label}
+                            {link.badge > 0 && (
+                                <span style={{
+                                    background: 'var(--error)',
+                                    color: '#fff',
+                                    borderRadius: '9999px',
+                                    fontSize: '0.5625rem',
+                                    fontWeight: 700,
+                                    minWidth: 16,
+                                    height: 16,
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    padding: '0 4px',
+                                    lineHeight: 1,
+                                }}>
+                                    {link.badge > 9 ? '9+' : link.badge}
+                                </span>
+                            )}
                         </Link>
                     ))}
                 </nav>

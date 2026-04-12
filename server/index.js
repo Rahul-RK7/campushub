@@ -1,15 +1,31 @@
 const express = require('express');
+const http = require('http');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
-// Manual sanitizer (express-mongo-sanitize is incompatible with Express 5)
 const rateLimit = require('express-rate-limit');
+const { Server } = require('socket.io');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
+const server = http.createServer(app);
+
+// Socket.IO setup
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+
+// Make io accessible to controllers via req.app.get('io')
+app.set('io', io);
+
 app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
+
 // Sanitize req.body to prevent NoSQL injection (req.query is read-only in Express 5)
 app.use((req, res, next) => {
   const sanitize = (obj) => {
@@ -24,10 +40,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rate limiting — 100 requests per 15 min per IP
+// Rate limiting — 200 requests per 15 min per IP
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -49,6 +65,70 @@ app.use('/api/posts', require('./routes/posts'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/comments', require('./routes/comments'));
 app.use('/api/events', require('./routes/events'));
+app.use('/api/messages', require('./routes/messages'));
+
+// ═══════════════════════════════════════════════════════════════
+// Socket.IO — Authentication & Events
+// ═══════════════════════════════════════════════════════════════
+
+// Track online users: userId -> Set of socketIds
+const onlineUsers = new Map();
+
+// JWT authentication middleware for Socket.IO
+io.use((socket, next) => {
+  const token = socket.handshake.auth?.token;
+  if (!token) return next(new Error('Authentication required'));
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.userId = decoded.id;
+    next();
+  } catch {
+    next(new Error('Invalid token'));
+  }
+});
+
+io.on('connection', (socket) => {
+  const userId = socket.userId;
+  console.log(`Socket connected: ${userId}`);
+
+  // Join a personal room keyed by userId
+  socket.join(userId);
+
+  // Track online status
+  if (!onlineUsers.has(userId)) onlineUsers.set(userId, new Set());
+  onlineUsers.get(userId).add(socket.id);
+
+  // Broadcast updated online users list
+  io.emit('onlineUsers', Array.from(onlineUsers.keys()));
+
+  // Typing indicator
+  socket.on('typing', ({ conversationId, isTyping }) => {
+    socket.to(conversationId).emit('userTyping', {
+      userId,
+      conversationId,
+      isTyping,
+    });
+  });
+
+  // Join conversation room (for typing indicators)
+  socket.on('joinConversation', (conversationId) => {
+    socket.join(conversationId);
+  });
+
+  socket.on('leaveConversation', (conversationId) => {
+    socket.leave(conversationId);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`Socket disconnected: ${userId}`);
+    const sockets = onlineUsers.get(userId);
+    if (sockets) {
+      sockets.delete(socket.id);
+      if (sockets.size === 0) onlineUsers.delete(userId);
+    }
+    io.emit('onlineUsers', Array.from(onlineUsers.keys()));
+  });
+});
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -56,4 +136,4 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, () => console.log('Server running on port ' + PORT));
+server.listen(PORT, () => console.log('Server running on port ' + PORT));

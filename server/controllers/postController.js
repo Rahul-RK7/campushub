@@ -103,3 +103,14 @@ exports.toggleLike = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+exports.getUserPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({ author: req.params.userId })
+      .sort({ createdAt: -1 })
+      .populate('author', 'name profilePic role');
+    res.json({ posts });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};

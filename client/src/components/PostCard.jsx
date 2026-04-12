@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -102,32 +103,41 @@ export default function PostCard({ post, onDelete, followingList = [] }) {
           }}>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               {/* Avatar */}
-              <div style={{
-                width: 48, height: 48,
-                borderRadius: isAnnouncement ? 'var(--radius-xl)' : '50%',
-                background: isAnnouncement ? 'var(--tertiary-fixed)' : 'var(--gradient-primary)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0, overflow: 'hidden',
-              }}>
-                {isAnnouncement ? (
-                  <span className="material-symbols-outlined" style={{ color: 'var(--tertiary)', fontSize: 22 }}>school</span>
-                ) : post.author?.profilePic ? (
-                  <img src={post.author.profilePic} alt={post.author.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>
-                    {post.author?.name?.charAt(0)?.toUpperCase() || '?'}
-                  </span>
-                )}
-              </div>
+              <Link to={isOwner ? '/profile' : `/profile/${post.author?._id}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{
+                  width: 48, height: 48,
+                  borderRadius: isAnnouncement ? 'var(--radius-xl)' : '50%',
+                  background: isAnnouncement ? 'var(--tertiary-fixed)' : 'var(--gradient-primary)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0, overflow: 'hidden',
+                  cursor: 'pointer', transition: 'opacity 150ms ease',
+                }}>
+                  {isAnnouncement ? (
+                    <span className="material-symbols-outlined" style={{ color: 'var(--tertiary)', fontSize: 22 }}>school</span>
+                  ) : post.author?.profilePic ? (
+                    <img src={post.author.profilePic} alt={post.author.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <span style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>
+                      {post.author?.name?.charAt(0)?.toUpperCase() || '?'}
+                    </span>
+                  )}
+                </div>
+              </Link>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <h3 style={{
-                    fontFamily: "'Manrope', sans-serif",
-                    fontWeight: 700, fontSize: '1rem', lineHeight: 1.3,
-                    color: 'var(--on-surface)', margin: 0,
-                  }}>
-                    {post.author?.name}
-                  </h3>
+                  <Link to={isOwner ? '/profile' : `/profile/${post.author?._id}`} style={{ textDecoration: 'none' }}>
+                    <h3 style={{
+                      fontFamily: "'Manrope', sans-serif",
+                      fontWeight: 700, fontSize: '1rem', lineHeight: 1.3,
+                      color: 'var(--on-surface)', margin: 0,
+                      cursor: 'pointer', transition: 'color 150ms ease',
+                    }}
+                      onMouseOver={e => e.currentTarget.style.color = 'var(--primary)'}
+                      onMouseOut={e => e.currentTarget.style.color = 'var(--on-surface)'}
+                    >
+                      {post.author?.name}
+                    </h3>
+                  </Link>
                   {!isOwner && (
                     <button onClick={handleFollow} disabled={followLoading} style={{
                       background: following ? 'var(--surface-container-high)' : 'var(--primary)',
@@ -297,30 +307,35 @@ export default function PostCard({ post, onDelete, followingList = [] }) {
                 <div key={c._id} style={{
                   display: 'flex', gap: '0.75rem', marginBottom: '0.75rem',
                 }}>
-                  <div style={{
-                    width: 32, height: 32, borderRadius: '50%',
-                    background: 'var(--surface-container-high)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 11, fontWeight: 700, color: 'var(--on-surface-variant)',
-                    flexShrink: 0, overflow: 'hidden',
-                  }}>
-                    {c.author?.profilePic ? (
-                      <img src={c.author.profilePic} alt={c.author.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      c.author?.name?.charAt(0)?.toUpperCase() || '?'
-                    )}
-                  </div>
+                  <Link to={c.author?._id === user?._id ? '/profile' : `/profile/${c.author?._id}`} style={{ textDecoration: 'none', flexShrink: 0 }}>
+                    <div style={{
+                      width: 32, height: 32, borderRadius: '50%',
+                      background: 'var(--surface-container-high)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 11, fontWeight: 700, color: 'var(--on-surface-variant)',
+                      flexShrink: 0, overflow: 'hidden',
+                      cursor: 'pointer', transition: 'opacity 150ms ease',
+                    }}>
+                      {c.author?.profilePic ? (
+                        <img src={c.author.profilePic} alt={c.author.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        c.author?.name?.charAt(0)?.toUpperCase() || '?'
+                      )}
+                    </div>
+                  </Link>
                   <div style={{
                     background: 'var(--surface-container-low)',
                     borderRadius: 'var(--radius-xl)',
                     padding: '0.75rem',
                     flex: 1,
                   }}>
-                    <p style={{
-                      fontSize: '0.625rem', fontWeight: 700, color: 'var(--primary)',
-                      textTransform: 'uppercase', letterSpacing: '0.08em',
-                      margin: '0 0 0.25rem',
-                    }}>{c.author?.name}</p>
+                    <Link to={c.author?._id === user?._id ? '/profile' : `/profile/${c.author?._id}`} style={{ textDecoration: 'none' }}>
+                      <p style={{
+                        fontSize: '0.625rem', fontWeight: 700, color: 'var(--primary)',
+                        textTransform: 'uppercase', letterSpacing: '0.08em',
+                        margin: '0 0 0.25rem', cursor: 'pointer',
+                      }}>{c.author?.name}</p>
+                    </Link>
                     <p style={{
                       fontSize: '0.75rem', color: 'var(--on-surface-variant)',
                       margin: 0, lineHeight: 1.5,
