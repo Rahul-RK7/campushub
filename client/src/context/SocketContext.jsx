@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext';
 
@@ -8,13 +8,17 @@ export function SocketProvider({ children }) {
     const { token } = useAuth();
     const [socket, setSocket] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    const socketRef = useRef(null);
 
     useEffect(() => {
+        // Cleanup previous socket before creating a new one
+        if (socketRef.current) {
+            socketRef.current.disconnect();
+            socketRef.current = null;
+            setSocket(null);
+        }
+
         if (!token) {
-            if (socket) {
-                socket.disconnect();
-                setSocket(null);
-            }
             return;
         }
 
@@ -35,10 +39,12 @@ export function SocketProvider({ children }) {
             console.error('Socket connection error:', err.message);
         });
 
+        socketRef.current = newSocket;
         setSocket(newSocket);
 
         return () => {
             newSocket.disconnect();
+            socketRef.current = null;
         };
     }, [token]);
 

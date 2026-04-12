@@ -105,6 +105,10 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     // Send email
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('EMAIL_USER or EMAIL_PASS not configured');
+      return res.status(503).json({ error: 'Email service not configured. Contact admin.' });
+    }
     await transporter.sendMail({
       from: `"CampusHUB" <${process.env.EMAIL_USER}>`,
       to: email,

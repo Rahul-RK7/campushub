@@ -1,4 +1,5 @@
 const Event = require('../models/Event');
+const mongoose = require('mongoose');
 
 exports.getEvents = async (req, res) => {
     try {
@@ -19,6 +20,13 @@ exports.createEvent = async (req, res) => {
         if (!title || !date || !time || !location) {
             return res.status(400).json({ error: 'Title, date, time, and location are required' });
         }
+        const eventDate = new Date(date);
+        if (isNaN(eventDate.getTime())) {
+            return res.status(400).json({ error: 'Invalid date format' });
+        }
+        if (eventDate < new Date(new Date().toDateString())) {
+            return res.status(400).json({ error: 'Event date cannot be in the past' });
+        }
         const event = await Event.create({
             title,
             description: description || '',
@@ -37,6 +45,9 @@ exports.createEvent = async (req, res) => {
 
 exports.deleteEvent = async (req, res) => {
     try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ error: 'Invalid event ID' });
+        }
         const event = await Event.findById(req.params.id);
         if (!event) return res.status(404).json({ error: 'Event not found' });
         if (event.createdBy.toString() !== req.user._id.toString()) {

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const { protect } = require('../middleware/authMiddleware');
 const Comment = require('../models/Comment');
 const Post = require('../models/Post');
@@ -7,6 +8,9 @@ router.use(protect);
 
 router.post('/:postId', async (req, res) => {
   try {
+    if (!mongoose.isValidObjectId(req.params.postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
     const postExists = await Post.exists({ _id: req.params.postId });
     if (!postExists) return res.status(404).json({ error: 'Post not found' });
     if (!req.body.content?.trim()) return res.status(400).json({ error: 'Comment content is required' });
@@ -25,6 +29,9 @@ router.post('/:postId', async (req, res) => {
 
 router.get('/:postId', async (req, res) => {
   try {
+    if (!mongoose.isValidObjectId(req.params.postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
     const comments = await Comment.find({ postId: req.params.postId })
       .sort({ createdAt: 1 })
       .populate('author', 'name profilePic');
@@ -36,6 +43,9 @@ router.get('/:postId', async (req, res) => {
 
 router.delete('/:postId/:commentId', async (req, res) => {
   try {
+    if (!mongoose.isValidObjectId(req.params.postId) || !mongoose.isValidObjectId(req.params.commentId)) {
+      return res.status(400).json({ error: 'Invalid ID' });
+    }
     const c = await Comment.findById(req.params.commentId);
     if (!c) return res.status(404).json({ error: 'Not found' });
     if (c.postId.toString() !== req.params.postId) return res.status(400).json({ error: 'Comment does not belong to this post' });

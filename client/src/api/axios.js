@@ -7,4 +7,22 @@ api.interceptors.request.use(config => {
   if (token) config.headers.Authorization = 'Bearer ' + token;
   return config;
 });
+
+// Auto-logout on 401 (expired/invalid token)
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      // Only redirect if not already on an auth page
+      const path = window.location.pathname;
+      if (path !== '/login' && path !== '/register' && path !== '/forgot-password') {
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;

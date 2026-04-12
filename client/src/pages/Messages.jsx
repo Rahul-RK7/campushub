@@ -65,6 +65,13 @@ export default function Messages() {
     const chatContainerRef = useRef(null);
     const activeConvIdRef = useRef(null);
 
+    // Clean up typing timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+        };
+    }, []);
+
     // Keep ref in sync with activeConv so socket handlers always see latest value
     useEffect(() => {
         activeConvIdRef.current = activeConv?._id || null;
@@ -224,7 +231,7 @@ export default function Messages() {
             setSearchingUsers(true);
             try {
                 const { data } = await api.get(`/api/users/search?q=${encodeURIComponent(searchQuery)}`);
-                setSearchResults(data.filter(u => u._id !== user._id));
+                setSearchResults(data.filter(u => u._id !== user?._id));
             } catch (err) {
                 console.error('User search failed:', err);
             } finally {

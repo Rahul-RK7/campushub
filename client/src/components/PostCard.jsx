@@ -30,7 +30,7 @@ export default function PostCard({ post, onDelete, followingList = [] }) {
     if (!confirm('Delete this post?')) return;
     try {
       await api.delete(`/api/posts/${post._id}`);
-      onDelete(post._id);
+      onDelete?.(post._id);
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to delete post');
     }

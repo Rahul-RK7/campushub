@@ -1,4 +1,5 @@
 const Post = require('../models/Post');
+const mongoose = require('mongoose');
 const { cloudinary, uploadToCloudinary } = require('../config/cloudinaryConfig');
 
 exports.createPost = async (req, res) => {
@@ -49,6 +50,9 @@ exports.getFeed = async (req, res) => {
 
 exports.deletePost = async (req, res) => {
   try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ error: 'Not found' });
     const isOwner = post.author.toString() === req.user._id.toString();
@@ -87,6 +91,9 @@ exports.deletePost = async (req, res) => {
 
 exports.toggleLike = async (req, res) => {
   try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ error: 'Not found' });
     const userId = req.user._id;
@@ -106,6 +113,9 @@ exports.toggleLike = async (req, res) => {
 
 exports.getUserPosts = async (req, res) => {
   try {
+    if (!mongoose.isValidObjectId(req.params.userId)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
     const posts = await Post.find({ author: req.params.userId })
       .sort({ createdAt: -1 })
       .populate('author', 'name profilePic role');

@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
+const mongoose = require('mongoose');
 const { cloudinary, uploadToCloudinary } = require('../config/cloudinaryConfig');
 
 exports.getMe = async (req, res) => {
@@ -66,6 +67,9 @@ exports.getPostCount = async (req, res) => {
 exports.toggleFollow = async (req, res) => {
     try {
         const targetId = req.params.id;
+        if (!mongoose.isValidObjectId(targetId)) {
+            return res.status(400).json({ error: 'Invalid user ID' });
+        }
         const myId = req.user._id;
 
         if (targetId === myId.toString()) {
@@ -115,6 +119,9 @@ exports.getMyPosts = async (req, res) => {
 
 exports.getUserProfile = async (req, res) => {
     try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ error: 'Invalid user ID' });
+        }
         const user = await User.findById(req.params.id)
             .select('-password -otp -otpExpiry')
             .populate('followers', 'name profilePic')
@@ -141,7 +148,7 @@ exports.searchUsers = async (req, res) => {
         if (!q) return res.json([]);
 
         const users = await User.find({
-            name: { $regex: q, $options: 'i' },
+            name: { $regex: q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), $options: 'i' },
             _id: { $ne: req.user._id },
             status: 'active',
         })

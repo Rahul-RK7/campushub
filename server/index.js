@@ -8,13 +8,23 @@ const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+// ── Process-level crash handlers ──
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  process.exit(1);
+});
+
 const app = express();
 const server = http.createServer(app);
 
 // Socket.IO setup
+const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:5173';
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: allowedOrigin,
     methods: ['GET', 'POST'],
   },
 });
@@ -23,10 +33,10 @@ const io = new Server(server, {
 app.set('io', io);
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({ origin: allowedOrigin }));
 app.use(express.json({ limit: '1mb' }));
 
-// Sanitize req.body to prevent NoSQL injection (req.query is read-only in Express 5)
+// Sanitize req.body, req.query, and req.params to prevent NoSQL injection
 app.use((req, res, next) => {
   const sanitize = (obj) => {
     if (typeof obj !== 'object' || obj === null) return obj;
@@ -37,6 +47,8 @@ app.use((req, res, next) => {
     return obj;
   };
   if (req.body) sanitize(req.body);
+  if (req.query) sanitize(req.query);
+  if (req.params) sanitize(req.params);
   next();
 });
 
@@ -137,3 +149,18 @@ app.use((err, req, res, next) => {
 });
 
 server.listen(PORT, () => console.log('Server running on port ' + PORT));
+
+// ── Graceful shutdown ──
+const shutdown = () => {
+  console.log('Shutting down gracefully...');
+  server.close(() => {
+    mongoose.connection.close(false).then(() => {
+      console.log('MongoDB connection closed.');
+      process.exit(0);
+    });
+  });
+  // Force exit after 10s if graceful shutdown fails
+  setTimeout(() => process.exit(1), 10000);
+};
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);

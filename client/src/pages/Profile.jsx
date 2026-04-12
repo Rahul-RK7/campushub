@@ -21,6 +21,13 @@ export default function Profile() {
     const [listModal, setListModal] = useState(null); // 'followers' | 'following' | null
     const fileRef = useRef(null);
 
+    // Revoke object URL on unmount to prevent memory leak
+    useEffect(() => {
+        return () => {
+            if (picPreview) URL.revokeObjectURL(picPreview);
+        };
+    }, [picPreview]);
+
     useEffect(() => {
         api.get('/api/users/me')
             .then(({ data }) => {

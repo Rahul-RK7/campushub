@@ -275,7 +275,7 @@ export default function UserProfile() {
                             </div>
                         ) : (
                             posts.map(post => (
-                                <PostCard key={post._id} post={post} onDelete={handleDeletePost} />
+                                <PostCard key={post._id} post={post} onDelete={handleDeletePost} followingList={(profile?.following || []).map(f => f._id || f)} />
                             ))
                         )}
                     </div>

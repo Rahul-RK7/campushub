@@ -1,6 +1,7 @@
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
 const User = require('../models/User');
+const mongoose = require('mongoose');
 
 // GET /api/messages/conversations — list user's conversations
 exports.getConversations = async (req, res) => {
@@ -36,6 +37,9 @@ exports.createConversation = async (req, res) => {
     try {
         const { participantId } = req.body;
         if (!participantId) return res.status(400).json({ error: 'participantId required' });
+        if (!mongoose.isValidObjectId(participantId)) {
+            return res.status(400).json({ error: 'Invalid participant ID' });
+        }
         if (participantId === req.user._id.toString()) {
             return res.status(400).json({ error: 'Cannot message yourself' });
         }
@@ -71,6 +75,9 @@ exports.createConversation = async (req, res) => {
 // GET /api/messages/conversations/:id — get messages in a conversation
 exports.getMessages = async (req, res) => {
     try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ error: 'Invalid conversation ID' });
+        }
         const conversation = await Conversation.findById(req.params.id);
         if (!conversation) return res.status(404).json({ error: 'Conversation not found' });
 
@@ -103,6 +110,9 @@ exports.sendMessage = async (req, res) => {
     try {
         const { text } = req.body;
         if (!text?.trim()) return res.status(400).json({ error: 'Message text required' });
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ error: 'Invalid conversation ID' });
+        }
 
         const conversation = await Conversation.findById(req.params.id);
         if (!conversation) return res.status(404).json({ error: 'Conversation not found' });
@@ -148,6 +158,9 @@ exports.sendMessage = async (req, res) => {
 // PUT /api/messages/conversations/:id/read — mark messages as read
 exports.markAsRead = async (req, res) => {
     try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ error: 'Invalid conversation ID' });
+        }
         const conversation = await Conversation.findById(req.params.id);
         if (!conversation) return res.status(404).json({ error: 'Conversation not found' });
 
