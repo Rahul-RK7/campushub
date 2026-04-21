@@ -64,6 +64,7 @@ export default function Messages() {
     const [isCreatingGroup, setIsCreatingGroup] = useState(false);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [groupName, setGroupName] = useState('');
+    const [showGroupInfo, setShowGroupInfo] = useState(false);
 
     const messagesEndRef = useRef(null);
     const typingTimeoutRef = useRef(null);
@@ -285,6 +286,33 @@ export default function Messages() {
         setSelectedUsers([]);
         setGroupName('');
         setIsCreatingGroup(false);
+    };
+
+    const handleAddMember = async (userId) => {
+        try {
+            const { data } = await api.post(`/api/messages/groups/${activeConv._id}/members`, { userId });
+            setActiveConv(data);
+            setSearchQuery('');
+            fetchConversations();
+        } catch (err) {
+            console.error('Failed to add member:', err);
+        }
+    };
+
+    const handleRemoveMember = async (userId) => {
+        try {
+            const { data } = await api.delete(`/api/messages/groups/${activeConv._id}/members/${userId}`);
+            if (data.deleted) {
+                setActiveConv(null);
+                setMobileShowChat(false);
+                setShowGroupInfo(false);
+            } else {
+                setActiveConv(data);
+            }
+            fetchConversations();
+        } catch (err) {
+            console.error('Failed to remove member:', err);
+        }
     };
 
     /* ── get other participant ── */
@@ -534,6 +562,19 @@ export default function Messages() {
                                         )}
                                     </p>
                                 </div>
+                                {activeConv.isGroup && (
+                                    <button
+                                        onClick={() => { setShowGroupInfo(true); setSearchQuery(''); setSearchResults([]); }}
+                                        style={{
+                                            background: 'transparent', border: 'none', padding: 4,
+                                            cursor: 'pointer', color: 'var(--on-surface-variant)',
+                                            marginLeft: 'auto'
+                                        }}
+                                        title="Group Info"
+                                    >
+                                        <span className="material-symbols-outlined" style={{ fontSize: 24 }}>info</span>
+                                    </button>
+                                )}
                             </div>
 
                             {/* Messages area */}
@@ -561,12 +602,15 @@ export default function Messages() {
                                 ) : (
                                     <>
                                         {messages.map((msg, idx) => {
-                                            const isMine = msg.sender?._id === user._id || msg.sender === user._id;
+                                            const senderId = msg.sender?._id || msg.sender;
+                                            const isMine = senderId === user._id;
                                             const showDate = idx === 0 || (
                                                 new Date(msg.createdAt).toDateString() !== new Date(messages[idx - 1].createdAt).toDateString()
                                             );
+                                            const prevSenderId = idx > 0 ? (messages[idx - 1].sender?._id || messages[idx - 1].sender) : null;
+                                            const showSenderName = activeConv.isGroup && !isMine && (idx === 0 || prevSenderId !== senderId || showDate);
                                             return (
-                                                <div key={msg._id}>
+                                                <div key={msg._id} style={{ display: 'flex', flexDirection: 'column' }}>
                                                     {showDate && (
                                                         <div style={{
                                                             textAlign: 'center', margin: '1rem 0 0.75rem',
@@ -576,6 +620,14 @@ export default function Messages() {
                                                             {new Date(msg.createdAt).toLocaleDateString('en-US', {
                                                                 weekday: 'short', month: 'short', day: 'numeric',
                                                             })}
+                                                        </div>
+                                                    )}
+                                                    {showSenderName && msg.sender?.name && (
+                                                        <div style={{
+                                                            fontSize: '0.6875rem', fontWeight: 600, color: 'var(--primary)',
+                                                            marginLeft: '1rem', marginBottom: '0.125rem', marginTop: '0.5rem'
+                                                        }}>
+                                                            {msg.sender.name}
                                                         </div>
                                                     )}
                                                     <div style={{
@@ -663,6 +715,129 @@ export default function Messages() {
                         </>
                     )}
                 </div>
+
+                {/* ═══ GROUP INFO MODAL ═══ */}
+                {showGroupInfo && activeConv && activeConv.isGroup && (
+                    <div style={{
+                        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                        background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        zIndex: 100,
+                        animation: 'fadeIn 0.2s ease',
+                    }} onClick={() => setShowGroupInfo(false)}>
+                        <div onClick={e => e.stopPropagation()} style={{
+                            background: 'var(--surface-container-lowest)',
+                            borderRadius: 'var(--radius-2xl)',
+                            width: '100%', maxWidth: 440, maxHeight: '80vh',
+                            display: 'flex', flexDirection: 'column',
+                            boxShadow: '0 24px 48px rgba(0,0,0,0.15)',
+                            animation: 'fadeInUp 0.3s ease',
+                        }}>
+                            {/* Modal header */}
+                            <div style={{
+                                padding: '1.25rem 1.5rem',
+                                borderBottom: '1px solid rgba(200,196,213,0.15)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            }}>
+                                <div>
+                                    <h3 style={{
+                                        fontSize: '1.0625rem', fontWeight: 700,
+                                        fontFamily: "'Manrope', sans-serif",
+                                        margin: 0, color: 'var(--on-surface)',
+                                    }}>Group Info</h3>
+                                    <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: 'var(--outline)' }}>
+                                        Created by {activeConv.groupAdmin?.name}
+                                    </p>
+                                </div>
+                                <button onClick={() => setShowGroupInfo(false)} style={{
+                                    background: 'transparent', border: 'none', padding: 4,
+                                    cursor: 'pointer', color: 'var(--outline)',
+                                }}>
+                                    <span className="material-symbols-outlined" style={{ fontSize: 22 }}>close</span>
+                                </button>
+                            </div>
+
+                            {/* Members list */}
+                            <div style={{ padding: '1rem 1.5rem 0.5rem' }}>
+                                <h4 style={{ fontSize: '0.8125rem', color: 'var(--on-surface-variant)', margin: '0 0 0.5rem' }}>Members ({activeConv.participants.length})</h4>
+                            </div>
+                            <div style={{ flexShrink: 0, maxHeight: '30vh', overflowY: 'auto', padding: '0 1.5rem 1rem' }}>
+                                {activeConv.participants.map(p => {
+                                    const isAdmin = p._id === activeConv.groupAdmin?._id;
+                                    const amIAdmin = user._id === activeConv.groupAdmin?._id;
+                                    const canRemove = amIAdmin && !isAdmin;
+                                    return (
+                                        <div key={p._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 0' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                <Avatar name={p.name} pic={p.profilePic} size={32} online={onlineUsers.includes(p._id)} />
+                                                <div>
+                                                    <p style={{ margin: 0, fontSize: '0.875rem', fontWeight: 500, color: 'var(--on-surface)' }}>
+                                                        {p.name} {p._id === user._id && '(You)'}
+                                                    </p>
+                                                    {isAdmin && <span style={{ fontSize: '0.625rem', background: 'var(--primary-fixed)', color: 'var(--on-primary-fixed)', padding: '2px 6px', borderRadius: '4px', display: 'inline-block', marginTop: 2 }}>Admin</span>}
+                                                </div>
+                                            </div>
+                                            {canRemove && (
+                                                <button onClick={() => handleRemoveMember(p._id)} style={{
+                                                    background: 'transparent', border: 'none', color: 'var(--error)', cursor: 'pointer', padding: 4,
+                                                }} title="Remove Member">
+                                                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>person_remove</span>
+                                                </button>
+                                            )}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+
+                            {/* Add Member section (Admin only) */}
+                            {user._id === activeConv.groupAdmin?._id && (
+                                <>
+                                    <div style={{ padding: '0 1.5rem', borderTop: '1px solid rgba(200,196,213,0.15)', paddingTop: '1rem' }}>
+                                        <h4 style={{ fontSize: '0.8125rem', color: 'var(--on-surface-variant)', margin: '0 0 0.5rem' }}>Add Members</h4>
+                                        <div style={{
+                                            display: 'flex', alignItems: 'center', background: 'var(--surface-container-low)',
+                                            borderRadius: 'var(--radius-full)', padding: '0.5rem 0.875rem',
+                                        }}>
+                                            <span className="material-symbols-outlined" style={{ fontSize: 18, color: 'var(--outline)', marginRight: 8 }}>person_search</span>
+                                            <input
+                                                type="text" placeholder="Search by name..."
+                                                value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                                                style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: '0.8125rem', padding: '0.25rem 0', color: 'var(--on-surface)' }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 0.5rem 1rem' }}>
+                                        {searchingUsers ? (
+                                            <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem' }}>
+                                                <div style={{ width: 20, height: 20, border: '2px solid var(--surface-container-high)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                                            </div>
+                                        ) : searchResults.length === 0 && searchQuery.trim() ? (
+                                            <p style={{ textAlign: 'center', color: 'var(--outline)', fontSize: '0.8125rem', padding: '1rem' }}>No users found</p>
+                                        ) : (
+                                            searchResults.filter(u => !activeConv.participants.find(p => p._id === u._id)).map(u => (
+                                                <div key={u._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 1rem', borderRadius: 'var(--radius-lg)', transition: 'background 150ms ease' }}
+                                                    onMouseOver={e => e.currentTarget.style.background = 'var(--surface-container-low)'}
+                                                    onMouseOut={e => e.currentTarget.style.background = 'transparent'}
+                                                >
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                        <Avatar name={u.name} pic={u.profilePic} size={32} online={onlineUsers.includes(u._id)} />
+                                                        <p style={{ fontWeight: 500, fontSize: '0.875rem', color: 'var(--on-surface)', margin: 0 }}>{u.name}</p>
+                                                    </div>
+                                                    <button onClick={() => handleAddMember(u._id)} style={{
+                                                        background: 'var(--surface-container-high)', border: 'none', borderRadius: 'var(--radius-full)',
+                                                        width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--on-surface)',
+                                                    }}>
+                                                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>add</span>
+                                                    </button>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {/* ═══ NEW CHAT MODAL ═══ */}
                 {showNewChat && (
