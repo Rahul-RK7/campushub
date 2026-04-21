@@ -78,6 +78,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/comments', require('./routes/comments'));
 app.use('/api/events', require('./routes/events'));
 app.use('/api/messages', require('./routes/messages'));
+app.use('/api/stories', require('./routes/stories'));
 
 // ═══════════════════════════════════════════════════════════════
 // Socket.IO — Authentication & Events

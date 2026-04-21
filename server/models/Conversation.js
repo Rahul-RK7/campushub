@@ -6,6 +6,22 @@ const conversationSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     }],
+    isGroup: {
+        type: Boolean,
+        default: false,
+    },
+    groupName: {
+        type: String,
+        default: '',
+    },
+    groupAdmin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    groupPic: {
+        type: String,
+        default: '',
+    },
     lastMessage: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Message',

@@ -10,6 +10,7 @@ exports.getConversations = async (req, res) => {
             participants: req.user._id,
         })
             .populate('participants', 'name profilePic')
+            .populate('groupAdmin', 'name profilePic')
             .populate('lastMessage')
             .sort({ updatedAt: -1 });
 
@@ -63,11 +64,47 @@ exports.createConversation = async (req, res) => {
         });
         conversation = await Conversation.findById(conversation._id)
             .populate('participants', 'name profilePic')
+            .populate('groupAdmin', 'name profilePic')
             .populate('lastMessage');
 
         res.status(201).json(conversation);
     } catch (err) {
         console.error('createConversation error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+// POST /api/messages/groups — create group conversation
+exports.createGroupConversation = async (req, res) => {
+    try {
+        const { participantIds, groupName } = req.body;
+        if (!participantIds || !Array.isArray(participantIds) || participantIds.length < 1) {
+            return res.status(400).json({ error: 'Participants required' });
+        }
+        if (!groupName || typeof groupName !== 'string' || !groupName.trim()) {
+            return res.status(400).json({ error: 'Group name is required' });
+        }
+
+        const allParticipants = [...new Set([...participantIds, req.user._id.toString()])];
+
+        const isValid = allParticipants.every(id => mongoose.isValidObjectId(id));
+        if (!isValid) return res.status(400).json({ error: 'Invalid participant ID(s)' });
+
+        let conversation = await Conversation.create({
+            participants: allParticipants,
+            isGroup: true,
+            groupName: groupName.trim(),
+            groupAdmin: req.user._id,
+        });
+
+        conversation = await Conversation.findById(conversation._id)
+            .populate('participants', 'name profilePic')
+            .populate('groupAdmin', 'name profilePic')
+            .populate('lastMessage');
+
+        res.status(201).json(conversation);
+    } catch (err) {
+        console.error('createGroupConversation error:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };
@@ -205,3 +242,85 @@ exports.getUnreadCount = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+// POST /api/messages/groups/:id/members — add member to group
+exports.addGroupMember = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        if (!mongoose.isValidObjectId(userId) || !mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({ error: 'Invalid ID' });
+        }
+
+        const conversation = await Conversation.findById(req.params.id);
+        if (!conversation || !conversation.isGroup) {
+            return res.status(404).json({ error: 'Group not found' });
+        }
+
+        // Only group admin can add
+        if (conversation.groupAdmin?.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ error: 'Only admin can add members' });
+        }
+
+        if (conversation.participants.some(p => p.toString() === userId)) {
+            return res.status(400).json({ error: 'User already in group' });
+        }
+
+        conversation.participants.push(userId);
+        await conversation.save();
+
+        const updated = await Conversation.findById(conversation._id)
+            .populate('participants', 'name profilePic')
+            .populate('groupAdmin', 'name profilePic')
+            .populate('lastMessage');
+
+        res.json(updated);
+    } catch (err) {
+        console.error('addGroupMember error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+// DELETE /api/messages/groups/:id/members/:userId — remove member from group
+exports.removeGroupMember = async (req, res) => {
+    try {
+        const { id, userId } = req.params;
+        if (!mongoose.isValidObjectId(userId) || !mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ error: 'Invalid ID' });
+        }
+
+        const conversation = await Conversation.findById(id);
+        if (!conversation || !conversation.isGroup) {
+            return res.status(404).json({ error: 'Group not found' });
+        }
+
+        // Can remove if requester is admin OR if user is removing themselves
+        if (conversation.groupAdmin?.toString() !== req.user._id.toString() && req.user._id.toString() !== userId) {
+            return res.status(403).json({ error: 'Not authorized to remove member' });
+        }
+
+        conversation.participants = conversation.participants.filter(p => p.toString() !== userId);
+
+        // If admin leaves, assign new admin or delete if empty
+        if (req.user._id.toString() === userId && conversation.groupAdmin?.toString() === userId) {
+            if (conversation.participants.length > 0) {
+                conversation.groupAdmin = conversation.participants[0];
+            } else {
+                await Conversation.findByIdAndDelete(conversation._id);
+                return res.json({ deleted: true });
+            }
+        }
+
+        await conversation.save();
+
+        const updated = await Conversation.findById(conversation._id)
+            .populate('participants', 'name profilePic')
+            .populate('groupAdmin', 'name profilePic')
+            .populate('lastMessage');
+
+        res.json(updated);
+    } catch (err) {
+        console.error('removeGroupMember error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+

@@ -23,6 +23,8 @@ const postSchema = new mongoose.Schema({
     enum: ['none', 'image', 'video'],
     default: 'none'
   },
+  tags: [{ type: String }],
+  commentCount: { type: Number, default: 0 },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true });
 

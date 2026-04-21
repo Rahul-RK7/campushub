@@ -20,6 +20,7 @@ router.post('/:postId', async (req, res) => {
       author: req.user._id,
       content: req.body.content
     });
+    await Post.updateOne({ _id: req.params.postId }, { $inc: { commentCount: 1 } });
     await comment.populate('author', 'name profilePic');
     res.status(201).json({ comment });
   } catch (err) {
@@ -54,6 +55,7 @@ router.delete('/:postId/:commentId', async (req, res) => {
     if (!isAuthor && !isFaculty)
       return res.status(403).json({ error: 'Not allowed' });
     await c.deleteOne();
+    await Post.updateOne({ _id: req.params.postId }, { $inc: { commentCount: -1 } });
     res.json({ message: 'Deleted' });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });

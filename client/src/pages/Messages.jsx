@@ -60,6 +60,11 @@ export default function Messages() {
     const [unreadCount, setUnreadCount] = useState(0);
     const [mobileShowChat, setMobileShowChat] = useState(false);
 
+    // Group chat states
+    const [isCreatingGroup, setIsCreatingGroup] = useState(false);
+    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [groupName, setGroupName] = useState('');
+
     const messagesEndRef = useRef(null);
     const typingTimeoutRef = useRef(null);
     const chatContainerRef = useRef(null);
@@ -245,9 +250,7 @@ export default function Messages() {
     const startConversation = async (participantId) => {
         try {
             const { data } = await api.post('/api/messages/conversations', { participantId });
-            setShowNewChat(false);
-            setSearchQuery('');
-            setSearchResults([]);
+            closeNewChatModal();
             setActiveConv(data);
             setMobileShowChat(true);
             setSearchParams({ conv: data._id }, { replace: true });
@@ -255,6 +258,33 @@ export default function Messages() {
         } catch (err) {
             console.error('Failed to start conversation:', err);
         }
+    };
+
+    /* ── start group conversation ── */
+    const startGroupConversation = async () => {
+        if (!groupName.trim() || selectedUsers.length < 1) return;
+        try {
+            const { data } = await api.post('/api/messages/groups', {
+                participantIds: selectedUsers.map(u => u._id),
+                groupName
+            });
+            closeNewChatModal();
+            setActiveConv(data);
+            setMobileShowChat(true);
+            setSearchParams({ conv: data._id }, { replace: true });
+            fetchConversations();
+        } catch (err) {
+            console.error('Failed to create group:', err);
+        }
+    };
+
+    const closeNewChatModal = () => {
+        setShowNewChat(false);
+        setSearchQuery('');
+        setSearchResults([]);
+        setSelectedUsers([]);
+        setGroupName('');
+        setIsCreatingGroup(false);
     };
 
     /* ── get other participant ── */
@@ -266,8 +296,8 @@ export default function Messages() {
     const [convSearch, setConvSearch] = useState('');
     const filteredConversations = conversations.filter(c => {
         if (!convSearch.trim()) return true;
-        const other = getOtherParticipant(c);
-        return other.name?.toLowerCase().includes(convSearch.toLowerCase());
+        const nameToSearch = c.isGroup ? c.groupName : getOtherParticipant(c)?.name || '';
+        return nameToSearch.toLowerCase().includes(convSearch.toLowerCase());
     });
 
     /* ═══════════════════════════ RENDER ═══════════════════════════ */
@@ -364,9 +394,12 @@ export default function Messages() {
                             </div>
                         ) : (
                             filteredConversations.map(conv => {
-                                const other = getOtherParticipant(conv);
+                                const isGroup = conv.isGroup;
+                                const other = isGroup ? {} : getOtherParticipant(conv);
+                                const displayName = isGroup ? conv.groupName : other.name;
+                                const displayPic = isGroup ? conv.groupPic : other.profilePic;
                                 const isActive = activeConv?._id === conv._id;
-                                const isOnline = onlineUsers.includes(other._id);
+                                const isOnline = !isGroup && onlineUsers.includes(other._id);
                                 return (
                                     <div
                                         key={conv._id}
@@ -381,14 +414,14 @@ export default function Messages() {
                                         onMouseOver={e => { if (!isActive) e.currentTarget.style.background = 'var(--surface-container-low)'; }}
                                         onMouseOut={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
                                     >
-                                        <Avatar name={other.name} pic={other.profilePic} size={44} online={isOnline} />
+                                        <Avatar name={displayName} pic={displayPic} size={44} online={isOnline} />
                                         <div style={{ flex: 1, minWidth: 0 }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <span style={{
                                                     fontWeight: conv.unreadCount > 0 ? 700 : 500,
                                                     fontSize: '0.875rem', color: 'var(--on-surface)',
                                                     whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                                                }}>{other.name}</span>
+                                                }}>{displayName}</span>
                                                 <span style={{
                                                     fontSize: '0.6875rem', color: 'var(--outline)',
                                                     flexShrink: 0, marginLeft: 8,
@@ -482,21 +515,23 @@ export default function Messages() {
                                     <span className="material-symbols-outlined" style={{ fontSize: 22 }}>arrow_back</span>
                                 </button>
                                 <Avatar
-                                    name={getOtherParticipant(activeConv).name}
-                                    pic={getOtherParticipant(activeConv).profilePic}
+                                    name={activeConv.isGroup ? activeConv.groupName : getOtherParticipant(activeConv).name}
+                                    pic={activeConv.isGroup ? activeConv.groupPic : getOtherParticipant(activeConv).profilePic}
                                     size={38}
-                                    online={onlineUsers.includes(getOtherParticipant(activeConv)._id)}
+                                    online={!activeConv.isGroup && onlineUsers.includes(getOtherParticipant(activeConv)._id)}
                                 />
                                 <div>
                                     <p style={{ fontWeight: 600, fontSize: '0.9375rem', color: 'var(--on-surface)', margin: 0 }}>
-                                        {getOtherParticipant(activeConv).name}
+                                        {activeConv.isGroup ? activeConv.groupName : getOtherParticipant(activeConv).name}
                                     </p>
                                     <p style={{ fontSize: '0.6875rem', color: 'var(--outline)', margin: 0 }}>
-                                        {typingUsers[activeConv._id]
-                                            ? <span style={{ color: 'var(--primary)', fontWeight: 500 }}>typing...</span>
-                                            : onlineUsers.includes(getOtherParticipant(activeConv)._id)
-                                                ? <span style={{ color: '#22c55e' }}>Online</span>
-                                                : 'Offline'}
+                                        {activeConv.isGroup ? `${activeConv.participants.length} members` : (
+                                            typingUsers[activeConv._id]
+                                                ? <span style={{ color: 'var(--primary)', fontWeight: 500 }}>typing...</span>
+                                                : onlineUsers.includes(getOtherParticipant(activeConv)._id)
+                                                    ? <span style={{ color: '#22c55e' }}>Online</span>
+                                                    : 'Offline'
+                                        )}
                                     </p>
                                 </div>
                             </div>
@@ -657,13 +692,68 @@ export default function Messages() {
                                     fontFamily: "'Manrope', sans-serif",
                                     margin: 0, color: 'var(--on-surface)',
                                 }}>New Message</h3>
-                                <button onClick={() => setShowNewChat(false)} style={{
+                                <button onClick={closeNewChatModal} style={{
                                     background: 'transparent', border: 'none', padding: 4,
                                     cursor: 'pointer', color: 'var(--outline)',
                                 }}>
                                     <span className="material-symbols-outlined" style={{ fontSize: 22 }}>close</span>
                                 </button>
                             </div>
+
+                            {/* Tabs */}
+                            <div style={{ display: 'flex', borderBottom: '1px solid rgba(200,196,213,0.15)' }}>
+                                <button
+                                    onClick={() => { setIsCreatingGroup(false); setSelectedUsers([]); }}
+                                    style={{
+                                        flex: 1, background: 'none', border: 'none', padding: '0.75rem',
+                                        fontSize: '0.8125rem', fontWeight: 600, cursor: 'pointer',
+                                        color: !isCreatingGroup ? 'var(--primary)' : 'var(--outline)',
+                                        borderBottom: !isCreatingGroup ? '2px solid var(--primary)' : '2px solid transparent',
+                                    }}
+                                >Direct Message</button>
+                                <button
+                                    onClick={() => { setIsCreatingGroup(true); }}
+                                    style={{
+                                        flex: 1, background: 'none', border: 'none', padding: '0.75rem',
+                                        fontSize: '0.8125rem', fontWeight: 600, cursor: 'pointer',
+                                        color: isCreatingGroup ? 'var(--primary)' : 'var(--outline)',
+                                        borderBottom: isCreatingGroup ? '2px solid var(--primary)' : '2px solid transparent',
+                                    }}
+                                >Create Group</button>
+                            </div>
+
+                            {/* Group details input */}
+                            {isCreatingGroup && (
+                                <div style={{ padding: '1rem 1.5rem 0' }}>
+                                    <input
+                                        type="text"
+                                        placeholder="Group Name"
+                                        value={groupName}
+                                        onChange={e => setGroupName(e.target.value)}
+                                        style={{
+                                            width: '100%', background: 'var(--surface-container-low)',
+                                            border: '1px solid var(--outline-variant)', borderRadius: 'var(--radius-md)',
+                                            padding: '0.625rem 0.875rem', fontSize: '0.875rem', color: 'var(--on-surface)',
+                                            outline: 'none', boxSizing: 'border-box'
+                                        }}
+                                    />
+                                    {selectedUsers.length > 0 && (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: '0.75rem' }}>
+                                            {selectedUsers.map(u => (
+                                                <div key={u._id} style={{
+                                                    background: 'var(--primary-fixed)', color: 'var(--on-primary-fixed)',
+                                                    fontSize: '0.6875rem', padding: '2px 8px', borderRadius: '1rem',
+                                                    display: 'flex', alignItems: 'center', gap: 4
+                                                }}>
+                                                    {u.name}
+                                                    <span onClick={() => setSelectedUsers(prev => prev.filter(x => x._id !== u._id))}
+                                                        style={{ cursor: 'pointer', opacity: 0.7 }} className="material-symbols-outlined">close</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
 
                             {/* Search input */}
                             <div style={{ padding: '1rem 1.5rem' }}>
@@ -707,10 +797,17 @@ export default function Messages() {
                                         fontSize: '0.8125rem', padding: '1.5rem',
                                     }}>No users found</p>
                                 ) : (
-                                    searchResults.map(u => (
+                                    searchResults.filter(u => !selectedUsers.find(x => x._id === u._id)).map(u => (
                                         <div
                                             key={u._id}
-                                            onClick={() => startConversation(u._id)}
+                                            onClick={() => {
+                                                if (isCreatingGroup) {
+                                                    setSelectedUsers(prev => [...prev, u]);
+                                                    setSearchQuery('');
+                                                } else {
+                                                    startConversation(u._id);
+                                                }
+                                            }}
                                             style={{
                                                 display: 'flex', alignItems: 'center', gap: '0.75rem',
                                                 padding: '0.75rem 1rem', borderRadius: 'var(--radius-lg)',
@@ -728,6 +825,23 @@ export default function Messages() {
                                     ))
                                 )}
                             </div>
+                            {/* Group Create Button */}
+                            {isCreatingGroup && (
+                                <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(200,196,213,0.15)' }}>
+                                    <button
+                                        onClick={startGroupConversation}
+                                        disabled={!groupName.trim() || selectedUsers.length < 1}
+                                        style={{
+                                            width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-full)',
+                                            background: (groupName.trim() && selectedUsers.length >= 1) ? 'var(--gradient-primary)' : 'var(--surface-container-high)',
+                                            color: (groupName.trim() && selectedUsers.length >= 1) ? '#fff' : 'var(--outline)',
+                                            border: 'none', fontWeight: 600, cursor: (groupName.trim() && selectedUsers.length >= 1) ? 'pointer' : 'default',
+                                        }}
+                                    >
+                                        Create Group
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

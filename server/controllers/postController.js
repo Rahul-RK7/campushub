@@ -5,7 +5,8 @@ const { cloudinary, uploadToCloudinary } = require('../config/cloudinaryConfig')
 exports.createPost = async (req, res) => {
   try {
     const { content, type } = req.body;
-    const postData = { author: req.user._id, content: content || '' };
+    const parsedTags = content ? [...new Set(Array.from(content.matchAll(/(?:^|\s)(#[a-zA-Z0-9_]+)/g)).map(m => m[1].toLowerCase()))] : [];
+    const postData = { author: req.user._id, content: content || '', tags: parsedTags };
 
     if (req.user.role === 'faculty' && type === 'announcement') {
       postData.type = 'announcement';
@@ -37,7 +38,10 @@ exports.getFeed = async (req, res) => {
   try {
     const page = Number(req.query.page) || 1;
     const limit = 10;
-    const posts = await Post.find()
+    const tag = req.query.tag;
+    const filter = tag ? { tags: tag.toLowerCase() } : {};
+
+    const posts = await Post.find(filter)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -120,6 +124,20 @@ exports.getUserPosts = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate('author', 'name profilePic role');
     res.json({ posts });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+exports.getTrendingTags = async (req, res) => {
+  try {
+    const tags = await Post.aggregate([
+      { $unwind: "$tags" },
+      { $group: { _id: "$tags", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 10 }
+    ]);
+    res.json(tags.map(t => t._id));
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }

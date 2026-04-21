@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../api/axios';
 import PostCard from '../components/PostCard';
 import PostComposer from '../components/PostComposer';
+import Stories from '../components/Stories';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
 
@@ -13,6 +14,8 @@ export default function Feed() {
   const [hasMore, setHasMore] = useState(true);
   const [postCount, setPostCount] = useState(0);
   const [followingList, setFollowingList] = useState([]);
+  const [trendingTags, setTrendingTags] = useState([]);
+  const [selectedTag, setSelectedTag] = useState(null);
 
   /* ── Event Calendar state ── */
   const [events, setEvents] = useState([]);
@@ -20,11 +23,14 @@ export default function Feed() {
   const [eventForm, setEventForm] = useState({ title: '', description: '', date: '', time: '', location: '' });
   const [eventSubmitting, setEventSubmitting] = useState(false);
 
-  const fetchPosts = async (p = 1) => {
+  const fetchPosts = async (p = 1, currentTag = null) => {
     try {
-      const { data } = await api.get('/api/posts?page=' + p);
+      if (p === 1) setLoading(true);
+      const url = `/api/posts?page=${p}${currentTag ? `&tag=${encodeURIComponent(currentTag)}` : ''}`;
+      const { data } = await api.get(url);
       setPosts(prev => p === 1 ? data.posts : [...prev, ...data.posts]);
       if (data.posts.length < 10) setHasMore(false);
+      else setHasMore(true);
     } catch (err) {
       console.error('Failed to load posts:', err);
     } finally {
@@ -41,9 +47,19 @@ export default function Feed() {
     }
   };
 
+  const fetchTrendingTags = async () => {
+    try {
+      const { data } = await api.get('/api/posts/tags/trending');
+      setTrendingTags(data);
+    } catch (err) {
+      console.error('Failed to load trending tags:', err);
+    }
+  };
+
   useEffect(() => {
-    fetchPosts(1);
+    fetchPosts(1, selectedTag);
     fetchEvents();
+    fetchTrendingTags();
     api.get('/api/users/me/post-count')
       .then(({ data }) => setPostCount(data.postCount))
       .catch(() => { });
@@ -51,6 +67,17 @@ export default function Feed() {
       .then(({ data }) => setFollowingList((data.following || []).map(f => f._id || f)))
       .catch(() => { });
   }, []);
+
+  const onToggleFollow = (userId, isFollowing) => {
+    setFollowingList(prev => {
+      if (isFollowing) {
+        if (!prev.includes(userId)) return [...prev, userId];
+        return prev;
+      } else {
+        return prev.filter(id => String(id) !== String(userId));
+      }
+    });
+  };
 
   const onNewPost = (post) => {
     setPosts(prev => [post, ...prev]);
@@ -173,13 +200,20 @@ export default function Feed() {
               marginBottom: '1rem',
             }}>Trending Tags</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {['#Hackathon2024', '#FinalsWeek', '#CampusDining', '#CareerFair'].map(tag => (
-                <span key={tag} style={{
+              {trendingTags.length === 0 && <span style={{ fontSize: '0.75rem', color: 'var(--outline)' }}>No tags yet</span>}
+              {trendingTags.map(tag => (
+                <span key={tag} onClick={() => {
+                  const newTag = selectedTag === tag ? null : tag;
+                  setSelectedTag(newTag);
+                  setPage(1);
+                  fetchPosts(1, newTag);
+                }} style={{
                   padding: '0.25rem 0.75rem',
-                  background: 'var(--surface-container-highest)',
-                  color: 'var(--on-surface-variant)',
+                  background: selectedTag === tag ? 'var(--primary)' : 'var(--surface-container-highest)',
+                  color: selectedTag === tag ? '#fff' : 'var(--on-surface-variant)',
                   fontSize: '0.75rem', fontWeight: 500,
                   borderRadius: 'var(--radius-full)',
+                  cursor: 'pointer'
                 }}>{tag}</span>
               ))}
             </div>
@@ -188,6 +222,7 @@ export default function Feed() {
 
         {/* ── Center: Feed ── */}
         <section>
+          <Stories />
           <PostComposer onPost={onNewPost} />
           {posts.length === 0 && (
             <div style={{
@@ -206,12 +241,12 @@ export default function Feed() {
             </div>
           )}
           {posts.map(p => (
-            <PostCard key={p._id} post={p} onDelete={id => setPosts(prev => prev.filter(x => x._id !== id))} followingList={followingList} />
+            <PostCard key={p._id} post={p} onDelete={id => setPosts(prev => prev.filter(x => x._id !== id))} followingList={followingList} onToggleFollow={onToggleFollow} />
           ))}
           {posts.length > 0 && hasMore && (
             <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '1rem' }}>
               <button
-                onClick={() => { const nextPage = page + 1; setPage(nextPage); fetchPosts(nextPage); }}
+                onClick={() => { const nextPage = page + 1; setPage(nextPage); fetchPosts(nextPage, selectedTag); }}
                 style={{
                   background: 'var(--surface-container-high)',
                   color: 'var(--primary)',

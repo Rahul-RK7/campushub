@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
-export default function PostCard({ post, onDelete, followingList = [] }) {
+export default function PostCard({ post, onDelete, followingList = [], onToggleFollow }) {
   const { user } = useAuth();
   const [likes, setLikes] = useState(post.likes?.length || 0);
   const [liked, setLiked] = useState(post.likes?.map(String).includes(String(user?._id)));
@@ -15,6 +15,14 @@ export default function PostCard({ post, onDelete, followingList = [] }) {
     followingList.map(String).includes(String(post.author?._id))
   );
   const [followLoading, setFollowLoading] = useState(false);
+  const [commentCount, setCommentCount] = useState(post.commentCount || 0);
+
+  // Sync follow state if props change (e.g. parent updates followingList from another PostCard)
+  import('react').then(React => {
+    React.useEffect(() => {
+      setFollowing(followingList.map(String).includes(String(post.author?._id)));
+    }, [followingList, post.author?._id]);
+  });
 
   const handleLike = async () => {
     try {
@@ -54,6 +62,7 @@ export default function PostCard({ post, onDelete, followingList = [] }) {
       const { data } = await api.post(`/api/comments/${post._id}`, { content: commentText });
       setComments(prev => [...prev, data.comment]);
       setCommentText('');
+      setCommentCount(prev => prev + 1);
     } catch (err) {
       console.error('Failed to add comment:', err);
     }
@@ -65,6 +74,9 @@ export default function PostCard({ post, onDelete, followingList = [] }) {
     try {
       const { data } = await api.post(`/api/users/${post.author?._id}/follow`);
       setFollowing(data.isFollowing);
+      if (typeof onToggleFollow === 'function') {
+        onToggleFollow(post.author?._id, data.isFollowing);
+      }
     } catch (err) {
       console.error('Follow failed:', err);
     }
@@ -262,7 +274,7 @@ export default function PostCard({ post, onDelete, followingList = [] }) {
             <button onClick={handleLike} style={{
               display: 'flex', alignItems: 'center', gap: 8,
               background: 'transparent', border: 'none', cursor: 'pointer',
-              color: liked ? 'var(--primary)' : 'var(--on-surface-variant)',
+              color: liked ? '#10b981' : 'var(--on-surface-variant)',
               fontWeight: 600, fontSize: '0.75rem',
               padding: 0,
               transition: 'all 150ms ease',
@@ -282,7 +294,7 @@ export default function PostCard({ post, onDelete, followingList = [] }) {
               transition: 'all 150ms ease',
             }}>
               <span className="material-symbols-outlined" style={{ fontSize: 20 }}>chat_bubble</span>
-              <span>{showComments ? 'Hide' : ''} Comments</span>
+              <span>{commentCount > 0 ? commentCount : ''} {showComments ? 'Hide' : ''} Comments</span>
             </button>
           </div>
         </div>
