@@ -92,9 +92,12 @@ exports.getMessages = async (req, res) => {
 
         const messages = await Message.find({ conversation: req.params.id })
             .populate('sender', 'name profilePic')
-            .sort({ createdAt: 1 })
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
+
+        // Reverse so the messages are returned chronologically (oldest to newest) for UI rendering
+        messages.reverse();
 
         const total = await Message.countDocuments({ conversation: req.params.id });
 
